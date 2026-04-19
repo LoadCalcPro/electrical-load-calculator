@@ -1,317 +1,228 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEC OPTIONAL CALCULATOR</title>
-
-<style>
-  body { font-family: Arial, sans-serif; margin: 15px; font-size: 18px; }
-  h2 { text-align: center; margin-bottom: 10px; font-size: 28px; }
-  .card { background: #f5f5f5; padding: 15px; margin-bottom: 18px; border-radius: 10px; }
-  .item-label { font-weight: bold; margin: 10px 0 6px; }
-  .row { display: flex; gap: 10px; margin-bottom: 8px; }
-  input.qty { width: 60px; flex: 0 0 60px; padding: 8px; font-size: 18px; border: 1px solid #ccc; border-radius: 6px; text-align: center; }
-  input.va { flex: 1; padding: 8px; font-size: 18px; border: 1px solid #ccc; border-radius: 6px; }
-  input.big { width: 100%; padding: 10px; font-size: 18px; border: 1px solid #ccc; border-radius: 6px; }
-  button { width: 100%; padding: 15px; font-size: 20px; background: #0078ff; color: white; border: none; border-radius: 8px; margin-top: 10px; }
-  pre { background: #ffffff; padding: 15px; border-radius: 8px; white-space: pre-wrap; font-size: 17px; border: 1px solid #ddd; }
-
-  /* PRINT STYLES */
-  @media print {
-    body { font-size: 16px; margin: 20px; }
-    button, input, .card:not(#printCard) { display: none !important; }
-    #printCard { display: block !important; border: none; background: #ffffff; }
-    #printCard pre { border: none; background: #ffffff; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEC OPTIONAL CALCULATOR</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 15px; font-size: 18px; }
+        h2 { text-align: center; margin-bottom: 10px; font-size: 28px; }
+        .card { background: #f5f5f5; padding: 15px; margin-bottom: 18px; border-radius: 10px; }
+        .item-label { font-weight: bold; margin: 10px 0 6px; }
+        .row { display: flex; gap: 10px; margin-bottom: 8px; }
+        input.qty { width: 60px; flex: 0 0 60px; padding: 8px; font-size: 18px; border: 1px solid #ccc; border-radius: 6px; text-align: center; }
+        input.va { flex: 1; padding: 8px; font-size: 18px; border: 1px solid #ccc; border-radius: 6px; }
+        input.big { width: 100%; padding: 10px; font-size: 18px; border: 1px solid #ccc; border-radius: 6px; }
+        button { width: 100%; padding: 15px; font-size: 20px; background: #0078ff; color: white; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer; }
+        pre { background: #ffffff; padding: 15px; border-radius: 8px; white-space: pre-wrap; font-size: 17px; border: 1px solid #ddd; }
+        /* PRINT STYLES */
+        @media print {
+            body { font-size: 16px; margin: 20px; }
+            button, input, .card:not(#printCard) { display: none !important; }
+            #printCard { display: block !important; border: none; background: #ffffff; }
+            #printCard pre { border: none; background: #ffffff; }
+        }
+    </style>
 </head>
-
 <body oncontextmenu="return false;" ondragstart="return false;">
 
-<h2>NEC OPTIONAL CALCULATOR</h2>
+    <h2>NEC OPTIONAL CALCULATOR</h2>
 
-<!-- CUSTOMER INFO -->
-<div class="card">
-  <div class="item-label">Customer Name</div>
-  <input id="custName" class="big" type="text">
+    <!-- CUSTOMER INFO -->
+    <div class="card">
+        <div class="item-label">Customer Name</div>
+        <input id="custName" class="big" type="text">
+        <div class="item-label">Address</div>
+        <input id="addr" class="big" type="text">
+        <div class="item-label">Project Number</div>
+        <input id="projNum" class="big" type="text">
+    </div>
 
-  <div class="item-label">Address</div>
-  <input id="addr" class="big" type="text">
+    <!-- GENERAL LOADS -->
+    <div class="card">
+        <div class="item-label">Service Voltage</div>
+        <input id="voltage" class="big" type="number" value="240">
+    </div>
 
-  <div class="item-label">Project Number</div>
-  <input id="projNum" class="big" type="text">
-</div>
+    <div class="card">
+        <div class="item-label">Square Footage @ 3 VA/ft²</div>
+        <input id="sqftQty" class="big" type="number">
+    </div>
 
-<!-- GENERAL LOADS -->
-<div class="card">
-  <div class="item-label">Service Voltage</div>
-  <input id="voltage" class="big" type="number" value="240">
-</div>
+    <div class="card">
+        <div class="item-label">Small Appliance Circuits @ 1500 VA Each</div>
+        <input id="smallQty" class="qty" type="number">
+    </div>
 
-<div class="card">
-  <div class="item-label">Square Footage @ 3 VA/ft²</div>
-  <input id="sqftQty" class="big" type="number">
-</div>
+    <div class="card">
+        <div class="item-label">Laundry Circuits @ 1500 VA Each</div>
+        <input id="laundryQty" class="qty" type="number">
+    </div>
 
-<div class="card">
-  <div class="item-label">Small Appliance Circuits @ 1500 VA Each</div>
-  <input id="smallQty" class="qty" type="number">
-</div>
+    <!-- APPLIANCES -->
+    <div class="card">
+        <div class="item-label">Appliances @ Nameplate</div>
+        <div id="applianceInputs"></div>
+    </div>
 
-<div class="card">
-  <div class="item-label">Laundry Circuits @ 1500 VA Each</div>
-  <input id="laundryQty" class="qty" type="number">
-</div>
+    <!-- HVAC -->
+    <div class="card">
+        <div class="item-label">HVAC Loads</div>
+        <div class="item-label">A/C #1 (100%)</div>
+        <div class="row"><input id="ac1Qty" class="qty" type="number"><input id="ac1VA" class="va" type="number"></div>
+        <div class="item-label">Heat #1 (65%)</div>
+        <div class="row"><input id="heat1Qty" class="qty" type="number"><input id="heat1VA" class="va" type="number"></div>
+        <div class="item-label">A/C #2 (100%)</div>
+        <div class="row"><input id="ac2Qty" class="qty" type="number"><input id="ac2VA" class="va" type="number"></div>
+        <div class="item-label">Heat #2 (65%)</div>
+        <div class="row"><input id="heat2Qty" class="qty" type="number"><input id="heat2VA" class="va" type="number"></div>
+    </div>
 
-<!-- APPLIANCES -->
-<div class="card">
-  <div class="item-label">Appliances @ Nameplate</div>
-
-  <script>
-    const applList = [
-      ["Dishwasher","dw"],
-      ["Disposal","disp"],
-      ["Refrigerator","ref"],
-      ["Freezer","freezer"],
-      ["Microwave","mw"],
-      ["Hood fan","hood"],
-      ["Range","range"],
-      ["Wall oven","oven"],
-      ["Cooktop","cooktop"],
-      ["Central vacuum","cvac"],
-      ["Indoor jacuzzi","jacuzzi"],
-      ["Wine cooler","wine"],
-      ["Coffee machine","coffee"],
-      ["Bath fan","bathfan"],
-      ["Garage door opener","gdoor"],
-      ["Sump pump","sump"],
-      ["Spa pump","spa"],
-      ["Water heater","wh"],
-      ["Washer","washer"],
-      ["Dryer","dryer"]
-    ];
-  </script>
-
-  <div id="applianceInputs"></div>
-
-  <script>
-    let html = "";
-    applList.forEach(a=>{
-      html += `
-        <div class="item-label">${a[0]}</div>
+    <!-- EV -->
+    <div class="card">
+        <div class="item-label">EV Charger (7,200 VA or Nameplate) @ 125%</div>
         <div class="row">
-          <input id="${a[1]}Qty" class="qty" type="number">
-          <input id="${a[1]}VA" class="va" type="number" placeholder="VA">
-        </div>`;
-    });
-    document.getElementById("applianceInputs").innerHTML = html;
-  </script>
-</div>
+            <input id="evQty" class="qty" type="number">
+            <input id="evVA" class="va" type="number" placeholder="VA (7200 used if smaller)">
+        </div>
+    </div>
 
-<!-- HVAC -->
-<div class="card">
-  <div class="item-label">HVAC Loads</div>
+    <!-- MOTORS -->
+    <div class="card">
+        <div class="item-label">Motors</div>
+        <div class="item-label">Largest Motor (125%)</div>
+        <div class="row"><input id="motorLargestQty" class="qty" type="number"><input id="motorLargestVA" class="va" type="number"></div>
+        <div class="item-label">Other Motors</div>
+        <div class="row"><input id="motorOtherQty" class="qty" type="number"><input id="motorOtherVA" class="va" type="number"></div>
+    </div>
 
-  <div class="item-label">A/C #1 (100%)</div>
-  <div class="row"><input id="ac1Qty" class="qty"><input id="ac1VA" class="va"></div>
+    <button onclick="calc()">Calculate</button>
 
-  <div class="item-label">Heat #1 (65%)</div>
-  <div class="row"><input id="heat1Qty" class="qty"><input id="heat1VA" class="va"></div>
+    <div class="card">
+        <div class="item-label">Results</div>
+        <pre id="out"></pre>
+    </div>
 
-  <div class="item-label">A/C #2 (100%)</div>
-  <div class="row"><input id="ac2Qty" class="qty"><input id="ac2VA" class="va"></div>
+    <div class="card" id="printCard">
+        <pre id="report" style="white-space: pre-wrap;"></pre>
+    </div>
 
-  <div class="item-label">Heat #2 (65%)</div>
-  <div class="row"><input id="heat2Qty" class="qty"><input id="heat2VA" class="va"></div>
-</div>
+    <script>
+        const applList = [
+            ["Dishwasher","dw"], ["Disposal","disp"], ["Refrigerator","ref"], ["Freezer","freezer"],
+            ["Microwave","mw"], ["Hood fan","hood"], ["Range","range"], ["Wall oven","oven"],
+            ["Cooktop","cooktop"], ["Central vacuum","cvac"], ["Indoor jacuzzi","jacuzzi"],
+            ["Wine cooler","wine"], ["Coffee machine","coffee"], ["Bath fan","bathfan"],
+            ["Garage door opener","gdoor"], ["Sump pump","sump"], ["Spa pump","spa"],
+            ["Water heater","wh"], ["Washer","washer"], ["Dryer","dryer"]
+        ];
 
-<!-- EV -->
-<div class="card">
-  <div class="item-label">Car Charger </div>
-  <div class="row"><input id="evQty" class="qty"><input id="evVA" class="va"></div>
-</div>
+        let html = "";
+        applList.forEach(a => {
+            html += ` <div class="item-label">${a[0]}</div>
+                      <div class="row">
+                        <input id="${a[1]}Qty" class="qty" type="number">
+                        <input id="${a[1]}VA" class="va" type="number" placeholder="VA">
+                      </div>`;
+        });
+        document.getElementById("applianceInputs").innerHTML = html;
 
-<!-- MOTORS -->
-<div class="card">
-  <div class="item-label">Motors</div>
+        function n(id){ 
+            let v = Number(document.getElementById(id)?.value); 
+            return isNaN(v)?0:v; 
+        }
+        function t(id){ return document.getElementById(id)?.value || ""; }
 
-  <div class="item-label">Largest Motor (125%)</div>
-  <div class="row"><input id="motorLargestQty" class="qty"><input id="motorLargestVA" class="va"></div>
+        function calc(){
+            const voltage = n("voltage");
+            const report = [];
+            function add(label,val){ if(val>0) report.push(label+": "+Math.round(val)+" VA"); }
 
-  <div class="item-label">Other Motors</div>
-  <div class="row"><input id="motorOtherQty" class="qty"><input id="motorOtherVA" class="va"></div>
-</div>
+            report.push("Customer Name: " + t("custName"));
+            report.push("Address: " + t("addr"));
+            report.push("Project Number: " + t("projNum"));
+            report.push("");
 
-<button onclick="calc()">Calculate</button>
+            const genSqft=n("sqftQty")*3, genSmall=n("smallQty")*1500, genLaundry=n("laundryQty")*1500;
+            const genTotal=genSqft+genSmall+genLaundry;
+            if(genTotal>0){
+                report.push("GENERAL LOADS");
+                add("Square footage load",genSqft);
+                add("Small appliance circuits",genSmall);
+                add("Laundry circuits",genLaundry);
+                add("General loads subtotal",genTotal);
+                report.push("");
+            }
 
-<div class="card">
-  <div class="item-label">Results</div>
-  <pre id="out"></pre>
-</div>
+            let applTotal=0, anyAppl=false;
+            applList.forEach(a=>{
+                let qty=n(a[1]+"Qty"), va=n(a[1]+"VA");
+                if(qty>0 && va>0){
+                    let load=qty*va;
+                    applTotal+=load;
+                    if(!anyAppl){ report.push("APPLIANCE LOADS"); anyAppl=true; }
+                    add(a[0],load);
+                }
+            });
+            if(anyAppl){ add("Appliance subtotal",applTotal); report.push(""); }
 
-<div class="card" id="printCard">
-  <pre id="report" style="white-space: pre-wrap;"></pre>
-</div>
+            const genApplTotal=genTotal+applTotal;
+            const first10k=Math.min(genApplTotal,10000);
+            const remainder=Math.max(genApplTotal-10000,0);
+            const remainder40=remainder*0.40;
+            const genApplDerated=first10k+remainder40;
 
-<script>
-function n(id){ let v = Number(document.getElementById(id)?.value); return isNaN(v)?0:v; }
-function t(id){ return document.getElementById(id)?.value || ""; }
+            if(genApplTotal>0){
+                report.push("DERATING (GENERAL + APPLIANCES)");
+                add("General + appliances total",genApplTotal);
+                add("First 10,000 VA @ 100%",first10k);
+                if(remainder>0) add("Remainder @ 40%",remainder40);
+                add("Derated general/appliance load",genApplDerated);
+                report.push("");
+            }
 
-function calc(){
-  const voltage = n("voltage");
-  const report = [];
+            const hvac1=Math.max(n("ac1Qty")*n("ac1VA"), n("heat1Qty")*n("heat1VA")*0.65);
+            const hvac2=Math.max(n("ac2Qty")*n("ac2VA"), n("heat2Qty")*n("heat2VA")*0.65);
+            const hvacTotal=hvac1+hvac2;
+            if(hvacTotal>0){
+                report.push("HVAC LOADS");
+                add("HVAC #1 load",hvac1);
+                add("HVAC #2 load",hvac2);
+                add("HVAC total",hvacTotal);
+                report.push("");
+            }
 
-  function add(label,val){ if(val>0) report.push(label+": "+Math.round(val)+" VA"); }
+            // Updated EV Logic
+            const evQty = n("evQty");
+            const evInVA = n("evVA");
+            const evPerUnit = Math.max(7200, evInVA);
+            const evTotal125 = evQty * evPerUnit * 1.25;
 
-  report.push("Customer Name: " + t("custName"));
-  report.push("Address: " + t("addr"));
-  report.push("Project Number: " + t("projNum"));
-  report.push("");
+            if(evTotal125>0){
+                report.push("CONTINUOUS LOADS");
+                add(`EV Charger (${evQty} units @ ${evPerUnit}VA each) @ 125%`, evTotal125);
+                report.push("");
+            }
 
-  const genSqft=n("sqftQty")*3, genSmall=n("smallQty")*1500, genLaundry=n("laundryQty")*1500;
-  const genTotal=genSqft+genSmall+genLaundry;
+            const motor125=n("motorLargestQty")*n("motorLargestVA")*1.25;
+            const motorOther=n("motorOtherQty")*n("motorOtherVA");
+            const motorTotal=motor125+motorOther;
+            if(motorTotal>0){
+                report.push("MOTOR LOADS");
+                add("Largest motor @ 125%",motor125);
+                add("Other motors",motorOther);
+                add("Motor total",motorTotal);
+                report.push("");
+            }
 
-  if(genTotal>0){
-    report.push("GENERAL LOADS");
-    add("Square footage load",genSqft);
-    add("Small appliance circuits",genSmall);
-    add("Laundry circuits",genLaundry);
-    add("General loads subtotal",genTotal);
-    report.push("");
-  }
-
-  let applTotal=0, anyAppl=false;
-  applList.forEach(a=>{
-    let qty=n(a[1]+"Qty"), va=n(a[1]+"VA");
-    if(qty>0 && va>0){
-      let load=qty*va;
-      applTotal+=load;
-      if(!anyAppl){ report.push("APPLIANCE LOADS"); anyAppl=true; }
-      add(a[0],load);
-    }
-  });
-  if(anyAppl){ add("Appliance subtotal",applTotal); report.push(""); }
-
-  const genApplTotal=genTotal+applTotal;
-  const first10k=Math.min(genApplTotal,10000);
-  const remainder=Math.max(genApplTotal-10000,0);
-  const remainder40=remainder*0.40;
-  const genApplDerated=first10k+remainder40;
-
-  if(genApplTotal>0){
-    report.push("DERATING (GENERAL + APPLIANCES)");
-    add("General + appliances total",genApplTotal);
-    add("First 10,000 VA @ 100%",first10k);
-    if(remainder>0) add("Remainder @ 40%",remainder40);
-    add("Derated general/appliance load",genApplDerated);
-    report.push("");
-  }
-
-  const hvac1=Math.max(n("ac1Qty")*n("ac1VA"), n("heat1Qty")*n("heat1VA")*0.65);
-  const hvac2=Math.max(n("ac2Qty")*n("ac2VA"), n("heat2Qty")*n("heat2VA")*0.65);
-  const hvacTotal=hvac1+hvac2;
-
-  if(hvacTotal>0){
-    report.push("HVAC LOADS");
-    add("HVAC #1 load",hvac1);
-    add("HVAC #2 load",hvac2);
-    add("HVAC total",hvacTotal);
-    report.push("");
-  }
-
-  const ev125=n("evQty")*n("evVA")*1.25;
-  if(ev125>0){
-    report.push("CONTINUOUS LOADS");
-    add("EV charger @ 125%",ev125);
-    report.push("");
-  }
-
-  const motor125=n("motorLargestQty")*n("motorLargestVA")*1.25;
-  const motorOther=n("motorOtherQty")*n("motorOtherVA");
-  const motorTotal=motor125+motorOther;
-
-  if(motorTotal>0){
-    report.push("MOTOR LOADS");
-    add("Largest motor @ 125%",motor125);
-    add("Other motors",motorOther);
-    add("Motor total",motorTotal);
-    report.push("");
-  }
-
-  const totalVA=genApplDerated+hvacTotal+ev125+motorTotal;
-  const amps=voltage?totalVA/voltage:0;
-
-  document.getElementById("out").textContent =
-    "Total VA: "+Math.round(totalVA)+"\nMinimum Service Amps: "+Math.round(amps)+" A";
-
-  report.push("FINAL RESULTS");
-  report.push("Total VA: "+Math.round(totalVA));
-  report.push("Minimum Service Amps: "+Math.round(amps)+" A");
-
-  document.getElementById("report").innerHTML = report.join("\n");
-}
-</script>
-
-<!-- STRONG PROTECTION: WIPE-OUT ON DEVTOOLS KEYS, CTRL+P ALLOWED -->
-<script>
-  function isEditable(el) {
-    if (!el) return false;
-    const tag = el.tagName;
-    const editableTypes = ['INPUT', 'TEXTAREA'];
-    if (editableTypes.includes(tag)) return true;
-    if (el.isContentEditable) return true;
-    return false;
-  }
-
-  function wipePage() {
-    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Arial,sans-serif;font-size:22px;text-align:center;padding:20px;">Unauthorized access detected. This tool is protected.</div>';
-  }
-
-  ['copy','cut','paste'].forEach(evt => {
-    document.addEventListener(evt, e => {
-      if (!isEditable(e.target)) {
-        e.preventDefault();
-      }
-    });
-  });
-
-  document.addEventListener('selectstart', e => {
-    if (!isEditable(e.target)) {
-      e.preventDefault();
-    }
-  });
-
-  document.addEventListener('dragstart', e => e.preventDefault());
-
-  document.addEventListener('mousedown', e => {
-    if (e.button === 1) e.preventDefault();
-  });
-
-  document.addEventListener('keydown', e => {
-    const key = e.key.toLowerCase();
-
-    // DevTools keys -> wipe page
-    if (e.key === 'F12') {
-      e.preventDefault();
-      wipePage();
-      return;
-    }
-    if (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(key)) {
-      e.preventDefault();
-      wipePage();
-      return;
-    }
-
-    // Block common shortcuts (but NOT print)
-    if (e.ctrlKey || e.metaKey) {
-      const blocked = ['c','x','s','u','a'];
-      if (blocked.includes(key)) {
-        e.preventDefault();
-      }
-    }
-  });
-</script>
-
+            const totalVA=genApplDerated+hvacTotal+evTotal125+motorTotal;
+            const amps=voltage?totalVA/voltage:0;
+            document.getElementById("out").textContent = "Total VA: "+Math.round(totalVA)+"\nMinimum Service Amps: "+Math.round(amps)+" A";
+            report.push("FINAL RESULTS");
+            report.push("Total VA: "+Math.round(totalVA));
+            report.push("Minimum Service Amps: "+Math.round(amps)+" A");
+            document.getElementById("report").innerHTML = report.join("\n");
+        }
+    </script>
 </body>
 </html>
