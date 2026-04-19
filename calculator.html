@@ -19,11 +19,10 @@
             body { font-size: 16px; margin: 20px; }
             button, input, .card:not(#printCard) { display: none !important; }
             #printCard { display: block !important; border: none; background: #ffffff; }
-            #printCard pre { border: none; background: #ffffff; }
         }
     </style>
 </head>
-<body oncontextmenu="return false;" ondragstart="return false;">
+<body>
 
     <h2>NEC OPTIONAL CALCULATOR</h2>
 
@@ -74,10 +73,10 @@
     </div>
 
     <div class="card">
-        <div class="item-label">EV Charger (7,200 VA or Nameplate)</div>
+        <div class="item-label">EV Charger (7,200 watts or the nameplate rating, whichever is larger)</div>
         <div class="row">
             <input id="evQty" class="qty" type="number" placeholder="Qty">
-            <input id="evVA" class="va" type="number" placeholder="VA (7200 used if smaller)">
+            <input id="evVA" class="va" type="number" placeholder="Nameplate VA">
         </div>
     </div>
 
@@ -133,7 +132,10 @@
 
             report.push("Customer Name: " + t("custName"), "Address: " + t("addr"), "Project: " + t("projNum"), "");
 
-            const genTotal = (n("sqftQty")*3) + (n("smallQty")*1500) + (n("laundryQty")*1500);
+            const genSqft = n("sqftQty") * 3;
+            const genSmall = n("smallQty") * 1500;
+            const genLaundry = n("laundryQty") * 1500;
+            const genTotal = genSqft + genSmall + genLaundry;
             
             let applTotal = 0;
             applList.forEach(a => {
@@ -141,27 +143,29 @@
                 if(load > 0) { add(a[0], load); applTotal += load; }
             });
 
-            const genApplTotal = genTotal + applTotal;
-            const genApplDerated = Math.min(genApplTotal, 10000) + (Math.max(genApplTotal - 10000, 0) * 0.40);
+            const totalGenAppl = genTotal + applTotal;
+            const deratedGenAppl = Math.min(totalGenAppl, 10000) + (Math.max(totalGenAppl - 10000, 0) * 0.40);
 
-            report.push("DERATED GENERAL/APPLIANCE: " + Math.round(genApplDerated) + " VA", "");
+            report.push("DERATED GENERAL/APPLIANCE: " + Math.round(deratedGenAppl) + " VA", "");
 
+            // HVAC - Individual comparison
             const hvac1 = Math.max(n("ac1Qty")*n("ac1VA"), n("heat1Qty")*n("heat1VA")*0.65);
             const hvac2 = Math.max(n("ac2Qty")*n("ac2VA"), n("heat2Qty")*n("heat2VA")*0.65);
             const hvacTotal = hvac1 + hvac2;
             if(hvacTotal > 0) {
                 report.push("HVAC LOADS");
-                add("HVAC Total", hvacTotal);
+                add("HVAC #1", hvac1);
+                add("HVAC #2", hvac2);
                 report.push("");
             }
 
-            // EV Calculation: Largest of 7200 or Nameplate, no 125%
+            // EV Calculation: Larger of 7200 or nameplate at 100%
             const evQty = n("evQty");
             const evBase = Math.max(7200, n("evVA"));
             const evTotal = evQty * evBase;
             if(evTotal > 0) {
                 report.push("EV CHARGER");
-                add(`EV Charger (${evQty} units @ ${evBase}VA)`, evTotal);
+                add(`EV Charger (${evQty} unit(s) @ ${evBase}VA)`, evTotal);
                 report.push("");
             }
 
@@ -172,7 +176,7 @@
                 report.push("");
             }
 
-            const totalVA = genApplDerated + hvacTotal + evTotal + motorTotal;
+            const totalVA = deratedGenAppl + hvacTotal + evTotal + motorTotal;
             const amps = voltage ? totalVA / voltage : 0;
             
             const results = "Total VA: " + Math.round(totalVA) + "\nMin Service Amps: " + Math.round(amps) + " A";
