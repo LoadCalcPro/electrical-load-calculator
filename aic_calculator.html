@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AIC Calculator</title>
+  <style>
+    :root { --blue:#1f4e78; --light:#eaf3f8; --grid:#c9d3dc; --text:#1f2937; --muted:#64748b; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: Arial, Helvetica, sans-serif; color:var(--text); background:#f6f8fb; }
+    .page { max-width:1100px; margin:24px auto; background:white; border:1px solid #d7dee8; border-radius:14px; box-shadow:0 10px 30px rgba(15,23,42,.08); overflow:hidden; }
+    header { background:linear-gradient(135deg,var(--blue),#2f75b5); color:white; padding:22px 28px; }
+    header h1 { margin:0; font-size:30px; letter-spacing:.3px; }
+    header p { margin:6px 0 0; opacity:.9; }
+    main { padding:24px 28px 30px; }
+    h2 { margin:0 0 14px; font-size:20px; color:var(--blue); }
+    .grid { display:grid; grid-template-columns: 1.1fr .9fr; gap:22px; align-items:start; }
+    .card { border:1px solid #dbe3ee; border-radius:12px; background:#fff; padding:18px; }
+    .form-grid { display:grid; grid-template-columns: 1.6fr 1fr; gap:12px 16px; align-items:center; }
+    label { font-weight:600; color:#334155; }
+    input, select { width:100%; padding:9px 10px; border:1px solid #b8c6d8; border-radius:8px; font-size:15px; background:white; }
+    input:focus, select:focus { outline:2px solid #9cc9ee; border-color:#2f75b5; }
+    .result { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+    .metric { background:var(--light); border:1px solid #cfe3f2; border-radius:12px; padding:16px; }
+    .metric .label { color:var(--muted); font-size:13px; text-transform:uppercase; letter-spacing:.08em; }
+    .metric .value { font-size:28px; font-weight:700; margin-top:5px; color:#0f3557; }
+    .formula { font-family: Consolas, Monaco, monospace; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px; font-size:13px; line-height:1.5; margin-top:14px; color:#334155; }
+    table { width:100%; border-collapse:collapse; margin-top:12px; font-size:14px; }
+    th, td { border:1px solid var(--grid); padding:7px 8px; text-align:center; }
+    th { background:#d9eaf7; color:#17365d; font-weight:700; }
+    td:first-child, th:first-child { text-align:left; font-weight:700; }
+    .section-title { background:#1f4e78; color:white; text-align:left; font-size:15px; }
+    .note { color:var(--muted); font-size:13px; margin-top:10px; }
+    .button-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+    button { border:0; border-radius:8px; padding:10px 14px; font-weight:700; cursor:pointer; background:#2f75b5; color:white; }
+    button.secondary { background:#64748b; }
+    @media (max-width: 850px) { .grid { grid-template-columns:1fr; } main { padding:18px; } .result { grid-template-columns:1fr; } }
+    @media print { body { background:white; } .page { box-shadow:none; border:0; margin:0; } button { display:none; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>AIC Calculator</h1>
+      <p>HTML conversion of the uploaded Excel calculator. Inputs update results automatically.</p>
+    </header>
+    <main>
+      <div class="grid">
+        <section class="card">
+          <h2>A.I.C. Calculations</h2>
+          <div class="form-grid">
+            <label for="conduit">Conduit type</label>
+            <select id="conduit"><option>PVC</option><option>Steel</option></select>
+            <label for="wireType">Wire type</label>
+            <select id="wireType"><option>Copper</option><option>Aluminum</option></select>
+            <label for="wireSize">Wire size</label>
+            <select id="wireSize"></select>
+            <label for="utilityFault">I = Utility Fault Current</label>
+            <input id="utilityFault" type="number" value="21110" step="1">
+            <label for="distance">L = Distance to transformer</label>
+            <input id="distance" type="number" value="50" step="1">
+            <label for="volts">E = Volts</label>
+            <select id="volts"><option>208</option><option selected>240</option><option>480</option></select>
+            <label for="conductors">N = Number of conductors per phase</label>
+            <select id="conductors"><option selected>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+            <label for="phase">2 Single phase or √3 Three phase</label>
+            <select id="phase"><option selected>2</option><option>1.732</option></select>
+          </div>
+          <div class="result">
+            <div class="metric"><div class="label">C constant</div><div class="value" id="cConstant">—</div></div>
+            <div class="metric"><div class="label">AIC</div><div class="value" id="aicResult">—</div></div>
+          </div>
+          <div class="formula" id="calcDetails"></div>
+          <div class="button-row"><button onclick="window.print()">Print</button><button class="secondary" id="resetBtn">Reset</button></div>
+        </section>
+        <section class="card">
+          <h2>FPL Transformer</h2>
+          <div class="form-grid">
+            <label for="kva">Isec KVA</label>
+            <input id="kva" type="number" value="1500" step="1">
+            <label for="xfmrVolts">Transformer volts</label>
+            <input id="xfmrVolts" type="number" value="480" step="1">
+            <label for="sqrt3">Three-phase factor</label>
+            <input id="sqrt3" type="number" value="1.732" step="0.001">
+            <label for="impedance">Impedance factor</label>
+            <input id="impedance" type="number" value="0.041" step="0.001">
+          </div>
+          <div class="result">
+            <div class="metric"><div class="label">Isec</div><div class="value" id="isec">—</div></div>
+            <div class="metric"><div class="label">I</div><div class="value" id="xfmrI">—</div></div>
+          </div>
+          <p class="note">This section mirrors the transformer calculation area from the workbook.</p>
+        </section>
+      </div>
+      <section class="card" style="margin-top:22px;">
+        <h2>Constant Table</h2>
+        <table id="constantTable">
+          <thead>
+            <tr><th rowspan="2">Wire size</th><th colspan="2">Copper</th><th colspan="2">Aluminum</th></tr>
+            <tr><th>3 Cond. Steel</th><th>3 Cond. PVC</th><th>3 Cond. Steel</th><th>3 Cond. PVC</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+<script>
+const constants = {
+  "8":     { copperSteel:1557, copperPvc:1559, aluminumSteel:951, aluminumPvc:952 },
+  "6":     { copperSteel:2425, copperPvc:2430, aluminumSteel:1481, aluminumPvc:1482 },
+  "4":     { copperSteel:3806, copperPvc:3826, aluminumSteel:2346, aluminumPvc:2350 },
+  "3":     { copperSteel:4774, copperPvc:4811, aluminumSteel:2952, aluminumPvc:2961 },
+  "2":     { copperSteel:5907, copperPvc:6044, aluminumSteel:3713, aluminumPvc:3730 },
+  "1":     { copperSteel:7293, copperPvc:7493, aluminumSteel:4645, aluminumPvc:4678 },
+  "1/0":   { copperSteel:8925, copperPvc:9317, aluminumSteel:5777, aluminumPvc:5838 },
+  "2/0":   { copperSteel:10755, copperPvc:11424, aluminumSteel:7187, aluminumPvc:7301 },
+  "3/0":   { copperSteel:12844, copperPvc:13923, aluminumSteel:8826, aluminumPvc:9110 },
+  "4/0":   { copperSteel:15082, copperPvc:16673, aluminumSteel:10741, aluminumPvc:11174 },
+  "250MCM":{ copperSteel:16483, copperPvc:18594, aluminumSteel:12122, aluminumPvc:12862 },
+  "300MCM":{ copperSteel:18177, copperPvc:20868, aluminumSteel:13910, aluminumPvc:14923 },
+  "350MCM":{ copperSteel:19704, copperPvc:22737, aluminumSteel:15484, aluminumPvc:16813 },
+  "400MCM":{ copperSteel:20566, copperPvc:24294, aluminumSteel:16671, aluminumPvc:18506 },
+  "500MCM":{ copperSteel:22185, copperPvc:26706, aluminumSteel:18756, aluminumPvc:21391 },
+  "600MCM":{ copperSteel:22965, copperPvc:28033, aluminumSteel:20093, aluminumPvc:23451 },
+  "750MCM":{ copperSteel:24137, copperPvc:29735, aluminumSteel:21766, aluminumPvc:25976 },
+  "1000MCM":{ copperSteel:25278, copperPvc:31491, aluminumSteel:23478, aluminumPvc:28779 }
+};
+const defaults = { conduit:'PVC', wireType:'Copper', wireSize:'3/0', utilityFault:21110, distance:50, volts:240, conductors:1, phase:2, kva:1500, xfmrVolts:480, sqrt3:1.732, impedance:0.041 };
+function $(id){ return document.getElementById(id); }
+function num(id){ return Number($(id).value) || 0; }
+function fmt(n, digits=0){ return Number.isFinite(n) ? n.toLocaleString(undefined,{maximumFractionDigits:digits, minimumFractionDigits:digits}) : '—'; }
+function constantKey(){
+  const metal = $('wireType').value === 'Copper' ? 'copper' : 'aluminum';
+  const raceway = $('conduit').value === 'PVC' ? 'Pvc' : 'Steel';
+  return metal + raceway;
+}
+function calculate(){
+  const C = constants[$('wireSize').value][constantKey()];
+  const L = num('distance'), I = num('utilityFault'), E = num('volts'), N = num('conductors'), phase = num('phase');
+  const F = (phase * L * I) / (N * C * E);
+  const M = 1 / (1 + F);
+  const AIC = I * M;
+  const isec = (num('kva') * 1000) / (num('xfmrVolts') * num('sqrt3'));
+  const xfmrI = isec / num('impedance');
+  $('cConstant').textContent = fmt(C);
+  $('aicResult').textContent = fmt(AIC, 0);
+  $('isec').textContent = fmt(isec, 0);
+  $('xfmrI').textContent = fmt(xfmrI, 0);
+  $('calcDetails').innerHTML = `F = (${phase} × ${L} × ${fmt(I)}) / (${N} × ${fmt(C)} × ${E}) = ${F.toFixed(4)}<br>M = 1 / (1 + F) = ${M.toFixed(4)}<br>AIC = Utility Fault Current × M = ${fmt(I)} × ${M.toFixed(4)} = <strong>${fmt(AIC,0)}</strong>`;
+}
+function populate(){
+  const sizes = Object.keys(constants);
+  $('wireSize').innerHTML = sizes.map(s => `<option${s==='3/0'?' selected':''}>${s}</option>`).join('');
+  const tbody = $('constantTable').querySelector('tbody');
+  tbody.innerHTML = sizes.map(s => {
+    const r = constants[s];
+    return `<tr><td>${s}</td><td>${fmt(r.copperSteel)}</td><td>${fmt(r.copperPvc)}</td><td>${fmt(r.aluminumSteel)}</td><td>${fmt(r.aluminumPvc)}</td></tr>`;
+  }).join('');
+  document.querySelectorAll('input,select').forEach(el => el.addEventListener('input', calculate));
+  $('resetBtn').addEventListener('click', () => {
+    Object.entries(defaults).forEach(([k,v]) => { if ($(k)) $(k).value = String(v); });
+    calculate();
+  });
+  calculate();
+}
+populate();
+</script>
+</body>
+</html>
