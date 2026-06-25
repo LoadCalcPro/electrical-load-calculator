@@ -1,202 +1,255 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LoadCalcPro</title>
+
+<title>LoadCalcPro | NEC Electrical Load Calculators</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background: #0f172a;
-    color: white;
-    line-height: 1.6;
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#0f172a;
+    color:#fff;
+    line-height:1.6;
 }
 
-header {
-    text-align: center;
-    padding: 80px 20px;
-    background: linear-gradient(135deg,#1e3a8a,#0f172a);
+header{
+    text-align:center;
+    padding:80px 20px;
+    background:linear-gradient(135deg,#1e3a8a,#0f172a);
 }
 
-header h1 {
-    font-size: 56px;
-    margin-bottom: 15px;
+header h1{
+    font-size:58px;
+    margin-bottom:15px;
 }
 
-header p {
-    font-size: 20px;
-    opacity: .9;
-    max-width: 800px;
-    margin: auto;
+header p{
+    font-size:20px;
+    max-width:900px;
+    margin:auto;
+    opacity:.9;
 }
 
-.button-container {
-    margin-top: 35px;
+.button-container{
+    margin-top:40px;
 }
 
-.btn {
-    display: inline-block;
-    margin: 10px;
-    padding: 14px 28px;
-    background: #22c55e;
-    color: #000;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 8px;
-    transition: .3s;
+.btn{
+    display:inline-block;
+    margin:10px;
+    padding:15px 30px;
+    background:#22c55e;
+    color:#000;
+    text-decoration:none;
+    font-weight:bold;
+    border-radius:8px;
+    transition:.25s;
 }
 
-.btn:hover {
-    transform: translateY(-2px);
+.btn:hover{
+    transform:translateY(-3px);
 }
 
-.btn-secondary {
-    background: #3b82f6;
-    color: white;
+section{
+    max-width:1100px;
+    margin:auto;
+    padding:60px 20px;
 }
 
-section {
-    max-width: 1000px;
-    margin: auto;
-    padding: 60px 20px;
+h2{
+    text-align:center;
+    margin-bottom:35px;
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 30px;
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
 }
 
-.card {
-    background: #1e293b;
-    padding: 25px;
-    border-radius: 10px;
-    margin-bottom: 15px;
+.card{
+    background:#1e293b;
+    padding:30px;
+    border-radius:12px;
+    text-align:center;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
-    gap: 20px;
+.card h3{
+    margin-bottom:15px;
 }
 
-footer {
-    text-align: center;
-    padding: 30px;
-    opacity: .7;
-    border-top: 1px solid #334155;
+.card p{
+    margin-bottom:20px;
 }
+
+footer{
+    margin-top:40px;
+    text-align:center;
+    padding:30px;
+    border-top:1px solid #334155;
+    opacity:.75;
+}
+
 </style>
+
 </head>
 
 <body>
 
 <header>
-    <h1>LoadCalcPro</h1>
 
-    <p>
-        NEC-based electrical calculation tools for engineers,
-        inspectors, plans examiners, and electrical contractors.
-    </p>
+<h1>⚡ LoadCalcPro</h1>
 
-    <div class="button-container">
-        <a href="calculator.html" class="btn">
-            Optional Load Calculator
-        </a>
+<p>
+Professional NEC® electrical calculation tools for engineers,
+plans examiners, inspectors, and electrical contractors.
+</p>
 
-        <a href="aic_calculator.html" class="btn btn-secondary">
-            AIC Calculator
-        </a>
-    </div>
+<div class="button-container">
+
+<a href="calculator.html" class="btn">
+Residential Load Calculator
+</a>
+
+<a href="generator.html" class="btn">
+Generator Calculator
+</a>
+
+<a href="aic_calculator.html" class="btn">
+AIC Calculator
+</a>
+
+</div>
+
 </header>
 
-<section>
-    <h2>Professional Electrical Calculation Tools</h2>
-
-    <div class="grid">
-
-        <div class="card">
-            <h3>Optional Method Calculator</h3>
-            <p>
-                Perform NEC residential load calculations quickly
-                and consistently.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>AIC Calculator</h3>
-            <p>
-                Calculate available fault current and verify
-                equipment interrupting ratings.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>Generator Calculator</h3>
-            <p>
-                Coming Soon.
-            </p>
-        </div>
-
-    </div>
-</section>
 
 <section>
-    <h2>Built For</h2>
 
-    <div class="grid">
+<h2>Professional Electrical Calculation Tools</h2>
 
-        <div class="card">
-            Electrical Engineers
-        </div>
+<div class="grid">
 
-        <div class="card">
-            Plans Examiners
-        </div>
+<div class="card">
 
-        <div class="card">
-            Inspectors
-        </div>
+<h3>Residential Load Calculator</h3>
 
-        <div class="card">
-            Electrical Contractors
-        </div>
+<p>
+Perform NEC optional method residential load calculations quickly,
+accurately, and generate professional printable reports.
+</p>
 
-    </div>
+<a href="calculator.html" class="btn">
+Open Calculator
+</a>
+
+</div>
+
+
+<div class="card">
+
+<h3>Generator Optional Method Calculator</h3>
+
+<p>
+Size residential generators using the NEC optional method with
+automatic demand calculations and printable reports.
+</p>
+
+<a href="generator.html" class="btn">
+Open Calculator
+</a>
+
+</div>
+
+
+<div class="card">
+
+<h3>AIC Calculator</h3>
+
+<p>
+Calculate available fault current and verify equipment interrupting
+ratings.
+</p>
+
+<a href="aic_calculator.html" class="btn">
+Open Calculator
+</a>
+
+</div>
+
+</div>
+
 </section>
+
 
 <section>
-    <h2>Why LoadCalcPro?</h2>
 
-    <div class="card">
-        NEC-based calculations
-    </div>
+<h2>Built For</h2>
 
-    <div class="card">
-        Faster permit preparation
-    </div>
+<div class="grid">
 
-    <div class="card">
-        Reduced calculation errors
-    </div>
+<div class="card">
+Electrical Engineers
+</div>
 
-    <div class="card">
-        Professional printable reports
-    </div>
+<div class="card">
+Plans Examiners
+</div>
+
+<div class="card">
+Electrical Inspectors
+</div>
+
+<div class="card">
+Electrical Contractors
+</div>
+
+</div>
 
 </section>
+
+
+<section>
+
+<h2>Why LoadCalcPro?</h2>
+
+<div class="grid">
+
+<div class="card">
+NEC®-Based Calculations
+</div>
+
+<div class="card">
+Professional Printable Reports
+</div>
+
+<div class="card">
+Fast Permit Preparation
+</div>
+
+<div class="card">
+Reduced Calculation Errors
+</div>
+
+</div>
+
+</section>
+
 
 <footer>
-    © 2023 LoadCalcPro. All Rights Reserved.
+
+© 2023 LoadCalcPro. All Rights Reserved.
+
 </footer>
 
 </body>
 </html>
-```
