@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generator Optional Method Calculator</title>
+<style>
+:root{--bg:#f3f4f6;--panel:#ffffff;--ink:#111827;--muted:#6b7280;--blue:#1e3a8a;--blue2:#0f172a;--line:#d1d5db;--head:#e8eefc;--accent:#0f766e;--green:#15803d;--danger:#b42318;}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}header{background:linear-gradient(135deg,#1e3a8a,#0f172a);color:#fff;padding:26px 30px}header h1{margin:0;font-size:28px;letter-spacing:.2px}header p{margin:7px 0 0;color:#dbeafe;font-size:14px}.tabs{display:flex;gap:8px;flex-wrap:wrap;padding:14px 22px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}.tab{border:1px solid var(--line);background:#f8fafc;border-radius:999px;padding:8px 14px;cursor:pointer;font-weight:700;color:#111827}.tab.active{background:#1e3a8a;color:#fff;border-color:#1e3a8a}main{padding:22px}.toolbar{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap}.toolbar-left{display:flex;gap:10px;flex-wrap:wrap}.note{color:var(--muted);font-size:13px}.btn,button{border:1px solid #1e3a8a;background:#1e3a8a;color:#fff;border-radius:10px;padding:9px 13px;font-weight:700;cursor:pointer}.btn.secondary,button.secondary{background:#fff;color:#1e3a8a}.btn.print,button.print{background:#0f766e;border-color:#0f766e}.results{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:12px;margin-bottom:14px}.kpi{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 18px rgba(15,23,42,.08);padding:14px 16px}.kpi .label{font-size:12px;color:#6b7280;text-transform:uppercase;font-weight:700}.kpi .value{font-size:25px;font-weight:900;margin-top:4px;color:#0f172a}.card,.sheet-wrap{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 18px rgba(15,23,42,.08);overflow:auto;max-height:calc(100vh - 175px)}table{border-collapse:collapse;min-width:900px;width:100%;table-layout:fixed}col.label{width:36%} col.qty{width:13%} col.va{width:13%} col.service{width:16%} col.managed{width:10%} col.gen{width:12%}th,td{border:1px solid #d9dee8;height:28px;padding:4px 7px;vertical-align:middle;font-size:13px;white-space:normal}thead th{position:sticky;top:0;background:#f8fafc;color:#6b7280;font-size:11px;z-index:2;text-transform:none;letter-spacing:0}td.label{font-weight:600}.section td{background:#1e3a8a!important;color:#fff!important;font-weight:700;text-align:center}.subtotal td{background:#e8eefc!important;color:#111827!important;font-weight:700}.total td{background:#dff0e7!important;color:#0f172a!important;font-weight:800}.out{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}.center{text-align:center}.small{font-size:12px;color:#6b7280;font-weight:400}input[type=number],input[type=text],select{width:100%;border:1px solid #cbd5e1;border-radius:6px;padding:5px 6px;font-size:13px;background:#fff;text-align:right}select{text-align:center}input[readonly]{background:#eef2f7;color:#596579}.descInput{width:100%;border:1px solid #cbd5e1;border-radius:6px;padding:5px 6px;font-size:13px;background:#fff;text-align:left!important;font-weight:600;color:#111827}@media print{.descInput{border:0;padding:0;background:transparent;font-weight:600}}.check{font-family:'Segoe UI Symbol',Arial,sans-serif;width:28px;height:24px;border:1px solid #cbd5e1;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;background:#fff;color:#15803d;font-size:18px;font-weight:900;cursor:pointer;user-select:none}.check.checked{background:#ecfdf5;border-color:#15803d}.footer{font-size:12px;color:var(--muted);padding:12px 2px}
+.form-titlebar{display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px;margin-bottom:8px;padding:2px 2px 0 2px;color:#111827}.form-titlebar .form-title{font-size:15px;font-weight:800;color:#0f172a;letter-spacing:.1px}.form-titlebar .form-timestamp{font-size:11px;color:#6b7280;white-space:nowrap}.form-titlebar .form-brand{font-size:12px;font-weight:800;color:#1e3a8a;opacity:.78;white-space:nowrap;letter-spacing:.15px}.form-titlebar .bolt{color:#0f766e;margin-right:3px}@media print{.form-titlebar{display:grid!important;grid-template-columns:1fr auto;align-items:center;gap:12px;margin:0 0 5px 0;padding:0;color:#111827}.form-titlebar .form-title{font-size:11px;font-weight:800;color:#0f172a}.form-titlebar .form-timestamp{font-size:9px;color:#555}.form-titlebar .form-brand{font-size:10px;font-weight:800;color:#1e3a8a;opacity:.85}.form-titlebar .bolt{color:#0f766e;margin-right:2px}}
+.project-info{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 18px rgba(15,23,42,.08);padding:10px 12px;margin-bottom:12px;display:grid;grid-template-columns:115px 1fr 90px 180px;gap:7px 8px;align-items:center}.project-info label{font-size:12px;font-weight:700;color:#111827;white-space:nowrap}.project-info input{height:26px;text-align:left!important}.project-info .wide{grid-column:span 3}@media(max-width:760px){.project-info{grid-template-columns:1fr}.project-info .wide{grid-column:auto}}@media print{.project-info{box-shadow:none;border:0;border-radius:0;margin:0 0 6px 0;padding:0;grid-template-columns:82px 1fr 70px 130px;gap:3px 6px}.project-info label{font-size:10px}.project-info input{border:0;border-bottom:1px solid #999;border-radius:0;padding:1px 2px;height:18px;font-size:10px;background:transparent}}
+
+@media(max-width:760px){main{padding:14px}.results{grid-template-columns:1fr}.card,.sheet-wrap{max-height:none}table{min-width:780px}}@media print{body{background:white}header,.tabs,.toolbar,.footer,.note{display:none!important}main{margin:0;max-width:none;padding:0}.card,.sheet-wrap,.kpi{box-shadow:none;border:0}.results{grid-template-columns:repeat(3,1fr)}table{font-size:11px;min-width:0;width:100%}th,td{padding:3px 4px}tr.print-hide{display:none!important}.after-min-amp-spacer td{height:10px!important;border:0!important;background:#fff!important;padding:0!important}}
+.after-min-amp-spacer td{height:12px;border:0;background:transparent;padding:0}
+
+@page{size:letter;margin:0}
+@media print{html,body{margin:0!important;padding:0!important}main{padding:0.25in!important}}
+</style>
+</head>
+<body>
+<main>
+  <div class="form-titlebar">
+    <div class="form-title">Generator Optional Method Calculator</div>
+    <div class="form-brand"><span class="bolt">⚡</span>LoadCalcPro</div>
+  </div>
+  <div class="project-info">
+    <label for="projectName">Project Name</label>
+    <input id="projectName" type="text">
+    <label for="projectNumber">Project #</label>
+    <input id="projectNumber" type="text">
+    <label for="projectAddress">Address</label>
+    <input id="projectAddress" class="wide" type="text">
+    <label for="projectCityState">City/State</label>
+    <input id="projectCityState" class="wide" type="text">
+  </div>
+  <div class="toolbar"><div class="toolbar-left">
+    <button class="print" onclick="window.print()">Print / Save PDF</button>
+    <button class="secondary" onclick="resetDefaults()">Reset Defaults</button>
+    <button onclick="clearInputs()">Clear Inputs</button></div>
+    <span class="note">Click the box in the Managed column to show a ✓. Checked items are removed from the generator load.</span>
+  </div>
+  <div class="sheet-wrap">
+    <table id="calcTable">
+      <colgroup><col class="label"><col class="qty"><col class="va"><col class="service"><col class="managed"><col class="gen"></colgroup>
+      <thead><tr><th>Load Description</th><th>Qty</th><th>VA</th><th>Service Load VA</th><th>Managed</th><th>Gen Load VA</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</main>
+<script>
+const DATA = {"labels": {"4": "GENERAL LOADS", "5": "Select sq ft", "6": "Small appliance", "7": "Laundry", "8": "GENERAL LOADS SUBTOTAL", "9": "APPLIANCES LOADS NAMEPLATE", "10": "Dishwasher", "11": "Disposal", "12": "Refrigerator", "13": "Microwave", "14": "Hood fan", "15": "Freezer", "16": "Range (Name plate)", "17": "Wall Oven (Name plate)", "18": "Cooktop", "19": "Bath fan", "20": "Wine cooler", "21": "Coffee machine", "22": "Golf cart charger", "23": "", "24": "Irrigation pump", "25": "Garage Door Opener", "26": "", "27": "Pool equipment", "28": "Sauna", "29": "Water Heater", "30": "Dryer", "31": "APPLIANCES LOADS SUBTOTAL", "32": "GENERAL AND APPLIANCE LOADS", "33": "FIRST 10K of GENERAL AND APPLIANCE", "34": "REMAINDER @ 40%", "35": "TOTAL DERATED LOAD", "36": "HVAC AND CONTINUOUS", "37": "A/C at 100%", "38": "Heat at 65%", "39": "A/C at 100%", "40": "Heat at 65%", "41": "Heat at 40%", "42": null, "43": "Car charger 125%", "44": "HVAC AND CONTINUOUS", "45": "TOTAL CALCULATED LOAD WATTS", "46": "SELECT SERVICE VOLTAGE", "47": "MINIMUM SERVICE AMPACITY"}, "qty": {"5": 3, "6": 2, "7": 1, "8": "", "9": "QTY", "10": 1, "11": 1, "12": 1, "13": "", "14": "", "15": "", "16": "", "17": "", "18": "", "19": "", "20": "", "21": "", "22": "", "23": "", "24": "", "25": "", "26": "", "27": "", "28": "", "29": "", "30": "", "31": "", "32": "", "33": "", "34": 0.4, "35": "", "36": "QTY", "37": "", "38": "", "39": "", "40": "", "41": "", "42": "", "43": "", "44": "", "45": "", "46": 240, "47": ""}, "va": {"5": 2000, "6": 1500, "7": 1500, "8": "", "9": "VA", "10": 1500, "11": 1500, "12": 1500, "13": "", "14": "", "15": "", "16": "", "17": "", "18": "", "19": "", "20": "", "21": "", "22": "", "23": "", "24": "", "25": "", "26": "", "27": "", "28": "", "29": "", "30": "", "31": "", "32": "", "33": "", "34": "=_xlfn.LET(_xlpm.result, _xlfn.AGGREGATE(9, 6, E32) - _xlfn.AGGREGATE(9, 6, E33), IF(_xlpm.result=0, \"\", _xlpm.result))", "35": "", "36": "VA", "37": "", "38": "", "39": "", "40": "", "41": "", "42": "", "43": "", "44": "", "45": "", "46": "", "47": ""}, "managed": {"10": false, "11": false, "12": false, "13": false, "14": false, "15": false, "16": false, "17": false, "18": false, "19": false, "20": false, "21": false, "22": false, "23": false, "24": false, "25": false, "26": false, "27": false, "28": false, "29": false, "30": false, "37": false, "38": false, "39": false, "40": false, "41": false, "42": false, "43": false}, "inputRows": [5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 37, 38, 39, 40, 42, 43, 46], "managedRows": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 37, 38, 39, 40, 41, 42, 43], "summaryRows": [8, 31, 32, 33, 34, 35, 41, 44, 45, 47], "sectionRows": [4, 9, 36, 46]};
+const EDITABLE_LABEL_ROWS = [19,20,21,22,23,24,25,26,27,28];
+const REMOVED_ROWS = [];
+
+function num(v){ const n = parseFloat(v); return Number.isFinite(n) ? n : 0; }
+function money(n){ return n ? Math.round(n).toLocaleString() : ""; }
+function watts(n){ return n ? Math.round(n).toLocaleString()+" W" : "0 W"; }
+function amps(n){ return n ? (Math.round(n*10)/10).toLocaleString()+" A" : "0 A"; }
+function isManagedRow(r){ return DATA.managedRows.includes(r); }
+function isInputRow(r){ return DATA.inputRows.includes(r); }
+function isSummaryRow(r){ return DATA.summaryRows.includes(r); }
+function isSectionRow(r){ return DATA.sectionRows.includes(r); }
+function isEditableLabelRow(r){ return EDITABLE_LABEL_ROWS.includes(r); }
+function q(r){ const el=document.getElementById("q"+r); return el ? num(el.value) : 0; }
+function v(r){ const el=document.getElementById("v"+r); return el ? num(el.value) : 0; }
+function checked(r){ const el=document.getElementById("m"+r); return el ? el.classList.contains("checked") : false; }
+function setOut(r, val, genVal=null){
+  const e=document.getElementById("e"+r); if(e) e.textContent=money(val);
+  const f=document.getElementById("f"+r); if(f) f.textContent=genVal===null ? "" : money(genVal);
+}
+function rowVA(r){
+  if(r===43) return q(r)*v(r)*1.25;
+  return q(r)*v(r);
+}
+function build(){
+  const tb=document.getElementById("tbody"); tb.innerHTML="";
+  for(let r=4;r<=47;r++){
+    if(REMOVED_ROWS.includes(r)) continue;
+    const tr=document.createElement("tr");
+    tr.id = "row" + r;
+    if(isSectionRow(r)) tr.className="section";
+    if(isSummaryRow(r)) tr.className += (r===45 || r===47 ? " total" : " subtotal");
+    const label=DATA.labels[String(r)] || "";
+    let qtyCell="", vaCell="", serviceCell=`<span class="out" id="e${r}"></span>`, managedCell="", genCell=`<span class="out" id="f${r}"></span>`;
+    if(isSectionRow(r)){
+      if(r===46){
+        qtyCell = `<select id="q${r}" onchange="calculate()"><option value="208" ${String(DATA.qty[String(r)] ?? 240)==="208" ? "selected" : ""}>208</option><option value="240" ${String(DATA.qty[String(r)] ?? 240)!=="208" ? "selected" : ""}>240</option></select>`;
+        serviceCell = "SERVICE LOAD"; genCell = "GEN LOAD";
+      } else {
+        serviceCell = r===4 ? "VA" : "VA";
+        managedCell = r===4 ? "MANAGED" : "";
+        genCell = r===4 ? "" : "";
+      }
+    } else {
+      if(isInputRow(r)){
+        if(r===5){
+          qtyCell = `<span class="out">3</span><input id="q${r}" type="hidden" value="3">`;
+          vaCell = `<input id="v${r}" type="number" value="${DATA.va[String(r)] ?? ""}" oninput="calculate()">`;
+        } else {
+          qtyCell = `<input id="q${r}" type="number" value="${DATA.qty[String(r)] ?? ""}" oninput="calculate()">`;
+          vaCell = `<input id="v${r}" type="number" value="${DATA.va[String(r)] ?? ""}" oninput="calculate()">`;
+        }
+      }
+      if(r===41){
+        qtyCell = `<span class="out" id="q41out"></span>`;
+        vaCell = `<span class="small">auto</span>`;
+      }
+      if(isManagedRow(r)){
+        const chk = DATA.managed[String(r)] ? " checked" : "";
+        managedCell = `<span id="m${r}" class="check${chk}" onclick="toggleManaged(${r})">${chk ? "✓" : ""}</span>`;
+      }
+    }
+    const labelCell = isEditableLabelRow(r) ? `<input id="label${r}" class="descInput" type="text" value="${label}">` : label;
+    tr.innerHTML = `<td class="label">${labelCell}</td><td>${qtyCell}</td><td>${vaCell}</td><td class="out">${serviceCell}</td><td class="center">${managedCell}</td><td class="out">${genCell}</td>`;
+    tb.appendChild(tr);
+  }
+  const spacer=document.createElement("tr");
+  spacer.className="after-min-amp-spacer";
+  spacer.innerHTML='<td colspan="6"></td>';
+  tb.appendChild(spacer);
+  calculate();
+}
+
+function hasEnteredInput(r){
+  const qe=document.getElementById("q"+r), ve=document.getElementById("v"+r);
+  const qText = qe ? String(qe.value).trim() : "";
+  const vText = ve ? String(ve.value).trim() : "";
+  if(r===46) return qText !== "";
+  return qText !== "" || vText !== "";
+}
+
+function updatePrintRows(){
+  // Print only rows tied to actual entered information.
+  // Blank input rows are hidden even if the calculator would otherwise show 0.
+  let hasGeneral=false, hasAppliance=false, hasHvac=false;
+
+  for(let r=4;r<=47;r++){
+    const row = document.getElementById("row"+r);
+    if(row) row.classList.add("print-hide");
+  }
+
+  for(const r of [5,6,7]){
+    const row=document.getElementById("row"+r), service=document.getElementById("e"+r);
+    const show = hasEnteredInput(r) && service && service.textContent.trim() !== "";
+    if(row) row.classList.toggle("print-hide", !show);
+    if(show) hasGeneral=true;
+  }
+
+  for(let r=10;r<=30;r++){
+    const row=document.getElementById("row"+r), service=document.getElementById("e"+r);
+    const show = hasEnteredInput(r) && service && service.textContent.trim() !== "";
+    if(row) row.classList.toggle("print-hide", !show);
+    if(show) hasAppliance=true;
+  }
+
+  for(const r of [37,38,39,40,42,43]){
+    const row=document.getElementById("row"+r), service=document.getElementById("e"+r);
+    const show = hasEnteredInput(r) && service && service.textContent.trim() !== "";
+    if(row) row.classList.toggle("print-hide", !show);
+    if(show) hasHvac=true;
+  }
+
+  // Show summary/total rows only when they have a calculated Service Load VA and their section has data.
+  const summaryRules = {8:hasGeneral, 31:false, 32:(hasGeneral||hasAppliance), 33:(hasGeneral||hasAppliance), 34:(hasGeneral||hasAppliance), 35:(hasGeneral||hasAppliance), 41:hasHvac, 44:hasHvac, 45:(hasGeneral||hasAppliance||hasHvac), 47:(hasGeneral||hasAppliance||hasHvac)};
+  for(const key in summaryRules){
+    const r=Number(key), row=document.getElementById("row"+r), service=document.getElementById("e"+r);
+    const show = summaryRules[key] && service && service.textContent.trim() !== "";
+    if(row) row.classList.toggle("print-hide", !show);
+  }
+
+  // Keep section headers only when that section has visible rows.
+  const sectionRules = {4:hasGeneral, 9:hasAppliance, 36:hasHvac, 46:false};
+  for(const key in sectionRules){
+    const row=document.getElementById("row"+key);
+    if(row) row.classList.toggle("print-hide", !sectionRules[key]);
+  }
+}
+
+function toggleManaged(r){
+  const el=document.getElementById("m"+r);
+  el.classList.toggle("checked");
+  el.textContent = el.classList.contains("checked") ? "✓" : "";
+  calculate();
+}
+function calculate(){
+  // Row calculations based on the worksheet formulas.
+  const general = rowVA(5)+rowVA(6)+rowVA(7);
+  setOut(5,rowVA(5),rowVA(5)); setOut(6,rowVA(6),rowVA(6)); setOut(7,rowVA(7),rowVA(7)); setOut(8,general,general);
+
+  let applTotal=0, applGen=0, managedCount=0, managedVA=0;
+  for(let r=10;r<=30;r++){
+    const val=rowVA(r);
+    applTotal += val;
+    if(checked(r) && val>0){managedCount++; managedVA += val;} else {applGen += val;}
+    setOut(r,val, checked(r) ? 0 : val);
+  }
+  setOut(9,null,managedVA);
+  setOut(31,applTotal,applGen);
+
+  const combined = general + applTotal;
+  const combinedGen = general + applGen;
+  setOut(32,combined,combinedGen);
+  const first10 = combined ? Math.min(combined,10000) : 0;
+  const first10Gen = combinedGen ? Math.min(combinedGen,10000) : 0;
+  setOut(33,first10,first10Gen);
+  const rem = Math.max(combined-first10,0);
+  const remGen = Math.max(combinedGen-first10Gen,0);
+  setOut(34,rem*0.4, remGen*0.4);
+  const derated = first10 + rem*0.4;
+  const deratedGen = first10Gen + remGen*0.4;
+  setOut(35,derated,deratedGen);
+
+  // HVAC logic: use the larger of A/C at 100% or heat.
+  // When the total quantity entered on the Heat at 65% rows is 4 or more,
+  // heating is calculated at 40% instead of 65%.
+  const ac1=q(37)*v(37), heat1=q(38)*v(38);
+  const ac2=q(39)*v(39), heat2=q(40)*v(40);
+  const totalAc = ac1 + ac2;
+  const totalHeat = heat1 + heat2;
+  const heatQty = q(38)+q(40);
+  const heat40 = heatQty >= 4 ? totalHeat*0.4 : 0;
+  const heat65 = heatQty > 0 && heatQty < 4 ? totalHeat*0.65 : 0;
+  document.getElementById("q41out").textContent = heatQty ? heatQty : "";
+  let hvacVals = {};
+  if(heatQty >= 4){
+    if(heat40 >= totalAc){
+      hvacVals[37]=0; hvacVals[38]=0; hvacVals[39]=0; hvacVals[40]=0; hvacVals[41]=heat40;
+    } else {
+      hvacVals[37]=ac1; hvacVals[38]=0; hvacVals[39]=ac2; hvacVals[40]=0; hvacVals[41]=0;
+    }
+  } else {
+    if(heat65 >= totalAc){
+      hvacVals[37]=0; hvacVals[38]=heat1*0.65; hvacVals[39]=0; hvacVals[40]=heat2*0.65; hvacVals[41]=0;
+    } else {
+      hvacVals[37]=ac1; hvacVals[38]=0; hvacVals[39]=ac2; hvacVals[40]=0; hvacVals[41]=0;
+    }
+  }
+  hvacVals[42]=rowVA(42);
+  hvacVals[43]=rowVA(43);
+
+  let hvacTotal=0, hvacGen=0;
+  for(const rr of [37,38,39,40,41,42,43]){
+    hvacTotal += hvacVals[rr] || 0;
+    const genVal = checked(rr) ? 0 : (hvacVals[rr] || 0);
+    hvacGen += genVal;
+    setOut(rr,hvacVals[rr] || 0, genVal);
+  }
+  setOut(44,hvacTotal,hvacGen);
+  const total = derated + hvacTotal;
+  const totalGen = deratedGen + hvacGen;
+  setOut(45,total,totalGen);
+  const voltage = q(46)||240;
+  setOut(47,total/voltage,totalGen/voltage);
+
+}
+function resetDefaults(){
+  for(const r of EDITABLE_LABEL_ROWS){
+    const le=document.getElementById("label"+r);
+    if(le) le.value = DATA.labels[String(r)] || "";
+  }
+  for(const r of DATA.inputRows){
+    const qe=document.getElementById("q"+r), ve=document.getElementById("v"+r);
+    if(qe) qe.value = DATA.qty[String(r)] ?? "";
+    if(ve) ve.value = DATA.va[String(r)] ?? "";
+  }
+
+  // Reset Defaults should leave both A/C at 100% rows and both Heat at 65% rows blank.
+  for(const r of [37,38,39,40]){
+    const qe=document.getElementById("q"+r), ve=document.getElementById("v"+r);
+    if(qe) qe.value = "";
+    if(ve) ve.value = "";
+  }
+
+  // Reset Defaults should not leave any managed-load checkmarks selected.
+  for(const r of DATA.managedRows){
+    const el=document.getElementById("m"+r);
+    if(el){
+      el.classList.remove("checked");
+      el.textContent = "";
+    }
+  }
+  calculate();
+}
+function clearInputs(){
+  // Clear project information fields.
+  for(const id of ["projectName","projectNumber","projectAddress","projectCityState"]){
+    const el = document.getElementById(id);
+    if(el) el.value = "";
+  }
+
+  for(const r of DATA.inputRows){
+    if(r===46) continue;
+    const qe=document.getElementById("q"+r), ve=document.getElementById("v"+r);
+    if(r===5){
+      if(qe) qe.value="3";
+      if(ve) ve.value="";
+      continue;
+    }
+    if(qe) qe.value="";
+    if(ve) ve.value="";
+  }
+  for(const r of DATA.managedRows){
+    const el=document.getElementById("m"+r);
+    if(el){el.classList.remove("checked"); el.textContent="";}
+  }
+  calculate();
+}
+window.addEventListener("beforeprint", updatePrintRows);
+build();
+</script>
+</body>
+</html>
