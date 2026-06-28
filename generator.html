@@ -40,7 +40,7 @@
     <button onclick="clearInputs()">Clear Inputs</button></div>
     <span class="note">Click the box in the Managed column to show a ✓. Checked items are removed from the generator load.</span>
   </div>
-  <div class="note" style="margin:-4px 0 10px 2px;">EV charger row calculates at 100% using 7,200 W/VA or nameplate rating, whichever is larger.</div>
+  <div class="note" style="margin:-4px 0 10px 2px;">EV charger calculates only when a quantity is entered. Each EV charger uses 7,200 W/VA or nameplate rating, whichever is larger.</div>
   <div class="sheet-wrap">
     <table id="calcTable">
       <colgroup><col class="label"><col class="qty"><col class="va"><col class="service"><col class="managed"><col class="gen"></colgroup>
@@ -50,14 +50,38 @@
   </div>
 </main>
 <script>
-const DATA = {"labels": {"4": "GENERAL LOADS", "5": "Select sq ft", "6": "Small appliance", "7": "Laundry", "8": "GENERAL LOADS SUBTOTAL", "9": "APPLIANCES LOADS NAMEPLATE", "10": "Dishwasher", "11": "Disposal", "12": "Refrigerator", "13": "Microwave", "14": "Hood fan", "15": "Freezer", "16": "Range (Name plate)", "17": "Wall Oven (Name plate)", "18": "Cooktop", "19": "Bath fan", "20": "Wine cooler", "21": "Coffee machine", "22": "Golf cart charger", "23": "", "24": "Irrigation pump", "25": "Garage Door Opener", "26": "", "27": "Pool equipment", "28": "Sauna", "29": "Water Heater", "30": "Dryer", "31": "APPLIANCES LOADS SUBTOTAL", "32": "GENERAL AND APPLIANCE LOADS", "33": "FIRST 10K of GENERAL AND APPLIANCE", "34": "REMAINDER @ 40%", "35": "TOTAL DERATED LOAD", "36": "HVAC AND CONTINUOUS", "37": "A/C at 100%", "38": "Heat at 65%", "39": "A/C at 100%", "40": "Heat at 65%", "41": "Heat at 40%", "42": null, "43": "EV Charger 100% — 7,200 W or Nameplate", "44": "HVAC AND CONTINUOUS", "45": "TOTAL CALCULATED LOAD WATTS", "46": "SELECT SERVICE VOLTAGE", "47": "MINIMUM SERVICE AMPACITY"}, "qty": {"5": 3, "6": 2, "7": 1, "8": "", "9": "QTY", "10": 1, "11": 1, "12": 1, "13": "", "14": "", "15": "", "16": "", "17": "", "18": "", "19": "", "20": "", "21": "", "22": "", "23": "", "24": "", "25": "", "26": "", "27": "", "28": "", "29": "", "30": "", "31": "", "32": "", "33": "", "34": 0.4, "35": "", "36": "QTY", "37": "", "38": "", "39": "", "40": "", "41": "", "42": "", "43": "", "44": "", "45": "", "46": 240, "47": ""}, "va": {"5": 2000, "6": 1500, "7": 1500, "8": "", "9": "VA", "10": 1500, "11": 1500, "12": 1500, "13": "", "14": "", "15": "", "16": "", "17": "", "18": "", "19": "", "20": "", "21": "", "22": "", "23": "", "24": "", "25": "", "26": "", "27": "", "28": "", "29": "", "30": "", "31": "", "32": "", "33": "", "34": "=_xlfn.LET(_xlpm.result, _xlfn.AGGREGATE(9, 6, E32) - _xlfn.AGGREGATE(9, 6, E33), IF(_xlpm.result=0, \"\", _xlpm.result))", "35": "", "36": "VA", "37": "", "38": "", "39": "", "40": "", "41": "", "42": "", "43": "", "44": "", "45": "", "46": "", "47": ""}, "managed": {"10": false, "11": false, "12": false, "13": false, "14": false, "15": false, "16": false, "17": false, "18": false, "19": false, "20": false, "21": false, "22": false, "23": false, "24": false, "25": false, "26": false, "27": false, "28": false, "29": false, "30": false, "37": false, "38": false, "39": false, "40": false, "41": false, "42": false, "43": false}, "inputRows": [5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 37, 38, 39, 40, 42, 43, 46], "managedRows": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 37, 38, 39, 40, 41, 42, 43], "summaryRows": [8, 31, 32, 33, 34, 35, 41, 44, 45, 47], "sectionRows": [4, 9, 36, 46]};
+const DATA = {"labels": {"4": "GENERAL LOADS", "5": "Select sq ft", "6": "Small appliance", "7": "Laundry", "8": "GENERAL LOADS SUBTOTAL", "9": "APPLIANCES LOADS NAMEPLATE", "10": "Dishwasher", "11": "Disposal", "12": "Refrigerator", "13": "Microwave", "14": "Hood fan", "15": "Freezer", "16": "Range (Name plate)", "17": "Wall Oven (Name plate)", "18": "Cooktop", "19": "Bath fan", "20": "Wine cooler", "21": "Coffee machine", "22": "Golf cart charger", "23": "", "24": "Irrigation pump", "25": "Garage Door Opener", "26": "", "27": "Pool equipment", "28": "Sauna", "29": "Water Heater", "30": "Dryer", "31": "APPLIANCES LOADS SUBTOTAL", "32": "GENERAL AND APPLIANCE LOADS", "33": "FIRST 10K of GENERAL AND APPLIANCE", "34": "REMAINDER @ 40%", "35": "TOTAL DERATED LOAD", "36": "HVAC AND CONTINUOUS", "37": "A/C at 100%", "38": "Heat at 65%", "39": "A/C at 100%", "40": "Heat at 65%", "41": "Heat at 40%", "42": null, "43": "EV Charger", "44": "HVAC AND CONTINUOUS", "45": "TOTAL CALCULATED LOAD WATTS", "46": "SELECT SERVICE VOLTAGE", "47": "MINIMUM SERVICE AMPACITY"}, "qty": {"5": 3, "6": 2, "7": 1, "8": "", "9": "QTY", "10": 1, "11": 1, "12": 1, "13": "", "14": "", "15": "", "16": "", "17": "", "18": "", "19": "", "20": "", "21": "", "22": "", "23": "", "24": "", "25": "", "26": "", "27": "", "28": "", "29": "", "30": "", "31": "", "32": "", "33": "", "34": 0.4, "35": "", "36": "QTY", "37": "", "38": "", "39": "", "40": "", "41": "", "42": "", "43": "", "44": "", "45": "", "46": 240, "47": ""}, "va": {"5": 2000, "6": 1500, "7": 1500, "8": "", "9": "VA", "10": 1500, "11": 1500, "12": 1500, "13": "", "14": "", "15": "", "16": "", "17": "", "18": "", "19": "", "20": "", "21": "", "22": "", "23": "", "24": "", "25": "", "26": "", "27": "", "28": "", "29": "", "30": "", "31": "", "32": "", "33": "", "34": "=_xlfn.LET(_xlpm.result, _xlfn.AGGREGATE(9, 6, E32) - _xlfn.AGGREGATE(9, 6, E33), IF(_xlpm.result=0, \"\", _xlpm.result))", "35": "", "36": "VA", "37": "", "38": "", "39": "", "40": "", "41": "", "42": "", "43": "", "44": "", "45": "", "46": "", "47": ""}, "managed": {"10": false, "11": false, "12": false, "13": false, "14": false, "15": false, "16": false, "17": false, "18": false, "19": false, "20": false, "21": false, "22": false, "23": false, "24": false, "25": false, "26": false, "27": false, "28": false, "29": false, "30": false, "37": false, "38": false, "39": false, "40": false, "41": false, "42": false, "43": false}, "inputRows": [5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 37, 38, 39, 40, 42, 43, 46], "managedRows": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 37, 38, 39, 40, 41, 42, 43], "summaryRows": [8, 31, 32, 33, 34, 35, 41, 44, 45, 47], "sectionRows": [4, 9, 36, 46]};
 const EDITABLE_LABEL_ROWS = [19,20,21,22,23,24,25,26,27,28];
 const REMOVED_ROWS = [];
 
-function num(v){ const n = parseFloat(v); return Number.isFinite(n) ? n : 0; }
+function num(v){ const n = parseFloat(v); return Number.isFinite(n) && n > 0 ? n : 0; }
+function sanitizeNonNegative(el){
+  if(!el) return;
+  const text = String(el.value).trim();
+  if(text === "") return;
+  const n = parseFloat(text);
+  // Quantity and VA fields should never show zero or a negative number.
+  // Blank means this row is not being used.
+  if(!Number.isFinite(n) || n <= 0){
+    el.value = "";
+  }
+}
+function hasPositiveEntry(id){
+  const el = document.getElementById(id);
+  if(!el) return false;
+  const text = String(el.value).trim();
+  if(text === "") return false;
+  const n = parseFloat(text);
+  return Number.isFinite(n) && n > 0;
+}
+function hasCompleteLoadInput(r){
+  // Voltage is a selector, not a load row.
+  if(r===46) return true;
+  return hasPositiveEntry("q"+r) && hasPositiveEntry("v"+r);
+}
 function money(n){ return n ? Math.round(n).toLocaleString() : ""; }
-function watts(n){ return n ? Math.round(n).toLocaleString()+" W" : "0 W"; }
-function amps(n){ return n ? (Math.round(n*10)/10).toLocaleString()+" A" : "0 A"; }
+function watts(n){ return n ? Math.round(n).toLocaleString()+" W" : ""; }
+function amps(n){ return n ? (Math.round(n*10)/10).toLocaleString()+" A" : ""; }
 function isManagedRow(r){ return DATA.managedRows.includes(r); }
 function isInputRow(r){ return DATA.inputRows.includes(r); }
 function isSummaryRow(r){ return DATA.summaryRows.includes(r); }
@@ -71,22 +95,17 @@ function setOut(r, val, genVal=null){
   const f=document.getElementById("f"+r); if(f) f.textContent=genVal===null ? "" : money(genVal);
 }
 function rowVA(r){
+  // Blank Quantity or blank VA means this row is not calculated.
+  if(!hasCompleteLoadInput(r)) return 0;
   // NEC 2023 220.57 EVSE rule:
-  // EVSE load is calculated at 7,200 W/VA or the nameplate rating,
-  // whichever is larger. This calculator applies that EV load at 100%.
+  // EV Charger uses 7,200 W/VA or nameplate rating, whichever is larger,
+  // but only after both Quantity and VA/nameplate are entered.
   if(r===43){
-    const qtyText = (document.getElementById("q43")?.value || "").trim();
-    const vaText = (document.getElementById("v43")?.value || "").trim();
-
-    // Do not auto-add 7,200 W unless the EV row has been entered.
-    if(qtyText === "" && vaText === "") return 0;
-
-    const qty = q(43) || 1;
-    const nameplate = v(43);
-    return qty * Math.max(7200, nameplate);
+    return q(43) * Math.max(7200, v(43));
   }
   return q(r)*v(r);
 }
+
 function build(){
   const tb=document.getElementById("tbody"); tb.innerHTML="";
   for(let r=4;r<=47;r++){
@@ -110,10 +129,10 @@ function build(){
       if(isInputRow(r)){
         if(r===5){
           qtyCell = `<span class="out">3</span><input id="q${r}" type="hidden" value="3">`;
-          vaCell = `<input id="v${r}" type="number" value="${DATA.va[String(r)] ?? ""}" oninput="calculate()">`;
+          vaCell = `<input id="v${r}" type="number" min="0" step="any" value="" oninput="sanitizeNonNegative(this);calculate()">`;
         } else {
-          qtyCell = `<input id="q${r}" type="number" value="${DATA.qty[String(r)] ?? ""}" oninput="calculate()">`;
-          vaCell = `<input id="v${r}" type="number" value="${DATA.va[String(r)] ?? ""}" oninput="calculate()">`;
+          qtyCell = `<input id="q${r}" type="number" min="0" step="any" value="" oninput="sanitizeNonNegative(this);calculate()">`;
+          vaCell = `<input id="v${r}" type="number" min="0" step="any" value="" oninput="sanitizeNonNegative(this);calculate()">`;
         }
       }
       if(r===41){
@@ -137,11 +156,8 @@ function build(){
 }
 
 function hasEnteredInput(r){
-  const qe=document.getElementById("q"+r), ve=document.getElementById("v"+r);
-  const qText = qe ? String(qe.value).trim() : "";
-  const vText = ve ? String(ve.value).trim() : "";
-  if(r===46) return qText !== "";
-  return qText !== "" || vText !== "";
+  if(r===46) return true;
+  return hasCompleteLoadInput(r);
 }
 
 function updatePrintRows(){
@@ -206,12 +222,13 @@ function improveEVRow(){
     q43.placeholder = "Qty";
   }
   if(v43){
-    v43.title = "Enter EV charger nameplate watts/VA. Calculator uses 7,200 W or nameplate, whichever is larger.";
+    v43.title = "Enter EV charger nameplate watts/VA. Row calculates only when Qty and VA are both entered; calculator uses 7,200 W or nameplate, whichever is larger.";
     v43.placeholder = "Nameplate W/VA";
   }
 }
 
 function calculate(){
+  document.querySelectorAll('input[id^="q"], input[id^="v"]').forEach(sanitizeNonNegative);
   improveEVRow();
   // Row calculations based on the worksheet formulas.
   const general = rowVA(5)+rowVA(6)+rowVA(7);
@@ -243,11 +260,11 @@ function calculate(){
   // HVAC logic: use the larger of A/C at 100% or heat.
   // When the total quantity entered on the Heat at 65% rows is 4 or more,
   // heating is calculated at 40% instead of 65%.
-  const ac1=q(37)*v(37), heat1=q(38)*v(38);
-  const ac2=q(39)*v(39), heat2=q(40)*v(40);
+  const ac1=rowVA(37), heat1=rowVA(38);
+  const ac2=rowVA(39), heat2=rowVA(40);
   const totalAc = ac1 + ac2;
   const totalHeat = heat1 + heat2;
-  const heatQty = q(38)+q(40);
+  const heatQty = (hasCompleteLoadInput(38) ? q(38) : 0) + (hasCompleteLoadInput(40) ? q(40) : 0);
   const heat40 = heatQty >= 4 ? totalHeat*0.4 : 0;
   const heat65 = heatQty > 0 && heatQty < 4 ? totalHeat*0.65 : 0;
   document.getElementById("q41out").textContent = heatQty ? heatQty : "";
@@ -292,20 +309,15 @@ function resetDefaults(){
     const le=document.getElementById("label"+r);
     if(le) le.value = DATA.labels[String(r)] || "";
   }
+  // Keep all user-entered Quantity and VA cells blank by default.
+  // Blank means no calculation for that row.
   for(const r of DATA.inputRows){
     const qe=document.getElementById("q"+r), ve=document.getElementById("v"+r);
-    if(qe) qe.value = DATA.qty[String(r)] ?? "";
-    if(ve) ve.value = DATA.va[String(r)] ?? "";
-  }
-
-  // Reset Defaults should leave both A/C at 100% rows and both Heat at 65% rows blank.
-  for(const r of [37,38,39,40]){
-    const qe=document.getElementById("q"+r), ve=document.getElementById("v"+r);
+    if(r===46){ if(qe) qe.value = DATA.qty[String(r)] ?? 240; continue; }
+    if(r===5){ if(qe) qe.value = "3"; if(ve) ve.value = ""; continue; }
     if(qe) qe.value = "";
     if(ve) ve.value = "";
   }
-
-  // Reset Defaults should not leave any managed-load checkmarks selected.
   for(const r of DATA.managedRows){
     const el=document.getElementById("m"+r);
     if(el){
