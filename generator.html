@@ -34,11 +34,13 @@
     <input id="projectCityState" class="wide" type="text">
   </div>
   <div class="toolbar"><div class="toolbar-left">
+    <button class="secondary" onclick="goHome()">🏠 Home</button>
     <button class="print" onclick="window.print()">Print / Save PDF</button>
     <button class="secondary" onclick="resetDefaults()">Reset Defaults</button>
     <button onclick="clearInputs()">Clear Inputs</button></div>
     <span class="note">Click the box in the Managed column to show a ✓. Checked items are removed from the generator load.</span>
   </div>
+  <div class="note" style="margin:-4px 0 10px 2px;">EV charger row calculates at 100% using 7,200 W/VA or nameplate rating, whichever is larger.</div>
   <div class="sheet-wrap">
     <table id="calcTable">
       <colgroup><col class="label"><col class="qty"><col class="va"><col class="service"><col class="managed"><col class="gen"></colgroup>
@@ -48,7 +50,7 @@
   </div>
 </main>
 <script>
-const DATA = {"labels": {"4": "GENERAL LOADS", "5": "Select sq ft", "6": "Small appliance", "7": "Laundry", "8": "GENERAL LOADS SUBTOTAL", "9": "APPLIANCES LOADS NAMEPLATE", "10": "Dishwasher", "11": "Disposal", "12": "Refrigerator", "13": "Microwave", "14": "Hood fan", "15": "Freezer", "16": "Range (Name plate)", "17": "Wall Oven (Name plate)", "18": "Cooktop", "19": "Bath fan", "20": "Wine cooler", "21": "Coffee machine", "22": "Golf cart charger", "23": "", "24": "Irrigation pump", "25": "Garage Door Opener", "26": "", "27": "Pool equipment", "28": "Sauna", "29": "Water Heater", "30": "Dryer", "31": "APPLIANCES LOADS SUBTOTAL", "32": "GENERAL AND APPLIANCE LOADS", "33": "FIRST 10K of GENERAL AND APPLIANCE", "34": "REMAINDER @ 40%", "35": "TOTAL DERATED LOAD", "36": "HVAC AND CONTINUOUS", "37": "A/C at 100%", "38": "Heat at 65%", "39": "A/C at 100%", "40": "Heat at 65%", "41": "Heat at 40%", "42": null, "43": "Car charger 125%", "44": "HVAC AND CONTINUOUS", "45": "TOTAL CALCULATED LOAD WATTS", "46": "SELECT SERVICE VOLTAGE", "47": "MINIMUM SERVICE AMPACITY"}, "qty": {"5": 3, "6": 2, "7": 1, "8": "", "9": "QTY", "10": 1, "11": 1, "12": 1, "13": "", "14": "", "15": "", "16": "", "17": "", "18": "", "19": "", "20": "", "21": "", "22": "", "23": "", "24": "", "25": "", "26": "", "27": "", "28": "", "29": "", "30": "", "31": "", "32": "", "33": "", "34": 0.4, "35": "", "36": "QTY", "37": "", "38": "", "39": "", "40": "", "41": "", "42": "", "43": "", "44": "", "45": "", "46": 240, "47": ""}, "va": {"5": 2000, "6": 1500, "7": 1500, "8": "", "9": "VA", "10": 1500, "11": 1500, "12": 1500, "13": "", "14": "", "15": "", "16": "", "17": "", "18": "", "19": "", "20": "", "21": "", "22": "", "23": "", "24": "", "25": "", "26": "", "27": "", "28": "", "29": "", "30": "", "31": "", "32": "", "33": "", "34": "=_xlfn.LET(_xlpm.result, _xlfn.AGGREGATE(9, 6, E32) - _xlfn.AGGREGATE(9, 6, E33), IF(_xlpm.result=0, \"\", _xlpm.result))", "35": "", "36": "VA", "37": "", "38": "", "39": "", "40": "", "41": "", "42": "", "43": "", "44": "", "45": "", "46": "", "47": ""}, "managed": {"10": false, "11": false, "12": false, "13": false, "14": false, "15": false, "16": false, "17": false, "18": false, "19": false, "20": false, "21": false, "22": false, "23": false, "24": false, "25": false, "26": false, "27": false, "28": false, "29": false, "30": false, "37": false, "38": false, "39": false, "40": false, "41": false, "42": false, "43": false}, "inputRows": [5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 37, 38, 39, 40, 42, 43, 46], "managedRows": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 37, 38, 39, 40, 41, 42, 43], "summaryRows": [8, 31, 32, 33, 34, 35, 41, 44, 45, 47], "sectionRows": [4, 9, 36, 46]};
+const DATA = {"labels": {"4": "GENERAL LOADS", "5": "Select sq ft", "6": "Small appliance", "7": "Laundry", "8": "GENERAL LOADS SUBTOTAL", "9": "APPLIANCES LOADS NAMEPLATE", "10": "Dishwasher", "11": "Disposal", "12": "Refrigerator", "13": "Microwave", "14": "Hood fan", "15": "Freezer", "16": "Range (Name plate)", "17": "Wall Oven (Name plate)", "18": "Cooktop", "19": "Bath fan", "20": "Wine cooler", "21": "Coffee machine", "22": "Golf cart charger", "23": "", "24": "Irrigation pump", "25": "Garage Door Opener", "26": "", "27": "Pool equipment", "28": "Sauna", "29": "Water Heater", "30": "Dryer", "31": "APPLIANCES LOADS SUBTOTAL", "32": "GENERAL AND APPLIANCE LOADS", "33": "FIRST 10K of GENERAL AND APPLIANCE", "34": "REMAINDER @ 40%", "35": "TOTAL DERATED LOAD", "36": "HVAC AND CONTINUOUS", "37": "A/C at 100%", "38": "Heat at 65%", "39": "A/C at 100%", "40": "Heat at 65%", "41": "Heat at 40%", "42": null, "43": "EV Charger 100% — 7,200 W or Nameplate", "44": "HVAC AND CONTINUOUS", "45": "TOTAL CALCULATED LOAD WATTS", "46": "SELECT SERVICE VOLTAGE", "47": "MINIMUM SERVICE AMPACITY"}, "qty": {"5": 3, "6": 2, "7": 1, "8": "", "9": "QTY", "10": 1, "11": 1, "12": 1, "13": "", "14": "", "15": "", "16": "", "17": "", "18": "", "19": "", "20": "", "21": "", "22": "", "23": "", "24": "", "25": "", "26": "", "27": "", "28": "", "29": "", "30": "", "31": "", "32": "", "33": "", "34": 0.4, "35": "", "36": "QTY", "37": "", "38": "", "39": "", "40": "", "41": "", "42": "", "43": "", "44": "", "45": "", "46": 240, "47": ""}, "va": {"5": 2000, "6": 1500, "7": 1500, "8": "", "9": "VA", "10": 1500, "11": 1500, "12": 1500, "13": "", "14": "", "15": "", "16": "", "17": "", "18": "", "19": "", "20": "", "21": "", "22": "", "23": "", "24": "", "25": "", "26": "", "27": "", "28": "", "29": "", "30": "", "31": "", "32": "", "33": "", "34": "=_xlfn.LET(_xlpm.result, _xlfn.AGGREGATE(9, 6, E32) - _xlfn.AGGREGATE(9, 6, E33), IF(_xlpm.result=0, \"\", _xlpm.result))", "35": "", "36": "VA", "37": "", "38": "", "39": "", "40": "", "41": "", "42": "", "43": "", "44": "", "45": "", "46": "", "47": ""}, "managed": {"10": false, "11": false, "12": false, "13": false, "14": false, "15": false, "16": false, "17": false, "18": false, "19": false, "20": false, "21": false, "22": false, "23": false, "24": false, "25": false, "26": false, "27": false, "28": false, "29": false, "30": false, "37": false, "38": false, "39": false, "40": false, "41": false, "42": false, "43": false}, "inputRows": [5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 37, 38, 39, 40, 42, 43, 46], "managedRows": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 37, 38, 39, 40, 41, 42, 43], "summaryRows": [8, 31, 32, 33, 34, 35, 41, 44, 45, 47], "sectionRows": [4, 9, 36, 46]};
 const EDITABLE_LABEL_ROWS = [19,20,21,22,23,24,25,26,27,28];
 const REMOVED_ROWS = [];
 
@@ -69,7 +71,20 @@ function setOut(r, val, genVal=null){
   const f=document.getElementById("f"+r); if(f) f.textContent=genVal===null ? "" : money(genVal);
 }
 function rowVA(r){
-  if(r===43) return q(r)*v(r)*1.25;
+  // NEC 2023 220.57 EVSE rule:
+  // EVSE load is calculated at 7,200 W/VA or the nameplate rating,
+  // whichever is larger. This calculator applies that EV load at 100%.
+  if(r===43){
+    const qtyText = (document.getElementById("q43")?.value || "").trim();
+    const vaText = (document.getElementById("v43")?.value || "").trim();
+
+    // Do not auto-add 7,200 W unless the EV row has been entered.
+    if(qtyText === "" && vaText === "") return 0;
+
+    const qty = q(43) || 1;
+    const nameplate = v(43);
+    return qty * Math.max(7200, nameplate);
+  }
   return q(r)*v(r);
 }
 function build(){
@@ -182,7 +197,22 @@ function toggleManaged(r){
   el.textContent = el.classList.contains("checked") ? "✓" : "";
   calculate();
 }
+
+function improveEVRow(){
+  const q43 = document.getElementById("q43");
+  const v43 = document.getElementById("v43");
+  if(q43){
+    q43.title = "EV charger quantity. Leave blank if no EV charger.";
+    q43.placeholder = "Qty";
+  }
+  if(v43){
+    v43.title = "Enter EV charger nameplate watts/VA. Calculator uses 7,200 W or nameplate, whichever is larger.";
+    v43.placeholder = "Nameplate W/VA";
+  }
+}
+
 function calculate(){
+  improveEVRow();
   // Row calculations based on the worksheet formulas.
   const general = rowVA(5)+rowVA(6)+rowVA(7);
   setOut(5,rowVA(5),rowVA(5)); setOut(6,rowVA(6),rowVA(6)); setOut(7,rowVA(7),rowVA(7)); setOut(8,general,general);
@@ -253,6 +283,10 @@ function calculate(){
   setOut(47,total/voltage,totalGen/voltage);
 
 }
+function goHome(){
+  window.location.href = "https://loadcalcpro.github.io/electrical-load-calculator/";
+}
+
 function resetDefaults(){
   for(const r of EDITABLE_LABEL_ROWS){
     const le=document.getElementById("label"+r);
