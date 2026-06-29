@@ -7,7 +7,8 @@
 <style>
 :root{--bg:#f3f4f6;--panel:#ffffff;--ink:#111827;--muted:#6b7280;--blue:#1e3a8a;--blue2:#0f172a;--line:#d1d5db;--head:#e8eefc;--accent:#0f766e;--green:#15803d;--danger:#b42318;}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}header{background:linear-gradient(135deg,#1e3a8a,#0f172a);color:#fff;padding:26px 30px}header h1{margin:0;font-size:28px;letter-spacing:.2px}header p{margin:7px 0 0;color:#dbeafe;font-size:14px}.tabs{display:flex;gap:8px;flex-wrap:wrap;padding:14px 22px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}.tab{border:1px solid var(--line);background:#f8fafc;border-radius:999px;padding:8px 14px;cursor:pointer;font-weight:700;color:#111827}.tab.active{background:#1e3a8a;color:#fff;border-color:#1e3a8a}main{padding:22px}.toolbar{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap}.toolbar-left{display:flex;gap:10px;flex-wrap:wrap}.note{color:var(--muted);font-size:13px}.btn,button{border:1px solid #1e3a8a;background:#1e3a8a;color:#fff;border-radius:10px;padding:9px 13px;font-weight:700;cursor:pointer}.btn.secondary,button.secondary{background:#fff;color:#1e3a8a}.btn.print,button.print{background:#0f766e;border-color:#0f766e}.results{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:12px;margin-bottom:14px}.kpi{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 18px rgba(15,23,42,.08);padding:14px 16px}.kpi .label{font-size:12px;color:#6b7280;text-transform:uppercase;font-weight:700}.kpi .value{font-size:25px;font-weight:900;margin-top:4px;color:#0f172a}.card,.sheet-wrap{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 18px rgba(15,23,42,.08);overflow:auto;max-height:calc(100vh - 175px)}table{border-collapse:collapse;min-width:900px;width:100%;table-layout:fixed}col.label{width:36%} col.qty{width:13%} col.va{width:13%} col.service{width:16%} col.managed{width:10%} col.gen{width:12%}th,td{border:1px solid #d9dee8;height:28px;padding:4px 7px;vertical-align:middle;font-size:13px;white-space:normal}thead th{position:sticky;top:0;background:#f8fafc;color:#6b7280;font-size:11px;z-index:2;text-transform:none;letter-spacing:0}td.label{font-weight:600}.section td{background:#1e3a8a!important;color:#fff!important;font-weight:700;text-align:center}.subtotal td{background:#e8eefc!important;color:#111827!important;font-weight:700}.total td{background:#dff0e7!important;color:#0f172a!important;font-weight:800}.out{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}.center{text-align:center}.small{font-size:12px;color:#6b7280;font-weight:400}input[type=number],input[type=text],select{width:100%;border:1px solid #cbd5e1;border-radius:6px;padding:5px 6px;font-size:13px;background:#fff;text-align:right}select{text-align:center}input[readonly]{background:#eef2f7;color:#596579}.descInput{width:100%;border:1px solid #cbd5e1;border-radius:6px;padding:5px 6px;font-size:13px;background:#fff;text-align:left!important;font-weight:600;color:#111827}@media print{.descInput{border:0;padding:0;background:transparent;font-weight:600}}.check{font-family:'Segoe UI Symbol',Arial,sans-serif;width:28px;height:24px;border:1px solid #cbd5e1;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;background:#fff;color:#15803d;font-size:18px;font-weight:900;cursor:pointer;user-select:none}.check.checked{background:#ecfdf5;border-color:#15803d}.footer{font-size:12px;color:var(--muted);padding:12px 2px}
-.form-titlebar{display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px;margin-bottom:8px;padding:2px 2px 0 2px;color:#111827}.form-titlebar .form-title{font-size:15px;font-weight:800;color:#0f172a;letter-spacing:.1px}.form-titlebar .form-timestamp{font-size:11px;color:#6b7280;white-space:nowrap}.form-titlebar .form-brand{font-size:12px;font-weight:800;color:#1e3a8a;opacity:.78;white-space:nowrap;letter-spacing:.15px}.form-titlebar .bolt{color:#0f766e;margin-right:3px}@media print{.form-titlebar{display:grid!important;grid-template-columns:1fr auto;align-items:center;gap:12px;margin:0 0 5px 0;padding:0;color:#111827}.form-titlebar .form-title{font-size:11px;font-weight:800;color:#0f172a}.form-titlebar .form-timestamp{font-size:9px;color:#555}.form-titlebar .form-brand{font-size:10px;font-weight:800;color:#1e3a8a;opacity:.85}.form-titlebar .bolt{color:#0f766e;margin-right:2px}}
+.form-titlebar{display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px;margin-bottom:8px;padding:2px 2px 0 2px;color:#111827}.form-titlebar .form-title{font-size:15px;font-weight:800;color:#0f172a;letter-spacing:.1px}
+.form-titlebar .form-version{font-size:11px;font-weight:700;color:#6b7280;margin-top:2px;letter-spacing:.12px}.form-titlebar .form-timestamp{font-size:11px;color:#6b7280;white-space:nowrap}.form-titlebar .form-brand{font-size:12px;font-weight:800;color:#1e3a8a;opacity:.78;white-space:nowrap;letter-spacing:.15px}.form-titlebar .bolt{color:#0f766e;margin-right:3px}@media print{.form-titlebar{display:grid!important;grid-template-columns:1fr auto;align-items:center;gap:12px;margin:0 0 5px 0;padding:0;color:#111827}.form-titlebar .form-title{font-size:11px;font-weight:800;color:#0f172a}.form-titlebar .form-version{font-size:8.5px;font-weight:700;color:#555;margin-top:1px}.form-titlebar .form-timestamp{font-size:9px;color:#555}.form-titlebar .form-brand{font-size:10px;font-weight:800;color:#1e3a8a;opacity:.85}.form-titlebar .bolt{color:#0f766e;margin-right:2px}}
 .project-info{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 18px rgba(15,23,42,.08);padding:10px 12px;margin-bottom:12px;display:grid;grid-template-columns:115px 1fr 90px 180px;gap:7px 8px;align-items:center}.project-info label{font-size:12px;font-weight:700;color:#111827;white-space:nowrap}.project-info input{height:26px;text-align:left!important}.project-info .wide{grid-column:span 3}@media(max-width:760px){.project-info{grid-template-columns:1fr}.project-info .wide{grid-column:auto}}@media print{.project-info{box-shadow:none;border:0;border-radius:0;margin:0 0 6px 0;padding:0;grid-template-columns:82px 1fr 70px 130px;gap:3px 6px}.project-info label{font-size:10px}.project-info input{border:0;border-bottom:1px solid #999;border-radius:0;padding:1px 2px;height:18px;font-size:10px;background:transparent}}
 
 @media(max-width:760px){main{padding:14px}.results{grid-template-columns:1fr}.card,.sheet-wrap{max-height:none}table{min-width:780px}}@media print{body{background:white}header,.tabs,.toolbar,.footer,.note{display:none!important}main{margin:0;max-width:none;padding:0}.card,.sheet-wrap,.kpi{box-shadow:none;border:0}.results{grid-template-columns:repeat(3,1fr)}table{font-size:11px;min-width:0;width:100%}th,td{padding:3px 4px}tr.print-hide{display:none!important}.after-min-amp-spacer td{height:10px!important;border:0!important;background:#fff!important;padding:0!important}}
@@ -20,7 +21,10 @@
 <body>
 <main>
   <div class="form-titlebar">
-    <div class="form-title">Generator Optional Method Calculator</div>
+    <div>
+      <div class="form-title">Generator Optional Method Calculator</div>
+      <div class="form-version">NEC 2023 | Version 1.0</div>
+    </div>
     <div class="form-brand"><span class="bolt">⚡</span>LoadCalcPro</div>
   </div>
   <div class="project-info">
@@ -36,7 +40,6 @@
   <div class="toolbar"><div class="toolbar-left">
     <button class="secondary" onclick="goHome()">🏠 Home</button>
     <button class="print" onclick="window.print()">Print / Save PDF</button>
-    <button class="secondary" onclick="resetDefaults()">Reset Defaults</button>
     <button onclick="clearInputs()">Clear Inputs</button></div>
     <span class="note">Click the box in the Managed column to show a ✓. Checked items are removed from the generator load.</span>
   </div>
@@ -304,29 +307,6 @@ function goHome(){
   window.location.href = "https://loadcalcpro.github.io/electrical-load-calculator/";
 }
 
-function resetDefaults(){
-  for(const r of EDITABLE_LABEL_ROWS){
-    const le=document.getElementById("label"+r);
-    if(le) le.value = DATA.labels[String(r)] || "";
-  }
-  // Keep all user-entered Quantity and VA cells blank by default.
-  // Blank means no calculation for that row.
-  for(const r of DATA.inputRows){
-    const qe=document.getElementById("q"+r), ve=document.getElementById("v"+r);
-    if(r===46){ if(qe) qe.value = DATA.qty[String(r)] ?? 240; continue; }
-    if(r===5){ if(qe) qe.value = "3"; if(ve) ve.value = ""; continue; }
-    if(qe) qe.value = "";
-    if(ve) ve.value = "";
-  }
-  for(const r of DATA.managedRows){
-    const el=document.getElementById("m"+r);
-    if(el){
-      el.classList.remove("checked");
-      el.textContent = "";
-    }
-  }
-  calculate();
-}
 function clearInputs(){
   // Clear project information fields.
   for(const id of ["projectName","projectNumber","projectAddress","projectCityState"]){
