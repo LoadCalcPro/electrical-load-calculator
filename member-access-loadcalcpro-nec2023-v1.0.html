@@ -32,13 +32,13 @@
   </div>
   <div class="project-info">
     <label for="projectName">Project Name</label>
-    <input id="projectName" type="text">
+    <input id="projectName" type="text" oninput="saveState()">
     <label for="projectNumber">Project #</label>
-    <input id="projectNumber" type="text">
+    <input id="projectNumber" type="text" oninput="saveState()">
     <label for="projectAddress">Address</label>
-    <input id="projectAddress" class="wide" type="text">
+    <input id="projectAddress" class="wide" type="text" oninput="saveState()">
     <label for="projectCityState">City/State</label>
-    <input id="projectCityState" class="wide" type="text">
+    <input id="projectCityState" class="wide" type="text" oninput="saveState()">
   </div>
   <div class="toolbar"><div class="toolbar-left">
     <button class="secondary" onclick="goHome()">🏠 Home</button>
@@ -464,7 +464,10 @@ function startNewCalculationFromButton(){
 }
 
 window.addEventListener("beforeprint", updatePrintRows);
+// Build the calculator without overwriting a saved calculation on page load.
+suppressAutoSave = true;
 build();
+suppressAutoSave = false;
 showRestorePromptIfNeeded();
 </script>
 </body>
