@@ -11,6 +11,9 @@
 .form-titlebar .form-version{font-size:11px;font-weight:700;color:#6b7280;margin-top:2px;letter-spacing:.12px}.form-titlebar .form-timestamp{font-size:11px;color:#6b7280;white-space:nowrap}.form-titlebar .form-brand{font-size:12px;font-weight:800;color:#1e3a8a;opacity:.78;white-space:nowrap;letter-spacing:.15px}.form-titlebar .bolt{color:#0f766e;margin-right:3px}@media print{.form-titlebar{display:grid!important;grid-template-columns:1fr auto;align-items:center;gap:12px;margin:0 0 5px 0;padding:0;color:#111827}.form-titlebar .form-title{font-size:11px;font-weight:800;color:#0f172a}.form-titlebar .form-version{font-size:8.5px;font-weight:700;color:#555;margin-top:1px}.form-titlebar .form-timestamp{font-size:9px;color:#555}.form-titlebar .form-brand{font-size:10px;font-weight:800;color:#1e3a8a;opacity:.85}.form-titlebar .bolt{color:#0f766e;margin-right:2px}}
 .project-info{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 18px rgba(15,23,42,.08);padding:10px 12px;margin-bottom:12px;display:grid;grid-template-columns:115px 1fr 90px 180px;gap:7px 8px;align-items:center}.project-info label{font-size:12px;font-weight:700;color:#111827;white-space:nowrap}.project-info input{height:26px;text-align:left!important}.project-info .wide{grid-column:span 3}@media(max-width:760px){.project-info{grid-template-columns:1fr}.project-info .wide{grid-column:auto}}@media print{.project-info{box-shadow:none;border:0;border-radius:0;margin:0 0 6px 0;padding:0;grid-template-columns:82px 1fr 70px 130px;gap:3px 6px}.project-info label{font-size:10px}.project-info input{border:0;border-bottom:1px solid #999;border-radius:0;padding:1px 2px;height:18px;font-size:10px;background:transparent}}
 
+.save-status{font-size:12px;color:#0f766e;font-weight:700;white-space:nowrap}
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px}.modal-backdrop.show{display:flex}.modal-box{background:#fff;color:#111827;border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,.32);max-width:430px;width:100%;padding:22px;border:1px solid #d1d5db}.modal-box h2{margin:0 0 8px 0;color:#1e3a8a;font-size:22px}.modal-box p{margin:8px 0 16px 0;color:#374151;line-height:1.45}.modal-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}.modal-actions button{border-radius:10px;padding:10px 13px}.modal-actions .danger{background:#b42318;border-color:#b42318;color:#fff}@media print{.save-status,.modal-backdrop{display:none!important}}
+
 @media(max-width:760px){main{padding:14px}.results{grid-template-columns:1fr}.card,.sheet-wrap{max-height:none}table{min-width:780px}}@media print{body{background:white}header,.tabs,.toolbar,.footer,.note{display:none!important}main{margin:0;max-width:none;padding:0}.card,.sheet-wrap,.kpi{box-shadow:none;border:0}.results{grid-template-columns:repeat(3,1fr)}table{font-size:11px;min-width:0;width:100%}th,td{padding:3px 4px}tr.print-hide{display:none!important}.after-min-amp-spacer td{height:10px!important;border:0!important;background:#fff!important;padding:0!important}}
 .after-min-amp-spacer td{height:12px;border:0;background:transparent;padding:0}
 
@@ -29,18 +32,19 @@
   </div>
   <div class="project-info">
     <label for="projectName">Project Name</label>
-    <input id="projectName" type="text">
+    <input id="projectName" type="text" oninput="saveState()">
     <label for="projectNumber">Project #</label>
-    <input id="projectNumber" type="text">
+    <input id="projectNumber" type="text" oninput="saveState()">
     <label for="projectAddress">Address</label>
-    <input id="projectAddress" class="wide" type="text">
+    <input id="projectAddress" class="wide" type="text" oninput="saveState()">
     <label for="projectCityState">City/State</label>
-    <input id="projectCityState" class="wide" type="text">
+    <input id="projectCityState" class="wide" type="text" oninput="saveState()">
   </div>
   <div class="toolbar"><div class="toolbar-left">
     <button class="secondary" onclick="goHome()">🏠 Home</button>
     <button class="print" onclick="window.print()">Print / Save PDF</button>
-    <button onclick="clearInputs()">Clear Inputs</button></div>
+    <button onclick="startNewCalculationFromButton()">New Calculation</button></div>
+    <span class="save-status" id="saveStatus">💾 Auto Saved</span>
     <span class="note">Click the box in the Managed column to show a ✓. Checked items are removed from the generator load.</span>
   </div>
   <div class="note" style="margin:-4px 0 10px 2px;">EV charger calculates only when a quantity is entered. Each EV charger uses 7,200 W/VA or nameplate rating, whichever is larger.</div>
@@ -52,7 +56,22 @@
     </table>
   </div>
 </main>
+<div id="restoreModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="restoreTitle">
+  <div class="modal-box">
+    <h2 id="restoreTitle">LoadCalcPro</h2>
+    <p><strong>A previous calculation was found.</strong></p>
+    <p>Would you like to continue your previous calculation or start a new one?</p>
+    <div class="modal-actions">
+      <button class="secondary" onclick="startNewFromSavedPrompt()">Start New Calculation</button>
+      <button onclick="continuePreviousCalculation()">Continue Previous Calculation</button>
+    </div>
+  </div>
+</div>
+
 <script>
+const STORAGE_KEY = "loadcalcpro_generator_optional_nec2023_v1";
+let suppressAutoSave = false;
+let restorePromptOpen = false;
 const DATA = {"labels": {"4": "GENERAL LOADS", "5": "Select sq ft", "6": "Small appliance", "7": "Laundry", "8": "GENERAL LOADS SUBTOTAL", "9": "APPLIANCES LOADS NAMEPLATE", "10": "Dishwasher", "11": "Disposal", "12": "Refrigerator", "13": "Microwave", "14": "Hood fan", "15": "Freezer", "16": "Range (Name plate)", "17": "Wall Oven (Name plate)", "18": "Cooktop", "19": "Bath fan", "20": "Wine cooler", "21": "Coffee machine", "22": "Golf cart charger", "23": "", "24": "Irrigation pump", "25": "Garage Door Opener", "26": "", "27": "Pool equipment", "28": "Sauna", "29": "Water Heater", "30": "Dryer", "31": "APPLIANCES LOADS SUBTOTAL", "32": "GENERAL AND APPLIANCE LOADS", "33": "FIRST 10K of GENERAL AND APPLIANCE", "34": "REMAINDER @ 40%", "35": "TOTAL DERATED LOAD", "36": "HVAC AND CONTINUOUS", "37": "A/C at 100%", "38": "Heat at 65%", "39": "A/C at 100%", "40": "Heat at 65%", "41": "Heat at 40%", "42": null, "43": "EV Charger", "44": "HVAC AND CONTINUOUS", "45": "TOTAL CALCULATED LOAD WATTS", "46": "SELECT SERVICE VOLTAGE", "47": "MINIMUM SERVICE AMPACITY"}, "qty": {"5": 3, "6": 2, "7": 1, "8": "", "9": "QTY", "10": 1, "11": 1, "12": 1, "13": "", "14": "", "15": "", "16": "", "17": "", "18": "", "19": "", "20": "", "21": "", "22": "", "23": "", "24": "", "25": "", "26": "", "27": "", "28": "", "29": "", "30": "", "31": "", "32": "", "33": "", "34": 0.4, "35": "", "36": "QTY", "37": "", "38": "", "39": "", "40": "", "41": "", "42": "", "43": "", "44": "", "45": "", "46": 240, "47": ""}, "va": {"5": 2000, "6": 1500, "7": 1500, "8": "", "9": "VA", "10": 1500, "11": 1500, "12": 1500, "13": "", "14": "", "15": "", "16": "", "17": "", "18": "", "19": "", "20": "", "21": "", "22": "", "23": "", "24": "", "25": "", "26": "", "27": "", "28": "", "29": "", "30": "", "31": "", "32": "", "33": "", "34": "=_xlfn.LET(_xlpm.result, _xlfn.AGGREGATE(9, 6, E32) - _xlfn.AGGREGATE(9, 6, E33), IF(_xlpm.result=0, \"\", _xlpm.result))", "35": "", "36": "VA", "37": "", "38": "", "39": "", "40": "", "41": "", "42": "", "43": "", "44": "", "45": "", "46": "", "47": ""}, "managed": {"10": false, "11": false, "12": false, "13": false, "14": false, "15": false, "16": false, "17": false, "18": false, "19": false, "20": false, "21": false, "22": false, "23": false, "24": false, "25": false, "26": false, "27": false, "28": false, "29": false, "30": false, "37": false, "38": false, "39": false, "40": false, "41": false, "42": false, "43": false}, "inputRows": [5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 37, 38, 39, 40, 42, 43, 46], "managedRows": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 37, 38, 39, 40, 41, 42, 43], "summaryRows": [8, 31, 32, 33, 34, 35, 41, 44, 45, 47], "sectionRows": [4, 9, 36, 46]};
 const EDITABLE_LABEL_ROWS = [19,20,21,22,23,24,25,26,27,28];
 const REMOVED_ROWS = [];
@@ -147,7 +166,7 @@ function build(){
         managedCell = `<span id="m${r}" class="check${chk}" onclick="toggleManaged(${r})">${chk ? "✓" : ""}</span>`;
       }
     }
-    const labelCell = isEditableLabelRow(r) ? `<input id="label${r}" class="descInput" type="text" value="${label}">` : label;
+    const labelCell = isEditableLabelRow(r) ? `<input id="label${r}" class="descInput" type="text" value="${label}" oninput="saveState()">` : label;
     tr.innerHTML = `<td class="label">${labelCell}</td><td>${qtyCell}</td><td>${vaCell}</td><td class="out">${serviceCell}</td><td class="center">${managedCell}</td><td class="out">${genCell}</td>`;
     tb.appendChild(tr);
   }
@@ -301,13 +320,16 @@ function calculate(){
   setOut(45,total,totalGen);
   const voltage = q(46)||240;
   setOut(47,total/voltage,totalGen/voltage);
+  saveState();
 
 }
 function goHome(){
   window.location.href = "https://loadcalcpro.github.io/electrical-load-calculator/";
 }
 
-function clearInputs(){
+function clearInputs(skipSave=false){
+  const previousSuppress = suppressAutoSave;
+  if(skipSave) suppressAutoSave = true;
   // Clear project information fields.
   for(const id of ["projectName","projectNumber","projectAddress","projectCityState"]){
     const el = document.getElementById(id);
@@ -330,9 +352,123 @@ function clearInputs(){
     if(el){el.classList.remove("checked"); el.textContent="";}
   }
   calculate();
+  suppressAutoSave = previousSuppress;
+  if(!skipSave) saveState();
 }
+
+function collectState(){
+  const state = {inputs:{}, labels:{}, managed:{}, savedAt:new Date().toISOString()};
+  document.querySelectorAll("input, select").forEach(el => {
+    if(el.id) state.inputs[el.id] = el.value;
+  });
+  for(const r of EDITABLE_LABEL_ROWS){
+    const el = document.getElementById("label"+r);
+    if(el) state.labels[r] = el.value;
+  }
+  for(const r of DATA.managedRows){
+    const el = document.getElementById("m"+r);
+    if(el) state.managed[r] = !!(el && el.classList.contains("checked"));
+  }
+  return state;
+}
+
+function saveState(){
+  if(suppressAutoSave || restorePromptOpen) return;
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState()));
+    updateSaveStatus();
+  }catch(e){
+    const status=document.getElementById("saveStatus");
+    if(status) status.textContent = "Auto save unavailable";
+  }
+}
+
+function updateSaveStatus(){
+  const status=document.getElementById("saveStatus");
+  if(!status) return;
+  const now = new Date();
+  status.textContent = "💾 Auto Saved " + now.toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+}
+
+function restoreState(state){
+  if(!state) return;
+  suppressAutoSave = true;
+  if(state.inputs){
+    for(const id in state.inputs){
+      const el=document.getElementById(id);
+      if(el) el.value = state.inputs[id];
+    }
+  }
+  if(state.labels){
+    for(const r in state.labels){
+      const el=document.getElementById("label"+r);
+      if(el) el.value = state.labels[r];
+    }
+  }
+  if(state.managed){
+    for(const r in state.managed){
+      const el=document.getElementById("m"+r);
+      if(el){
+        el.classList.toggle("checked", !!state.managed[r]);
+        el.textContent = state.managed[r] ? "✓" : "";
+      }
+    }
+  }
+  calculate();
+  suppressAutoSave = false;
+  saveState();
+}
+
+function getSavedState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+
+function showRestorePromptIfNeeded(){
+  const saved = getSavedState();
+  if(!saved) { saveState(); return; }
+  restorePromptOpen = true;
+  const modal=document.getElementById("restoreModal");
+  if(modal) modal.classList.add("show");
+}
+
+function hideRestorePrompt(){
+  restorePromptOpen = false;
+  const modal=document.getElementById("restoreModal");
+  if(modal) modal.classList.remove("show");
+}
+
+function continuePreviousCalculation(){
+  const saved = getSavedState();
+  hideRestorePrompt();
+  restoreState(saved);
+}
+
+function startNewFromSavedPrompt(){
+  if(confirm("Start a new calculation? Your previously saved calculation will be replaced.")){
+    hideRestorePrompt();
+    localStorage.removeItem(STORAGE_KEY);
+    clearInputs(true);
+    saveState();
+  }
+}
+
+function startNewCalculationFromButton(){
+  if(confirm("Start a new calculation? This will clear the current entries on this calculator.")){
+    localStorage.removeItem(STORAGE_KEY);
+    clearInputs(true);
+    saveState();
+  }
+}
+
 window.addEventListener("beforeprint", updatePrintRows);
+// Build the calculator without overwriting a saved calculation on page load.
+suppressAutoSave = true;
 build();
+suppressAutoSave = false;
+showRestorePromptIfNeeded();
 </script>
 </body>
 </html>
