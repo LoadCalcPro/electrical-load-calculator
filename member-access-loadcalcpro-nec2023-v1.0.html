@@ -19,9 +19,106 @@
 
 @page{size:letter;margin:0}
 @media print{html,body{margin:0!important;padding:0!important}main{padding:0.25in!important}}
+/* LoadCalcPro protected access screen - TEST VERSION */
+body.access-locked main,
+body.access-locked header,
+body.access-locked .tabs,
+body.access-locked .toolbar{
+  display:none!important;
+}
+body.access-locked .modal-backdrop.show{
+  display:none!important;
+}
+.access-screen{
+  min-height:100vh;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:linear-gradient(135deg,#1e3a8a,#0f172a);
+}
+body.access-locked .access-screen{display:flex;}
+.access-card{
+  width:100%;
+  max-width:460px;
+  background:#ffffff;
+  color:#111827;
+  border-radius:18px;
+  box-shadow:0 24px 80px rgba(0,0,0,.32);
+  padding:26px;
+  border:1px solid #d1d5db;
+}
+.access-topline{
+  font-size:12px;
+  font-weight:900;
+  color:#0f766e;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:8px;
+}
+.access-card h1{
+  margin:0 0 6px 0;
+  color:#1e3a8a;
+  font-size:26px;
+}
+.access-card .subtitle{
+  margin:0 0 18px 0;
+  color:#4b5563;
+  line-height:1.45;
+}
+.access-card label{
+  display:block;
+  font-weight:800;
+  font-size:13px;
+  margin:12px 0 6px;
+}
+.access-card input[type=email]{
+  width:100%;
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+  padding:11px 12px;
+  font-size:15px;
+  text-align:left!important;
+}
+.access-card button{
+  width:100%;
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:10px;
+}
+.access-msg{
+  min-height:20px;
+  margin-top:12px;
+  font-size:13px;
+  font-weight:700;
+}
+.access-msg.error{color:#b42318;}
+.access-msg.ok{color:#15803d;}
+.access-note{
+  margin-top:16px;
+  font-size:12px;
+  color:#6b7280;
+  line-height:1.4;
+}
+@media print{.access-screen{display:none!important}}
+
 </style>
 </head>
-<body>
+<body class="access-locked">
+
+<div id="accessScreen" class="access-screen">
+  <div class="access-card">
+    <div class="access-topline">LoadCalcPro Protected Access</div>
+    <h1>Professional Membership</h1>
+    <p class="subtitle">Please enter the email address used for your LoadCalcPro subscription to continue.</p>
+    <label for="memberEmail">Membership Email</label>
+    <input id="memberEmail" type="email" autocomplete="email" placeholder="you@example.com">
+    <button id="accessButton" type="button" onclick="requestCalculatorAccess()">Continue</button>
+    <div id="accessMessage" class="access-msg"></div>
+    <p class="access-note"><strong>Test version:</strong> This screen is ready for subscription checking, but it is not connected to Payhip yet.</p>
+  </div>
+</div>
+
 <main>
   <div class="form-titlebar">
     <div>
@@ -44,10 +141,8 @@
     <button class="secondary" onclick="goHome()">🏠 Home</button>
     <button class="print" onclick="window.print()">Print / Save PDF</button>
     <button onclick="startNewCalculationFromButton()">New Calculation</button></div>
-    <span class="save-status" id="saveStatus">💾 Auto Saved</span>
     <span class="note">Click the box in the Managed column to show a ✓. Checked items are removed from the generator load.</span>
   </div>
-  <div class="note" style="margin:-4px 0 10px 2px;">EV charger calculates only when a quantity is entered. Each EV charger uses 7,200 W/VA or nameplate rating, whichever is larger.</div>
   <div class="sheet-wrap">
     <table id="calcTable">
       <colgroup><col class="label"><col class="qty"><col class="va"><col class="service"><col class="managed"><col class="gen"></colgroup>
@@ -69,6 +164,80 @@
 </div>
 
 <script>
+
+/* LoadCalcPro protected access - TEST VERSION
+   Next step: replace TEST_MODE with a real backend check tied to Payhip subscriptions.
+*/
+const LOADCALCPRO_ACCESS_TEST_MODE = true;
+const LOADCALCPRO_ACCESS_KEY = "loadcalcpro_member_access_generator_nec2023";
+
+function setAccessMessage(text, type){
+  const msg = document.getElementById("accessMessage");
+  if(!msg) return;
+  msg.textContent = text || "";
+  msg.className = "access-msg" + (type ? " " + type : "");
+}
+
+function validEmail(email){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+async function verifyMembershipEmail(email){
+  if(LOADCALCPRO_ACCESS_TEST_MODE){
+    return {active:true, message:"Test access approved."};
+  }
+
+  // Future live version:
+  // return fetch("https://YOUR-SERVER-HERE/check-access", {
+  //   method:"POST",
+  //   headers:{"Content-Type":"application/json"},
+  //   body:JSON.stringify({email:email, calculator:"generator-nec2023"})
+  // }).then(r => r.json());
+
+  return {active:false, message:"Subscription verification is not connected yet."};
+}
+
+function unlockCalculator(email){
+  try{
+    sessionStorage.setItem(LOADCALCPRO_ACCESS_KEY, JSON.stringify({email:email, unlockedAt:new Date().toISOString()}));
+  }catch(e){}
+  document.body.classList.remove("access-locked");
+  setAccessMessage("Access approved. Opening calculator...", "ok");
+  showRestorePromptIfNeeded();
+}
+
+async function requestCalculatorAccess(){
+  const emailEl = document.getElementById("memberEmail");
+  const button = document.getElementById("accessButton");
+  const email = emailEl ? emailEl.value.trim().toLowerCase() : "";
+
+  if(!validEmail(email)){
+    setAccessMessage("Please enter a valid email address.", "error");
+    if(emailEl) emailEl.focus();
+    return;
+  }
+
+  try{
+    if(button){button.disabled=true; button.textContent="Checking...";}
+    setAccessMessage("Checking membership access...", "");
+    const result = await verifyMembershipEmail(email);
+    if(result && result.active){
+      unlockCalculator(email);
+    } else {
+      setAccessMessage((result && result.message) || "Subscription required. Please renew your membership to continue.", "error");
+    }
+  }catch(e){
+    setAccessMessage("Access check failed. Please try again.", "error");
+  }finally{
+    if(button){button.disabled=false; button.textContent="Continue";}
+  }
+}
+
+document.addEventListener("keydown", function(e){
+  if(e.key === "Enter" && document.body.classList.contains("access-locked")){
+    requestCalculatorAccess();
+  }
+});
 const STORAGE_KEY = "loadcalcpro_generator_optional_nec2023_v1";
 let suppressAutoSave = false;
 let restorePromptOpen = false;
@@ -150,8 +319,14 @@ function build(){
     } else {
       if(isInputRow(r)){
         if(r===5){
-          qtyCell = `<span class="out">3</span><input id="q${r}" type="hidden" value="3">`;
-          vaCell = `<input id="v${r}" type="number" min="0" step="any" value="" oninput="sanitizeNonNegative(this);calculate()">`;
+          qtyCell = `<input id="q${r}" type="number" min="0" step="any" value="" oninput="sanitizeNonNegative(this);calculate()">`;
+          vaCell = `<input id="v${r}" type="number" min="0" step="any" value="3" oninput="sanitizeNonNegative(this);calculate()">`;
+        } else if(r===6){
+          qtyCell = `<input id="q${r}" type="number" min="0" step="any" value="2" oninput="sanitizeNonNegative(this);calculate()">`;
+          vaCell = `<input id="v${r}" type="number" min="0" step="any" value="1500" oninput="sanitizeNonNegative(this);calculate()">`;
+        } else if(r===7){
+          qtyCell = `<input id="q${r}" type="number" min="0" step="any" value="1" oninput="sanitizeNonNegative(this);calculate()">`;
+          vaCell = `<input id="v${r}" type="number" min="0" step="any" value="1500" oninput="sanitizeNonNegative(this);calculate()">`;
         } else {
           qtyCell = `<input id="q${r}" type="number" min="0" step="any" value="" oninput="sanitizeNonNegative(this);calculate()">`;
           vaCell = `<input id="v${r}" type="number" min="0" step="any" value="" oninput="sanitizeNonNegative(this);calculate()">`;
@@ -340,8 +515,18 @@ function clearInputs(skipSave=false){
     if(r===46) continue;
     const qe=document.getElementById("q"+r), ve=document.getElementById("v"+r);
     if(r===5){
-      if(qe) qe.value="3";
-      if(ve) ve.value="";
+      if(qe) qe.value="";
+      if(ve) ve.value="3";
+      continue;
+    }
+    if(r===6){
+      if(qe) qe.value="2";
+      if(ve) ve.value="1500";
+      continue;
+    }
+    if(r===7){
+      if(qe) qe.value="1";
+      if(ve) ve.value="1500";
       continue;
     }
     if(qe) qe.value="";
@@ -372,22 +557,64 @@ function collectState(){
   return state;
 }
 
+function hasMeaningfulState(state){
+  if(!state) return false;
+
+  // Project information counts as saved work.
+  for(const id of ["projectName","projectNumber","projectAddress","projectCityState"]){
+    if(state.inputs && String(state.inputs[id] || "").trim() !== "") return true;
+  }
+
+  // Quantity and VA entries count as saved work. Ignore default helper fields.
+  if(state.inputs){
+    for(const id in state.inputs){
+      if(id === "q5" || id === "q46") continue;
+      if(id.startsWith("q") || id.startsWith("v")){
+        if(String(state.inputs[id] || "").trim() !== "") return true;
+      }
+    }
+  }
+
+  // Custom load descriptions count only if they differ from the default labels.
+  if(state.labels){
+    for(const r in state.labels){
+      const defaultLabel = DATA.labels[String(r)] || "";
+      if(String(state.labels[r] || "") !== defaultLabel) return true;
+    }
+  }
+
+  // Any checked managed load counts as saved work.
+  if(state.managed){
+    for(const r in state.managed){
+      if(state.managed[r]) return true;
+    }
+  }
+
+  return false;
+}
+
 function saveState(){
   if(suppressAutoSave || restorePromptOpen) return;
   try{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState()));
-    updateSaveStatus();
+    const state = collectState();
+
+    // Safety behavior:
+    // A blank calculator is NOT saved. This makes every first-time user open
+    // to a fresh calculator and prevents a blank saved session from causing
+    // the previous-calculation prompt.
+    if(!hasMeaningfulState(state)){
+      localStorage.removeItem(STORAGE_KEY);
+      return;
+    }
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }catch(e){
-    const status=document.getElementById("saveStatus");
-    if(status) status.textContent = "Auto save unavailable";
+    // If local storage is unavailable, the calculator still works normally.
   }
 }
 
 function updateSaveStatus(){
-  const status=document.getElementById("saveStatus");
-  if(!status) return;
-  const now = new Date();
-  status.textContent = "💾 Auto Saved " + now.toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+  // Status display intentionally omitted for Version 1.0.
 }
 
 function restoreState(state){
@@ -428,7 +655,15 @@ function getSavedState(){
 
 function showRestorePromptIfNeeded(){
   const saved = getSavedState();
-  if(!saved) { saveState(); return; }
+
+  // First-time users, or users with no meaningful saved work, always open
+  // to a fresh blank calculator. Only that person's own browser can create
+  // a saved calculation after they enter data.
+  if(!saved || !hasMeaningfulState(saved)){
+    try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+    return;
+  }
+
   restorePromptOpen = true;
   const modal=document.getElementById("restoreModal");
   if(modal) modal.classList.add("show");
@@ -451,7 +686,6 @@ function startNewFromSavedPrompt(){
     hideRestorePrompt();
     localStorage.removeItem(STORAGE_KEY);
     clearInputs(true);
-    saveState();
   }
 }
 
@@ -459,16 +693,24 @@ function startNewCalculationFromButton(){
   if(confirm("Start a new calculation? This will clear the current entries on this calculator.")){
     localStorage.removeItem(STORAGE_KEY);
     clearInputs(true);
-    saveState();
   }
 }
 
 window.addEventListener("beforeprint", updatePrintRows);
 // Build the calculator without overwriting a saved calculation on page load.
+// Keep the previous-calculation prompt hidden until membership access is approved.
 suppressAutoSave = true;
 build();
 suppressAutoSave = false;
-showRestorePromptIfNeeded();
+
+// If access was already approved in this browser tab, unlock automatically.
+try{
+  const savedAccess = sessionStorage.getItem(LOADCALCPRO_ACCESS_KEY);
+  if(savedAccess){
+    document.body.classList.remove("access-locked");
+    showRestorePromptIfNeeded();
+  }
+}catch(e){}
 </script>
 </body>
 </html>
