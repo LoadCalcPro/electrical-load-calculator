@@ -115,7 +115,7 @@ body.access-locked .access-screen{display:flex;}
     <input id="memberEmail" type="email" autocomplete="email" placeholder="you@example.com">
     <button id="accessButton" type="button" onclick="requestCalculatorAccess()">Continue</button>
     <div id="accessMessage" class="access-msg"></div>
-    <p class="access-note"><strong>Test version:</strong> This screen is ready for subscription checking, but it is not connected to Payhip yet.</p>
+    <p class="access-note"><strong>Membership access:</strong> This calculator checks your subscription through the LoadCalcPro secure access server.</p>
   </div>
 </div>
 
@@ -165,10 +165,9 @@ body.access-locked .access-screen{display:flex;}
 
 <script>
 
-/* LoadCalcPro protected access - TEST VERSION
-   Next step: replace TEST_MODE with a real backend check tied to Payhip subscriptions.
-*/
-const LOADCALCPRO_ACCESS_TEST_MODE = true;
+/* LoadCalcPro protected access - LIVE RENDER API VERSION */
+const LOADCALCPRO_API_BASE = "https://loadcalcpro-hcml-api.onrender.com";
+const LOADCALCPRO_ACCESS_ENDPOINT = LOADCALCPRO_API_BASE + "/api/access";
 const LOADCALCPRO_ACCESS_KEY = "loadcalcpro_member_access_generator_nec2023";
 
 function setAccessMessage(text, type){
@@ -179,22 +178,106 @@ function setAccessMessage(text, type){
 }
 
 function validEmail(email){
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const clean = String(email || "").trim().toLowerCase();
+  if(clean.length < 6 || clean.length > 254) return false;
+  if(clean.includes("..")) return false;
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean)) return false;
+
+  const parts = clean.split("@");
+  if(parts.length !== 2) return false;
+
+  const local = parts[0];
+  const domain = parts[1];
+
+  if(!local || !domain) return false;
+  if(local.length > 64) return false;
+  if(domain.length < 4) return false;
+
+  return true;
+}
+
+function looksFakeEmail(email){
+  const clean = String(email || "").trim().toLowerCase();
+  const parts = clean.split("@");
+  if(parts.length !== 2) return true;
+
+  const local = parts[0];
+  const domain = parts[1];
+
+  const blockedDomains = [
+    "test.com",
+    "example.com",
+    "example.net",
+    "example.org",
+    "mailinator.com",
+    "tempmail.com",
+    "temp-mail.org",
+    "10minutemail.com",
+    "guerrillamail.com",
+    "yopmail.com",
+    "trashmail.com",
+    "fakeinbox.com",
+    "getnada.com",
+    "sharklasers.com",
+    "dispostable.com"
+  ];
+
+  const blockedLocalWords = [
+    "test",
+    "fake",
+    "asdf",
+    "qwerty",
+    "none",
+    "noemail",
+    "noreply",
+    "sample",
+    "demo"
+  ];
+
+  if(blockedDomains.includes(domain)) return true;
+  if(/^[a-z]{1,3}$/.test(local)) return true;
+  if(/^\d+$/.test(local)) return true;
+  if(blockedLocalWords.some(word => local.includes(word))) return true;
+
+  return false;
 }
 
 async function verifyMembershipEmail(email){
-  if(LOADCALCPRO_ACCESS_TEST_MODE){
-    return {active:true, message:"Test access approved."};
+  const response = await fetch(LOADCALCPRO_ACCESS_ENDPOINT, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      email: email,
+      calculator: "generator-nec2023",
+      product: "LoadCalcPro Professional Membership"
+    })
+  });
+
+  let data = {};
+  try{
+    data = await response.json();
+  }catch(e){
+    data = {};
   }
 
-  // Future live version:
-  // return fetch("https://YOUR-SERVER-HERE/check-access", {
-  //   method:"POST",
-  //   headers:{"Content-Type":"application/json"},
-  //   body:JSON.stringify({email:email, calculator:"generator-nec2023"})
-  // }).then(r => r.json());
+  if(!response.ok){
+    return {
+      active:false,
+      message:data.message || data.error || "Membership check failed. Please try again."
+    };
+  }
 
-  return {active:false, message:"Subscription verification is not connected yet."};
+  const isActive =
+    data.active === true ||
+    data.access === true ||
+    data.allowed === true ||
+    data.ok === true ||
+    String(data.status || "").toLowerCase() === "active";
+
+  return {
+    active:isActive,
+    message:data.message || (isActive ? "Access approved." : "Subscription required. Please renew your membership to continue.")
+  };
 }
 
 function unlockCalculator(email){
@@ -213,6 +296,12 @@ async function requestCalculatorAccess(){
 
   if(!validEmail(email)){
     setAccessMessage("Please enter a valid email address.", "error");
+    if(emailEl) emailEl.focus();
+    return;
+  }
+
+  if(looksFakeEmail(email)){
+    setAccessMessage("This email address cannot be used. Please enter the email used for your LoadCalcPro membership.", "error");
     if(emailEl) emailEl.focus();
     return;
   }
