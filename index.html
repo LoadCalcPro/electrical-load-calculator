@@ -3,319 +3,104 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>LoadCalcPro | NEC Electrical Load Calculators</title>
-
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+:root{
+  --blue:#1e3a8a;
+  --dark:#0f172a;
+  --green:#22c55e;
+  --teal:#0f766e;
+  --light:#f8fafc;
+  --text:#111827;
+  --muted:#6b7280;
+  --line:#d1d5db;
 }
-
-body{
-    font-family:Arial,Helvetica,sans-serif;
-    background:#0f172a;
-    color:#fff;
-    line-height:1.6;
-}
-
-header{
-    text-align:center;
-    padding:80px 20px;
-    background:linear-gradient(135deg,#1e3a8a,#0f172a);
-}
-
-header h1{
-    font-size:58px;
-    margin-bottom:15px;
-}
-
-header p{
-    font-size:20px;
-    max-width:900px;
-    margin:auto;
-    opacity:.9;
-}
-
-.button-container{
-    margin-top:40px;
-}
-
-.btn{
-    display:inline-block;
-    margin:10px;
-    padding:15px 30px;
-    background:#22c55e;
-    color:#000;
-    text-decoration:none;
-    font-weight:bold;
-    border-radius:8px;
-    transition:.25s;
-}
-
-.btn:hover{
-    transform:translateY(-3px);
-}
-
-.btn.secondary{
-    background:#38bdf8;
-    color:#00111f;
-}
-
-.btn.dark{
-    background:#fff;
-    color:#0f172a;
-}
-
-section{
-    max-width:1100px;
-    margin:auto;
-    padding:60px 20px;
-}
-
-h2{
-    text-align:center;
-    margin-bottom:35px;
-    font-size:32px;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:25px;
-}
-
-.card{
-    background:#1e293b;
-    padding:30px;
-    border-radius:12px;
-    text-align:center;
-    border:1px solid #334155;
-}
-
-.card h3{
-    margin-bottom:15px;
-    font-size:22px;
-}
-
-.card p{
-    margin-bottom:20px;
-    color:#dbeafe;
-}
-
-.price-box{
-    background:linear-gradient(135deg,#1e293b,#111827);
-    border:2px solid #22c55e;
-    border-radius:16px;
-    padding:35px 25px;
-    text-align:center;
-    max-width:720px;
-    margin:0 auto;
-}
-
-.price{
-    font-size:46px;
-    font-weight:bold;
-    color:#22c55e;
-    margin:15px 0 5px;
-}
-
-.price span{
-    font-size:18px;
-    color:#dbeafe;
-}
-
-.feature-list{
-    list-style:none;
-    margin:25px auto;
-    max-width:520px;
-    text-align:left;
-}
-
-.feature-list li{
-    padding:8px 0;
-    border-bottom:1px solid #334155;
-}
-
-.notice{
-    max-width:850px;
-    margin:20px auto 0;
-    color:#cbd5e1;
-    font-size:14px;
-    text-align:center;
-}
-
-footer{
-    margin-top:40px;
-    text-align:center;
-    padding:30px;
-    border-top:1px solid #334155;
-    opacity:.75;
-}
-
-@media(max-width:700px){
-    header{
-        padding:55px 16px;
-    }
-
-    header h1{
-        font-size:42px;
-    }
-
-    header p{
-        font-size:17px;
-    }
-
-    .btn{
-        display:block;
-        width:100%;
-        max-width:340px;
-        margin:12px auto;
-    }
-
-    section{
-        padding:45px 16px;
-    }
-
-    .price{
-        font-size:38px;
-    }
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:var(--text);line-height:1.6}
+.hero{background:linear-gradient(135deg,var(--blue),var(--dark));color:white;text-align:center;padding:80px 20px}
+.logo{font-size:20px;font-weight:900;margin-bottom:18px;letter-spacing:.4px}
+.logo span{color:var(--green)}
+.hero h1{font-size:48px;line-height:1.1;margin-bottom:16px}
+.hero p{font-size:20px;max-width:850px;margin:0 auto 28px;color:#dbeafe}
+.buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-block;text-decoration:none;border-radius:12px;padding:15px 26px;font-weight:900;font-size:16px;border:2px solid transparent}
+.btn.primary{background:var(--green);color:#052e16}
+.btn.secondary{background:white;color:var(--blue)}
+.btn.outline{background:transparent;color:white;border-color:white}
+section{max-width:1120px;margin:0 auto;padding:50px 20px}
+.card{background:white;border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 28px rgba(15,23,42,.08);padding:28px;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feature h3,.soon h3{color:var(--blue);margin-bottom:8px;font-size:20px}
+.feature p,.soon p{color:var(--muted)}
+.product{display:grid;grid-template-columns:1.3fr .7fr;gap:28px;align-items:center}
+.badge{display:inline-block;background:#ecfdf5;color:#15803d;border:1px solid #bbf7d0;border-radius:999px;padding:6px 12px;font-weight:900;font-size:13px;margin-bottom:12px}
+.product h2{font-size:34px;color:var(--dark);line-height:1.15;margin-bottom:12px}
+.price{font-size:36px;font-weight:900;color:var(--blue);margin:12px 0}
+.price small{font-size:16px;color:var(--muted);font-weight:700}
+ul{padding-left:22px;margin:14px 0;color:#374151}
+li{margin:7px 0}
+.notice{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;border-radius:14px;padding:14px;margin-top:16px;font-weight:700}
+.soon-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.soon{background:white;border:1px solid var(--line);border-radius:16px;padding:20px;text-align:center}
+.footer{text-align:center;color:#6b7280;padding:28px 20px;border-top:1px solid var(--line);background:white;font-size:14px}
+@media(max-width:850px){.hero h1{font-size:36px}.hero p{font-size:17px}.product,.grid,.soon-grid{grid-template-columns:1fr}.card{padding:22px}.price{font-size:30px}}
 </style>
 </head>
-
 <body>
-
-<header>
-<h1>⚡ LoadCalcPro</h1>
-
-<p>
-Professional NEC® electrical calculation tools for engineers,
-plans examiners, inspectors, and electrical contractors.
-</p>
-
-<div class="button-container">
-<a href="#subscribe" class="btn">
-Subscribe Monthly
-</a>
-
-<a href="calculator.html" class="btn secondary">
-Residential Load Calculator
-</a>
-
-<a href="generator.html" class="btn secondary">
-Generator Calculator
-</a>
-
-<a href="aic_calculator.html" class="btn secondary">
-AIC Calculator
-</a>
-</div>
+<header class="hero">
+  <div class="logo"><span>⚡</span> LoadCalcPro</div>
+  <h1>NEC Electrical Load Calculators</h1>
+  <p>Professional electrical load calculation tools for contractors, engineers, inspectors, and plans examiners.</p>
+  <div class="buttons">
+    <a class="btn primary" href="https://payhip.com/LoadCalcTools/b-account/membership/AG1mf" target="_blank" rel="noopener">Get Instant Access</a>
+    <a class="btn secondary" href="generator.html">Member Login</a>
+  </div>
 </header>
 
+<section>
+  <div class="card product">
+    <div>
+      <span class="badge">Available Now</span>
+      <h2>Generator Optional Method Calculator</h2>
+      <p><strong>NEC 2023 | Version 1.0</strong></p>
+      <p>Calculate dwelling generator loads using the NEC optional method with a clean input screen, managed-load checkmarks, and a professional print/PDF output.</p>
+      <ul>
+        <li>General load and appliance load calculations</li>
+        <li>Managed load selection for generator sizing</li>
+        <li>HVAC and continuous load section</li>
+        <li>EV charger continuous load support</li>
+        <li>Print or save as PDF</li>
+      </ul>
+    </div>
+    <div class="card" style="margin:0;text-align:center;box-shadow:none;">
+      <div class="price">$9.99 <small>/ month</small></div>
+      <p>LoadCalcPro Professional Membership</p>
+      <div class="buttons" style="margin-top:18px;">
+        <a class="btn primary" href="https://payhip.com/LoadCalcTools/b-account/membership/AG1mf" target="_blank" rel="noopener">Get Instant Access</a>
+        <a class="btn secondary" href="generator.html">Member Login</a>
+      </div>
+      <div class="notice">After subscribing, use your membership email to open the calculator.</div>
+    </div>
+  </div>
 
-<section id="subscribe">
-<h2>LoadCalcPro Pro</h2>
-
-<div class="price-box">
-<h3>Monthly Access</h3>
-
-<div class="price">$9 <span>/ month</span></div>
-
-<p>
-Get access to professional NEC® electrical calculation tools with printable reports.
-</p>
-
-<ul class="feature-list">
-<li>✓ Residential NEC® Load Calculator</li>
-<li>✓ Generator Optional Method Calculator</li>
-<li>✓ NEC® 2023 EVSE calculation: 7,200 W/VA or nameplate, whichever is larger</li>
-<li>✓ AIC Calculator</li>
-<li>✓ Professional Print / Save PDF reports</li>
-<li>✓ Updates included while subscribed</li>
-</ul>
-
-<a href="YOUR_PAYHIP_SUBSCRIPTION_LINK_HERE" class="btn" target="_blank" rel="noopener">
-Subscribe Monthly
-</a>
-
-<p class="notice">
-Replace YOUR_PAYHIP_SUBSCRIPTION_LINK_HERE with your Payhip membership checkout link.
-</p>
-</div>
+  <div class="grid">
+    <div class="card feature"><h3>Built for Field Use</h3><p>Simple inputs, clear results, and a printable summary for project records.</p></div>
+    <div class="card feature"><h3>NEC 2023 Based</h3><p>Designed around the 2023 National Electrical Code optional method workflow.</p></div>
+    <div class="card feature"><h3>Professional Output</h3><p>Create a clean calculation page that can be printed or saved as a PDF.</p></div>
+  </div>
 </section>
-
 
 <section>
-<h2>Professional Electrical Calculation Tools</h2>
-
-<div class="grid">
-
-<div class="card">
-<h3>Residential Load Calculator</h3>
-<p>
-Perform NEC optional method residential load calculations quickly,
-accurately, and generate professional printable reports.
-</p>
-<a href="calculator.html" class="btn">
-Open Calculator
-</a>
-</div>
-
-<div class="card">
-<h3>Generator Optional Method Calculator</h3>
-<p>
-Size residential generators using the NEC optional method with
-automatic demand calculations and printable reports.
-</p>
-<a href="generator.html" class="btn">
-Open Calculator
-</a>
-</div>
-
-<div class="card">
-<h3>AIC Calculator</h3>
-<p>
-Calculate available fault current and verify equipment interrupting
-ratings.
-</p>
-<a href="aic_calculator.html" class="btn">
-Open Calculator
-</a>
-</div>
-
-</div>
+  <h2 style="text-align:center;margin-bottom:22px;color:#0f172a;">Coming Soon</h2>
+  <div class="soon-grid">
+    <div class="soon"><h3>Standard Method Calculator</h3><p>Dwelling load calculations.</p></div>
+    <div class="soon"><h3>Range Calculator</h3><p>Range demand calculations.</p></div>
+    <div class="soon"><h3>Box Fill Calculator</h3><p>Box fill support.</p></div>
+    <div class="soon"><h3>Conductor Fill Calculator</h3><p>Conductor fill support.</p></div>
+  </div>
 </section>
 
-
-<section>
-<h2>Built For</h2>
-
-<div class="grid">
-<div class="card">Electrical Engineers</div>
-<div class="card">Plans Examiners</div>
-<div class="card">Electrical Inspectors</div>
-<div class="card">Electrical Contractors</div>
-</div>
-</section>
-
-
-<section>
-<h2>Why LoadCalcPro?</h2>
-
-<div class="grid">
-<div class="card">NEC®-Based Calculations</div>
-<div class="card">Professional Printable Reports</div>
-<div class="card">Fast Permit Preparation</div>
-<div class="card">Reduced Calculation Errors</div>
-</div>
-</section>
-
-
-<footer>
-© 2023 LoadCalcPro. All Rights Reserved.
+<footer class="footer">
+  © 2026 LoadCalcPro. Calculations based on NEC 2023. Verify final results with applicable codes and local requirements.
 </footer>
-
 </body>
 </html>
