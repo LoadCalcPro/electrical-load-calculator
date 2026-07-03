@@ -177,33 +177,25 @@ function setAccessMessage(text, type){
   msg.className = "access-msg" + (type ? " " + type : "");
 }
 
+function cleanMembershipEmail(email){
+  return String(email || "").trim().toLowerCase().replace(/[.,;:\s]+$/g, "");
+}
+
 function validEmail(email){
-  const clean = String(email || "").trim().toLowerCase();
-  if(clean.length < 6 || clean.length > 254) return false;
-  if(clean.includes("..")) return false;
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean)) return false;
-
-  const parts = clean.split("@");
-  if(parts.length !== 2) return false;
-
-  const local = parts[0];
-  const domain = parts[1];
-
-  if(!local || !domain) return false;
-  if(local.length > 64) return false;
-  if(domain.length < 4) return false;
-
-  return true;
+  const clean = cleanMembershipEmail(email);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean);
 }
 
 function looksFakeEmail(email){
-  const clean = String(email || "").trim().toLowerCase();
+  const clean = cleanMembershipEmail(email);
   const parts = clean.split("@");
   if(parts.length !== 2) return true;
 
-  const local = parts[0];
   const domain = parts[1];
 
+  // Keep this simple and safe:
+  // block only known test/example/temporary email domains.
+  // Do NOT block Gmail, Yahoo, Outlook, or real customer emails based on the name before @.
   const blockedDomains = [
     "test.com",
     "example.com",
@@ -222,24 +214,7 @@ function looksFakeEmail(email){
     "dispostable.com"
   ];
 
-  const blockedLocalWords = [
-    "test",
-    "fake",
-    "asdf",
-    "qwerty",
-    "none",
-    "noemail",
-    "noreply",
-    "sample",
-    "demo"
-  ];
-
-  if(blockedDomains.includes(domain)) return true;
-  if(/^[a-z]{1,3}$/.test(local)) return true;
-  if(/^\d+$/.test(local)) return true;
-  if(blockedLocalWords.some(word => local.includes(word))) return true;
-
-  return false;
+  return blockedDomains.includes(domain);
 }
 
 async function verifyMembershipEmail(email){
@@ -292,7 +267,8 @@ function unlockCalculator(email){
 async function requestCalculatorAccess(){
   const emailEl = document.getElementById("memberEmail");
   const button = document.getElementById("accessButton");
-  const email = emailEl ? emailEl.value.trim().toLowerCase() : "";
+  const email = emailEl ? cleanMembershipEmail(emailEl.value) : "";
+  if(emailEl) emailEl.value = email;
 
   if(!validEmail(email)){
     setAccessMessage("Please enter a valid email address.", "error");
