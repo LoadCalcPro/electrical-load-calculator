@@ -177,44 +177,8 @@ function setAccessMessage(text, type){
   msg.className = "access-msg" + (type ? " " + type : "");
 }
 
-function cleanMembershipEmail(email){
-  return String(email || "").trim().toLowerCase().replace(/[.,;:\s]+$/g, "");
-}
-
 function validEmail(email){
-  const clean = cleanMembershipEmail(email);
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean);
-}
-
-function looksFakeEmail(email){
-  const clean = cleanMembershipEmail(email);
-  const parts = clean.split("@");
-  if(parts.length !== 2) return true;
-
-  const domain = parts[1];
-
-  // Keep this simple and safe:
-  // block only known test/example/temporary email domains.
-  // Do NOT block Gmail, Yahoo, Outlook, or real customer emails based on the name before @.
-  const blockedDomains = [
-    "test.com",
-    "example.com",
-    "example.net",
-    "example.org",
-    "mailinator.com",
-    "tempmail.com",
-    "temp-mail.org",
-    "10minutemail.com",
-    "guerrillamail.com",
-    "yopmail.com",
-    "trashmail.com",
-    "fakeinbox.com",
-    "getnada.com",
-    "sharklasers.com",
-    "dispostable.com"
-  ];
-
-  return blockedDomains.includes(domain);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 async function verifyMembershipEmail(email){
@@ -267,17 +231,10 @@ function unlockCalculator(email){
 async function requestCalculatorAccess(){
   const emailEl = document.getElementById("memberEmail");
   const button = document.getElementById("accessButton");
-  const email = emailEl ? cleanMembershipEmail(emailEl.value) : "";
-  if(emailEl) emailEl.value = email;
+  const email = emailEl ? emailEl.value.trim().toLowerCase() : "";
 
   if(!validEmail(email)){
     setAccessMessage("Please enter a valid email address.", "error");
-    if(emailEl) emailEl.focus();
-    return;
-  }
-
-  if(looksFakeEmail(email)){
-    setAccessMessage("This email address cannot be used. Please enter the email used for your LoadCalcPro membership.", "error");
     if(emailEl) emailEl.focus();
     return;
   }
