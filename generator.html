@@ -100,6 +100,26 @@ body.access-locked .access-screen{display:flex;}
   color:#6b7280;
   line-height:1.4;
 }
+.remember-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:12px;
+  font-size:13px;
+  color:#374151;
+}
+.remember-row input{
+  width:auto;
+}
+.forget-email{
+  width:auto!important;
+  margin-top:10px!important;
+  padding:7px 10px!important;
+  background:#ffffff!important;
+  color:#1e3a8a!important;
+  border:1px solid #93c5fd!important;
+  font-size:12px!important;
+}
 @media print{.access-screen{display:none!important}}
 
 </style>
@@ -113,7 +133,12 @@ body.access-locked .access-screen{display:flex;}
     <p class="subtitle">Please enter the email address used for your LoadCalcPro subscription to continue.</p>
     <label for="memberEmail">Membership Email</label>
     <input id="memberEmail" type="email" autocomplete="email" placeholder="you@example.com">
+    <label class="remember-row" for="rememberMemberEmail">
+      <input id="rememberMemberEmail" type="checkbox" checked>
+      Remember this email on this device
+    </label>
     <button id="accessButton" type="button" onclick="requestCalculatorAccess()">Continue</button>
+    <button id="forgetEmailButton" class="forget-email" type="button" onclick="forgetRememberedEmail()" style="display:none;">Forget saved email</button>
     <div id="accessMessage" class="access-msg"></div>
     <p class="access-note"><strong>Membership access:</strong> This calculator checks your subscription through the LoadCalcPro secure access server.</p>
   </div>
@@ -169,6 +194,7 @@ body.access-locked .access-screen{display:flex;}
 const LOADCALCPRO_API_BASE = "https://loadcalcpro-hcml-api.onrender.com";
 const LOADCALCPRO_ACCESS_ENDPOINT = LOADCALCPRO_API_BASE + "/api/access";
 const LOADCALCPRO_ACCESS_KEY = "loadcalcpro_member_access_generator_nec2023";
+const LOADCALCPRO_REMEMBERED_EMAIL_KEY = "loadcalcpro_remembered_member_email";
 
 function setAccessMessage(text, type){
   const msg = document.getElementById("accessMessage");
@@ -219,6 +245,65 @@ async function verifyMembershipEmail(email){
   };
 }
 
+function getRememberedEmail(){
+  try{
+    return String(localStorage.getItem(LOADCALCPRO_REMEMBERED_EMAIL_KEY) || "")
+      .trim()
+      .toLowerCase();
+  }catch(e){
+    return "";
+  }
+}
+
+function updateRememberedEmailControls(){
+  const emailEl = document.getElementById("memberEmail");
+  const rememberEl = document.getElementById("rememberMemberEmail");
+  const forgetButton = document.getElementById("forgetEmailButton");
+  const rememberedEmail = getRememberedEmail();
+
+  if(emailEl && rememberedEmail && !emailEl.value){
+    emailEl.value = rememberedEmail;
+  }
+
+  if(rememberEl){
+    rememberEl.checked = !!rememberedEmail || rememberEl.checked;
+  }
+
+  if(forgetButton){
+    forgetButton.style.display = rememberedEmail ? "inline-block" : "none";
+  }
+}
+
+function rememberMembershipEmail(email){
+  const rememberEl = document.getElementById("rememberMemberEmail");
+  try{
+    if(rememberEl && rememberEl.checked){
+      localStorage.setItem(LOADCALCPRO_REMEMBERED_EMAIL_KEY, email);
+    } else {
+      localStorage.removeItem(LOADCALCPRO_REMEMBERED_EMAIL_KEY);
+    }
+  }catch(e){}
+  updateRememberedEmailControls();
+}
+
+function forgetRememberedEmail(){
+  try{
+    localStorage.removeItem(LOADCALCPRO_REMEMBERED_EMAIL_KEY);
+    sessionStorage.removeItem(LOADCALCPRO_ACCESS_KEY);
+  }catch(e){}
+
+  const emailEl = document.getElementById("memberEmail");
+  const rememberEl = document.getElementById("rememberMemberEmail");
+  const forgetButton = document.getElementById("forgetEmailButton");
+
+  if(emailEl) emailEl.value = "";
+  if(rememberEl) rememberEl.checked = false;
+  if(forgetButton) forgetButton.style.display = "none";
+
+  setAccessMessage("Saved email removed from this device.", "ok");
+  if(emailEl) emailEl.focus();
+}
+
 function unlockCalculator(email){
   try{
     sessionStorage.setItem(LOADCALCPRO_ACCESS_KEY, JSON.stringify({email:email, unlockedAt:new Date().toISOString()}));
@@ -244,6 +329,7 @@ async function requestCalculatorAccess(){
     setAccessMessage("Checking membership access...", "");
     const result = await verifyMembershipEmail(email);
     if(result && result.active){
+      rememberMembershipEmail(email);
       unlockCalculator(email);
     } else {
       setAccessMessage((result && result.message) || "Subscription required. Please renew your membership to continue.", "error");
@@ -725,14 +811,56 @@ suppressAutoSave = true;
 build();
 suppressAutoSave = false;
 
-// If access was already approved in this browser tab, unlock automatically.
-try{
-  const savedAccess = sessionStorage.getItem(LOADCALCPRO_ACCESS_KEY);
-  if(savedAccess){
-    document.body.classList.remove("access-locked");
-    showRestorePromptIfNeeded();
+// Fill a remembered membership email, when available.
+updateRememberedEmailControls();
+
+// If this browser tab was already approved, open immediately.
+// Otherwise, a remembered email is verified again with the access server.
+// This means a canceled membership will not stay unlocked merely because
+// the email was saved on the device.
+(async function initializeMemberAccess(){
+  try{
+    const savedAccess = sessionStorage.getItem(LOADCALCPRO_ACCESS_KEY);
+    if(savedAccess){
+      document.body.classList.remove("access-locked");
+      showRestorePromptIfNeeded();
+      return;
+    }
+  }catch(e){}
+
+  const rememberedEmail = getRememberedEmail();
+  if(!rememberedEmail) return;
+
+  const button = document.getElementById("accessButton");
+  try{
+    if(button){
+      button.disabled = true;
+      button.textContent = "Checking...";
+    }
+    setAccessMessage("Checking saved membership email...", "");
+    const result = await verifyMembershipEmail(rememberedEmail);
+
+    if(result && result.active){
+      unlockCalculator(rememberedEmail);
+    } else {
+      setAccessMessage(
+        (result && result.message) ||
+        "Saved email is not connected to an active membership.",
+        "error"
+      );
+    }
+  }catch(e){
+    setAccessMessage(
+      "The saved email could not be checked. Please try again.",
+      "error"
+    );
+  }finally{
+    if(button){
+      button.disabled = false;
+      button.textContent = "Continue";
+    }
   }
-}catch(e){}
+})();
 </script>
 </body>
 </html>
