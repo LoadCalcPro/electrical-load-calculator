@@ -130,7 +130,28 @@
     .access-box input {
       margin-bottom:12px;
     }
-    .access-box button {
+    
+    .remember-row {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin:0 0 14px;
+      text-align:left;
+      color:#475569;
+      font-size:13px;
+    }
+    .remember-row input {
+      width:auto;
+      margin:0;
+    }
+    .remember-row label {
+      display:inline;
+      margin:0;
+      font-weight:600;
+      cursor:pointer;
+    }
+
+.access-box button {
       width:100%;
       padding:11px 14px;
     }
@@ -161,7 +182,11 @@
       <label for="accessEmail">Membership email</label>
       <input id="accessEmail" type="email" autocomplete="email"
         placeholder="Enter the email used for your membership" required>
-      <button type="submit" id="accessButton">Open Calculator</button>
+            <div class="remember-row">
+        <input id="rememberEmail" type="checkbox">
+        <label for="rememberEmail">Remember my email</label>
+      </div>
+<button type="submit" id="accessButton">Open Calculator</button>
       <div id="accessMessage" role="status" aria-live="polite"></div>
     </form>
   </div>
@@ -593,6 +618,7 @@ initialize();
 
 const ACCESS_API_URL = 'https://loadcalcpro-hcml-api.onrender.com/api/access';
 const ACCESS_SESSION_KEY = 'loadCalcProAicAccessApproved';
+const REMEMBERED_EMAIL_KEY = 'loadCalcProRememberedMemberEmail';
 
 function showCalculator() {
   document.getElementById('accessGate').hidden = true;
@@ -648,6 +674,12 @@ document.getElementById('accessForm').addEventListener('submit', async (event) =
   try {
     await verifyMemberAccess(email);
     sessionStorage.setItem(ACCESS_SESSION_KEY, 'true');
+
+    if (document.getElementById('rememberEmail').checked) {
+      localStorage.setItem(REMEMBERED_EMAIL_KEY, email);
+    } else {
+      localStorage.removeItem(REMEMBERED_EMAIL_KEY);
+    }
     messageNode.textContent = 'Access approved.';
     messageNode.classList.add('success');
     showCalculator();
@@ -666,9 +698,19 @@ document.getElementById('accessForm').addEventListener('submit', async (event) =
 
 document.getElementById('logoutBtn').addEventListener('click', () => {
   sessionStorage.removeItem(ACCESS_SESSION_KEY);
-  document.getElementById('accessEmail').value = '';
+
+  const rememberedEmail = localStorage.getItem(REMEMBERED_EMAIL_KEY) || '';
+  document.getElementById('accessEmail').value = rememberedEmail;
+  document.getElementById('rememberEmail').checked = rememberedEmail !== '';
+
   showAccessGate();
 });
+
+const rememberedEmail = localStorage.getItem(REMEMBERED_EMAIL_KEY) || '';
+if (rememberedEmail) {
+  document.getElementById('accessEmail').value = rememberedEmail;
+  document.getElementById('rememberEmail').checked = true;
+}
 
 if (sessionStorage.getItem(ACCESS_SESSION_KEY) === 'true') {
   showCalculator();
