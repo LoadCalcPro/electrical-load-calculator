@@ -88,16 +88,91 @@
       .panel-number { font-size:8px; margin-bottom:2px; }
       .button-row, .panel-controls, .note { display:none!important; }
     }
+
+    /* LoadCalcPro access protection */
+    body.access-locked { overflow:hidden; }
+    #accessGate {
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 58%,#0f766e 100%);
+    }
+    #accessGate[hidden] { display:none!important; }
+    .access-box {
+      width:min(430px,100%);
+      background:#fff;
+      border-radius:16px;
+      padding:28px;
+      box-shadow:0 24px 70px rgba(0,0,0,.32);
+      text-align:center;
+    }
+    .access-brand {
+      color:#1e3a8a;
+      font-size:24px;
+      font-weight:800;
+      margin-bottom:5px;
+    }
+    .access-subtitle {
+      color:#475569;
+      font-size:14px;
+      margin-bottom:22px;
+    }
+    .access-box label {
+      display:block;
+      text-align:left;
+      margin-bottom:7px;
+      color:#334155;
+    }
+    .access-box input {
+      margin-bottom:12px;
+    }
+    .access-box button {
+      width:100%;
+      padding:11px 14px;
+    }
+    #accessMessage {
+      min-height:20px;
+      margin-top:12px;
+      font-size:13px;
+      color:#b91c1c;
+    }
+    #accessMessage.success { color:#047857; }
+    .logout-button {
+      background:#fff!important;
+      color:#1e3a8a!important;
+      margin-left:8px;
+    }
+    @media print {
+      #accessGate, .logout-button { display:none!important; }
+    }
+
   </style>
 </head>
-<body>
+<body class="access-locked">
+
+  <div id="accessGate" aria-label="LoadCalcPro member login">
+    <form class="access-box" id="accessForm">
+      <div class="access-brand">⚡ LoadCalcPro</div>
+      <div class="access-subtitle">AIC Calculator — Member Access</div>
+      <label for="accessEmail">Membership email</label>
+      <input id="accessEmail" type="email" autocomplete="email"
+        placeholder="Enter the email used for your membership" required>
+      <button type="submit" id="accessButton">Open Calculator</button>
+      <div id="accessMessage" role="status" aria-live="polite"></div>
+    </form>
+  </div>
+
   <div class="page">
     <div class="form-titlebar">
       <div>
         <div class="form-title">Available Fault Current (AIC)</div>
         <div class="form-version">NEC 2023 | Version 1.0</div>
       </div>
-      <div class="title-actions"><button type="button" class="no-print" onclick="preparePrint()">Print</button><div class="form-brand"><span class="bolt">⚡</span>LoadCalcPro</div></div>
+      <div class="title-actions"><button type="button" class="no-print" onclick="preparePrint()">Print</button><button type="button" class="no-print logout-button" id="logoutBtn">Log Out</button><div class="form-brand"><span class="bolt">⚡</span>LoadCalcPro</div></div>
     </div>
     <main>
       <div class="grid">
@@ -514,6 +589,91 @@ function initialize() {
 }
 
 initialize();
+
+
+const ACCESS_API_URL = 'https://loadcalcpro-hcml-api.onrender.com/api/access';
+const ACCESS_SESSION_KEY = 'loadCalcProAicAccessApproved';
+
+function showCalculator() {
+  document.getElementById('accessGate').hidden = true;
+  document.body.classList.remove('access-locked');
+}
+
+function showAccessGate(message='') {
+  document.getElementById('accessGate').hidden = false;
+  document.body.classList.add('access-locked');
+  const messageNode = document.getElementById('accessMessage');
+  messageNode.textContent = message;
+  messageNode.classList.remove('success');
+}
+
+async function verifyMemberAccess(email) {
+  const response = await fetch(ACCESS_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
+  });
+
+  let data = {};
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error('The access server returned an unreadable response.');
+  }
+
+  if (!response.ok || data.active !== true) {
+    throw new Error(data.message || 'No active membership was found for this email.');
+  }
+
+  return data;
+}
+
+document.getElementById('accessForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const emailNode = document.getElementById('accessEmail');
+  const button = document.getElementById('accessButton');
+  const messageNode = document.getElementById('accessMessage');
+  const email = emailNode.value.trim().toLowerCase();
+
+  if (!email) {
+    messageNode.textContent = 'Please enter your membership email.';
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = 'Checking Access...';
+  messageNode.textContent = '';
+
+  try {
+    await verifyMemberAccess(email);
+    sessionStorage.setItem(ACCESS_SESSION_KEY, 'true');
+    messageNode.textContent = 'Access approved.';
+    messageNode.classList.add('success');
+    showCalculator();
+  } catch (error) {
+    sessionStorage.removeItem(ACCESS_SESSION_KEY);
+    messageNode.classList.remove('success');
+    messageNode.textContent =
+      error instanceof TypeError
+        ? 'Unable to reach the access server. Please try again.'
+        : error.message;
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Open Calculator';
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  sessionStorage.removeItem(ACCESS_SESSION_KEY);
+  document.getElementById('accessEmail').value = '';
+  showAccessGate();
+});
+
+if (sessionStorage.getItem(ACCESS_SESSION_KEY) === 'true') {
+  showCalculator();
+}
+
 </script>
 </body>
 </html>
