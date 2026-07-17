@@ -38,7 +38,7 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      background: rgba(2, 6, 23, 0.96);
+      background: rgba(2, 6, 23, 0.97);
       border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     }
 
@@ -66,7 +66,7 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 22px;
+      gap: 20px;
     }
 
     .nav-link {
@@ -78,16 +78,30 @@
       color: #86efac;
     }
 
-    .member-button {
-      display: inline-block;
-      padding: 12px 19px;
+    .member-button,
+    .purchase-button,
+    .secondary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 10px;
-      background: #22c55e;
-      color: #052e16;
       font-weight: 900;
+      text-align: center;
+      transition: 0.2s ease;
+    }
+
+    .member-button {
+      padding: 12px 19px;
+      background: #2563eb;
+      color: #ffffff;
     }
 
     .member-button:hover {
+      background: #1d4ed8;
+      color: #ffffff;
+    }
+
+    .purchase-button:hover {
       background: #16a34a;
       color: #ffffff;
     }
@@ -137,26 +151,14 @@
       flex-wrap: wrap;
     }
 
-    .primary-button,
-    .secondary-button {
-      display: inline-block;
+    .purchase-button {
       padding: 15px 23px;
-      border-radius: 11px;
-      font-weight: 900;
-      text-align: center;
-    }
-
-    .primary-button {
       background: #22c55e;
       color: #052e16;
     }
 
-    .primary-button:hover {
-      background: #16a34a;
-      color: #ffffff;
-    }
-
     .secondary-button {
+      padding: 15px 23px;
       border: 1px solid #93c5fd;
       color: #dbeafe;
       background: rgba(255, 255, 255, 0.04);
@@ -237,6 +239,8 @@
     }
 
     .calculator-card {
+      display: flex;
+      flex-direction: column;
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 19px;
@@ -245,6 +249,7 @@
     }
 
     .status {
+      align-self: flex-start;
       display: inline-block;
       padding: 6px 10px;
       margin-bottom: 15px;
@@ -266,6 +271,37 @@
 
     .calculator-card p {
       color: #64748b;
+      margin-bottom: 24px;
+      flex: 1;
+    }
+
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+    }
+
+    .card-actions .purchase-button,
+    .card-actions .login-card-button {
+      min-height: 48px;
+      padding: 12px 15px;
+      border-radius: 9px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .login-card-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      color: #ffffff;
+      background: #2563eb;
+    }
+
+    .login-card-button:hover {
+      background: #1d4ed8;
+      color: #ffffff;
     }
 
     .membership-section {
@@ -292,6 +328,14 @@
       font-size: 18px;
       margin-bottom: 25px;
     }
+
+    .membership-actions {
+      display: flex;
+      justify-content: center;
+      gap: 13px;
+      flex-wrap: wrap;
+    }
+
 
     footer {
       padding: 27px 20px;
@@ -329,7 +373,7 @@
       }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 520px) {
       h1 {
         font-size: 37px;
       }
@@ -339,10 +383,16 @@
       }
 
       .hero-actions,
-      .primary-button,
-      .secondary-button,
-      .member-button {
+      .hero-actions a,
+      .nav-links,
+      .member-button,
+      .membership-actions,
+      .membership-actions a {
         width: 100%;
+      }
+
+      .card-actions {
+        grid-template-columns: 1fr;
       }
 
       .section-heading h2,
@@ -360,7 +410,6 @@
     <a class="logo" href="index.html">⚡ LoadCalc<span>Pro</span></a>
 
     <div class="nav-links">
-      <a class="nav-link" href="#calculators">Calculators</a>
       <a class="member-button" href="member-dashboard.html">Member Login</a>
     </div>
   </nav>
@@ -371,30 +420,33 @@
     <div class="hero-inner">
       <div>
         <div class="eyebrow">Professional NEC 2023 Calculation Tools</div>
+
         <h1>Electrical calculations made clear, fast, and professional.</h1>
+
         <p class="hero-copy">
           LoadCalcPro helps electrical professionals prepare accurate calculations,
           organize project information, and produce clean printable reports.
         </p>
 
         <div class="hero-actions">
-          <a class="primary-button" href="member-dashboard.html">Open Member Login</a>
-          <a class="secondary-button" href="#calculators">View Calculators</a>
+          <a class="purchase-button" href="#purchase">Purchase a Calculator</a>
+          <a class="secondary-button" href="member-dashboard.html">Member Login</a>
         </div>
       </div>
 
-      <aside class="hero-card" aria-label="Membership information">
-        <h2>Already a Member?</h2>
+      <aside class="hero-card" aria-label="LoadCalcPro benefits">
+        <h2>Built for Electrical Professionals</h2>
+
         <p>
-          Use the Member Dashboard to enter your membership email and open every
-          calculator included with your account.
+          Choose the calculator you need, purchase securely through Payhip,
+          and use your purchase email to access your calculator.
         </p>
 
         <ul class="hero-list">
-          <li>One member login page</li>
+          <li>NEC 2023 calculation tools</li>
           <li>Separate access for each calculator</li>
-          <li>Remember-my-email option</li>
-          <li>Professional printable calculations</li>
+          <li>Professional printable reports</li>
+          <li>Simple member email login</li>
         </ul>
       </aside>
     </div>
@@ -402,41 +454,89 @@
 
   <section class="section" id="calculators">
     <div class="section-heading">
-      <h2>Available Professional Calculators</h2>
+      <h2>Professional Electrical Calculators</h2>
+
       <p>
-        Members are shown only the calculators included with their active membership.
+        Purchase the calculator you need. Existing members can use the Member Login
+        button to access products already included with their account.
       </p>
     </div>
 
-    <div class="calculator-grid">
+    <div class="calculator-grid" id="purchase">
       <article class="calculator-card">
         <div class="status">Available Now</div>
+
         <h3>Optional Method Generator Calculator</h3>
+
         <p>
           Prepare NEC 2023 residential generator-load calculations, select managed
           loads, compare HVAC loads, include EV charging, and print a professional report.
         </p>
+
+        <div class="card-actions">
+          <!-- Replace the URL below with your Generator Calculator Payhip product link. -->
+          <a
+            class="purchase-button"
+            href="PASTE-GENERATOR-PAYHIP-LINK-HERE"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Purchase
+          </a>
+
+          <a class="login-card-button" href="member-dashboard.html">
+            Member Login
+          </a>
+        </div>
       </article>
 
       <article class="calculator-card">
         <div class="status">Available Now</div>
+
         <h3>AIC Available Fault Current Calculator</h3>
+
         <p>
           Calculate available fault current at the service and downstream panels,
           add multiple panel locations, and print a professional calculation summary.
         </p>
+
+        <div class="card-actions">
+          <!-- Replace the URL below with your AIC Calculator Payhip product link. -->
+          <a
+            class="purchase-button"
+            href="PASTE-AIC-PAYHIP-LINK-HERE"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Purchase
+          </a>
+
+          <a class="login-card-button" href="member-dashboard.html">
+            Member Login
+          </a>
+        </div>
       </article>
     </div>
   </section>
 
   <section class="membership-section">
     <div class="membership-inner">
-      <h2>Access Your Calculators</h2>
+      <h2>Already Purchased?</h2>
+
       <p>
-        Enter the email used for your LoadCalcPro membership. The Member Dashboard
-        will check your account and display the calculators you can open.
+        Enter the email address used for your Payhip purchase. Your Member Dashboard
+        will check your account and display each calculator included with your membership.
       </p>
-      <a class="primary-button" href="member-dashboard.html">Go to Member Dashboard</a>
+
+      <div class="membership-actions">
+        <a class="member-button" href="member-dashboard.html">
+          Member Login
+        </a>
+
+        <a class="purchase-button" href="#purchase">
+          Purchase a Calculator
+        </a>
+      </div>
     </div>
   </section>
 </main>
