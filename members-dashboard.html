@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="LoadCalcPro member access portal" />
+  <title>Member Access | LoadCalcPro</title>
+
+  <style>
+    :root {
+      --navy: #10233f;
+      --navy-2: #17385f;
+      --green: #1f8a5b;
+      --green-dark: #176b47;
+      --gold: #d2a84b;
+      --page: #eef3f7;
+      --card: #ffffff;
+      --text: #182433;
+      --muted: #667487;
+      --border: #d9e1e8;
+      --danger: #b42318;
+      --danger-bg: #fff1f0;
+      --success: #16794f;
+      --success-bg: #ecfdf3;
+      --shadow: 0 18px 48px rgba(16, 35, 63, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(31, 138, 91, 0.13), transparent 32rem),
+        linear-gradient(145deg, #f7fafc 0%, var(--page) 100%);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .page-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .site-header {
+      background: linear-gradient(135deg, var(--navy), var(--navy-2));
+      color: #fff;
+      border-bottom: 4px solid var(--gold);
+    }
+
+    .header-inner {
+      width: min(1120px, calc(100% - 36px));
+      margin: 0 auto;
+      min-height: 92px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: var(--green);
+      color: #fff;
+      font-weight: 800;
+      font-size: 23px;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.18);
+    }
+
+    .brand-name {
+      margin: 0;
+      font-size: 25px;
+      letter-spacing: 0.2px;
+    }
+
+    .brand-tagline {
+      margin: 3px 0 0;
+      color: #d8e4ef;
+      font-size: 13px;
+    }
+
+    .header-link {
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+
+    .header-link:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    main {
+      width: min(980px, calc(100% - 32px));
+      margin: 48px auto;
+      flex: 1;
+    }
+
+    .panel {
+      width: min(540px, 100%);
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-top {
+      padding: 30px 32px 20px;
+      text-align: center;
+    }
+
+    .panel-top h1 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 29px;
+    }
+
+    .panel-top p {
+      margin: 0;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .panel-body {
+      padding: 10px 32px 32px;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .email-input {
+      width: 100%;
+      min-height: 50px;
+      padding: 12px 14px;
+      border: 1px solid #bcc8d3;
+      border-radius: 9px;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+    }
+
+    .email-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(31, 138, 91, 0.15);
+    }
+
+    .remember-row {
+      margin: 14px 0 22px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #425166;
+      font-size: 14px;
+    }
+
+    .remember-row input {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--green);
+    }
+
+    .primary-button {
+      width: 100%;
+      min-height: 50px;
+      border: 0;
+      border-radius: 9px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.12s ease, background 0.12s ease;
+    }
+
+    .primary-button:hover {
+      background: var(--green-dark);
+      transform: translateY(-1px);
+    }
+
+    .primary-button:disabled {
+      cursor: wait;
+      opacity: 0.7;
+      transform: none;
+    }
+
+    .message {
+      display: none;
+      margin-top: 17px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .message.error {
+      display: block;
+      color: var(--danger);
+      background: var(--danger-bg);
+      border: 1px solid #f3c7c3;
+    }
+
+    .message.success {
+      display: block;
+      color: var(--success);
+      background: var(--success-bg);
+      border: 1px solid #b7e4cb;
+    }
+
+    .small-note {
+      margin: 20px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .portal {
+      display: none;
+    }
+
+    .portal.active {
+      display: block;
+    }
+
+    .portal-heading {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .portal-heading h1 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 31px;
+    }
+
+    .portal-heading p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .member-email {
+      font-weight: 700;
+      color: var(--green-dark);
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .calculator-card {
+      min-height: 230px;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      box-shadow: 0 12px 30px rgba(16, 35, 63, 0.09);
+    }
+
+    .calculator-card.locked {
+      opacity: 0.6;
+    }
+
+    .calculator-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 18px;
+      background: #e9f6ef;
+      color: var(--green-dark);
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .calculator-card h2 {
+      margin: 0 0 9px;
+      color: var(--navy);
+      font-size: 20px;
+    }
+
+    .calculator-card p {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .open-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 15px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--navy);
+      color: #fff;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .open-button:hover {
+      background: #091a31;
+    }
+
+    .open-button[aria-disabled="true"] {
+      background: #8794a3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .portal-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 26px;
+    }
+
+    .sign-out-button {
+      border: 1px solid #aeb9c4;
+      border-radius: 8px;
+      padding: 10px 16px;
+      background: #fff;
+      color: var(--navy);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    footer {
+      padding: 20px 16px 28px;
+      text-align: center;
+      color: #6f7d8d;
+      font-size: 12px;
+    }
+
+    @media (max-width: 800px) {
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .calculator-card {
+        min-height: 0;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .header-inner {
+        min-height: 82px;
+      }
+
+      .brand-tagline,
+      .header-link {
+        display: none;
+      }
+
+      main {
+        margin-top: 28px;
+      }
+
+      .panel-top,
+      .panel-body {
+        padding-left: 22px;
+        padding-right: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">LC</div>
+          <div>
+            <h2 class="brand-name">LoadCalcPro</h2>
+            <p class="brand-tagline">Professional Electrical Calculation Tools</p>
+          </div>
+        </div>
+
+        <a class="header-link" href="index.html">Return to Main Page</a>
+      </div>
+    </header>
+
+    <main>
+      <section id="loginSection" class="panel" aria-labelledby="loginTitle">
+        <div class="panel-top">
+          <h1 id="loginTitle">Member Login</h1>
+          <p>Enter the email address used for your LoadCalcPro purchase.</p>
+        </div>
+
+        <div class="panel-body">
+          <form id="loginForm" novalidate>
+            <label class="field-label" for="email">Member Email</label>
+            <input
+              class="email-input"
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder="Enter your email address"
+              required
+            />
+
+            <label class="remember-row" for="rememberEmail">
+              <input id="rememberEmail" type="checkbox" />
+              <span>Remember my email</span>
+            </label>
+
+            <button id="loginButton" class="primary-button" type="submit">
+              Member Login
+            </button>
+
+            <div id="loginMessage" class="message" role="status" aria-live="polite"></div>
+          </form>
+
+          <p class="small-note">
+            Your membership must be active. Use the same email address entered when purchasing.
+          </p>
+        </div>
+      </section>
+
+      <section id="portalSection" class="portal" aria-labelledby="portalTitle">
+        <div class="portal-heading">
+          <h1 id="portalTitle">Member Calculators</h1>
+          <p>
+            Logged in as
+            <span id="memberEmailDisplay" class="member-email"></span>
+          </p>
+        </div>
+
+        <div class="calculator-grid">
+          <article class="calculator-card" data-product="load">
+            <div class="calculator-icon" aria-hidden="true">L</div>
+            <h2>Electrical Load Calculator</h2>
+            <p>
+              Open the LoadCalcPro electrical load calculation program.
+            </p>
+            <a
+              class="open-button"
+              data-access-link="load"
+              href="calculator.html"
+            >
+              Open Calculator
+            </a>
+          </article>
+
+          <article class="calculator-card" data-product="generator">
+            <div class="calculator-icon" aria-hidden="true">G</div>
+            <h2>Generator Calculator</h2>
+            <p>
+              Calculate generator sizing and related electrical loads.
+            </p>
+            <a
+              class="open-button"
+              data-access-link="generator"
+              href="generator.html"
+            >
+              Open Generator Calculator
+            </a>
+          </article>
+
+          <article class="calculator-card" data-product="aic">
+            <div class="calculator-icon" aria-hidden="true">A</div>
+            <h2>AIC Calculator</h2>
+            <p>
+              Calculate available fault current at the service and downstream panels.
+            </p>
+            <a
+              class="open-button"
+              data-access-link="aic"
+              href="aic_calculator.html"
+            >
+              Open AIC Calculator
+            </a>
+          </article>
+        </div>
+
+        <div class="portal-actions">
+          <button id="signOutButton" class="sign-out-button" type="button">
+            Sign Out
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      &copy; <span id="year"></span> LoadCalcPro. All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    "use strict";
+
+    /*
+      LoadCalcPro member access settings
+      ----------------------------------
+      This page checks the active membership through the Render server.
+    */
+    const API_BASE_URL = "https://loadcalcpro-hcml-api.onrender.com";
+    const CHECK_LICENSE_ENDPOINT = "/check-license";
+
+    const STORAGE_KEYS = {
+      rememberedEmail: "loadcalcproRememberedEmail",
+      sessionEmail: "loadcalcproMemberEmail",
+      sessionActive: "loadcalcproMemberActive",
+      allowedProducts: "loadcalcproAllowedProducts"
+    };
+
+    const loginSection = document.getElementById("loginSection");
+    const portalSection = document.getElementById("portalSection");
+    const loginForm = document.getElementById("loginForm");
+    const emailInput = document.getElementById("email");
+    const rememberEmailInput = document.getElementById("rememberEmail");
+    const loginButton = document.getElementById("loginButton");
+    const loginMessage = document.getElementById("loginMessage");
+    const memberEmailDisplay = document.getElementById("memberEmailDisplay");
+    const signOutButton = document.getElementById("signOutButton");
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function cleanEmail(value) {
+      return String(value || "").trim().toLowerCase();
+    }
+
+    function isValidEmail(value) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail(value));
+    }
+
+    function setMessage(text, type) {
+      loginMessage.textContent = text;
+      loginMessage.className = "message " + type;
+    }
+
+    function clearMessage() {
+      loginMessage.textContent = "";
+      loginMessage.className = "message";
+    }
+
+    function setLoading(isLoading) {
+      loginButton.disabled = isLoading;
+      loginButton.textContent = isLoading
+        ? "Checking Membership..."
+        : "Member Login";
+    }
+
+    /*
+      Supports several possible server response names so this page remains
+      compatible if the backend returns active, valid, authorized, or success.
+    */
+    function membershipIsActive(data) {
+      if (!data || typeof data !== "object") return false;
+
+      return (
+        data.active === true ||
+        data.valid === true ||
+        data.authorized === true ||
+        data.success === true ||
+        data.status === "active" ||
+        data.membership_status === "active"
+      );
+    }
+
+    /*
+      If the server supplies product permissions, use them.
+      If it only confirms an active membership, show all calculator choices.
+    */
+    function getAllowedProducts(data) {
+      const raw =
+        data.allowed_products ||
+        data.products ||
+        data.entitlements ||
+        data.access ||
+        null;
+
+      if (!raw) {
+        return ["load", "generator", "aic"];
+      }
+
+      const values = Array.isArray(raw) ? raw : [raw];
+      const normalized = values.map(function (item) {
+        return String(item || "").toLowerCase();
+      });
+
+      const allowed = [];
+
+      normalized.forEach(function (item) {
+        if (
+          item.includes("load") ||
+          item.includes("electrical") ||
+          item.includes("professional") ||
+          item.includes("membership")
+        ) {
+          allowed.push("load");
+        }
+
+        if (item.includes("generator")) {
+          allowed.push("generator");
+        }
+
+        if (
+          item.includes("aic") ||
+          item.includes("fault") ||
+          item.includes("available current")
+        ) {
+          allowed.push("aic");
+        }
+
+        if (item === "all" || item.includes("bundle")) {
+          allowed.push("load", "generator", "aic");
+        }
+      });
+
+      return [...new Set(allowed)];
+    }
+
+    function applyProductAccess(allowedProducts) {
+      const allowed = new Set(allowedProducts);
+
+      document.querySelectorAll(".calculator-card").forEach(function (card) {
+        const product = card.dataset.product;
+        const link = card.querySelector(".open-button");
+        const hasAccess = allowed.has(product);
+
+        card.classList.toggle("locked", !hasAccess);
+        link.setAttribute("aria-disabled", hasAccess ? "false" : "true");
+
+        if (hasAccess) {
+          link.textContent =
+            product === "load"
+              ? "Open Calculator"
+              : product === "generator"
+              ? "Open Generator Calculator"
+              : "Open AIC Calculator";
+        } else {
+          link.textContent = "Not Included in Membership";
+        }
+      });
+    }
+
+    function attachEmailToCalculatorLinks(email) {
+      document.querySelectorAll("[data-access-link]").forEach(function (link) {
+        const originalHref = link.getAttribute("href").split("?")[0];
+        const url = new URL(originalHref, window.location.href);
+        url.searchParams.set("member", email);
+        link.href = url.href;
+      });
+    }
+
+    function showPortal(email, allowedProducts) {
+      memberEmailDisplay.textContent = email;
+      applyProductAccess(allowedProducts);
+      attachEmailToCalculatorLinks(email);
+
+      loginSection.style.display = "none";
+      portalSection.classList.add("active");
+    }
+
+    function showLogin() {
+      portalSection.classList.remove("active");
+      loginSection.style.display = "block";
+      emailInput.focus();
+    }
+
+    async function checkMembership(email) {
+      const response = await fetch(
+        API_BASE_URL + CHECK_LICENSE_ENDPOINT,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({ email: email })
+        }
+      );
+
+      let data = {};
+
+      try {
+        data = await response.json();
+      } catch (error) {
+        data = {};
+      }
+
+      if (!response.ok) {
+        const serverMessage =
+          data.message ||
+          data.error ||
+          "The membership server could not verify this email.";
+
+        throw new Error(serverMessage);
+      }
+
+      return data;
+    }
+
+    loginForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      clearMessage();
+
+      const email = cleanEmail(emailInput.value);
+
+      if (!isValidEmail(email)) {
+        setMessage("Please enter a valid email address.", "error");
+        emailInput.focus();
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const result = await checkMembership(email);
+
+        if (!membershipIsActive(result)) {
+          const inactiveMessage =
+            result.message ||
+            result.error ||
+            "No active membership was found for this email address.";
+
+          setMessage(inactiveMessage, "error");
+          return;
+        }
+
+        const allowedProducts = getAllowedProducts(result);
+
+        if (rememberEmailInput.checked) {
+          localStorage.setItem(STORAGE_KEYS.rememberedEmail, email);
+        } else {
+          localStorage.removeItem(STORAGE_KEYS.rememberedEmail);
+        }
+
+        sessionStorage.setItem(STORAGE_KEYS.sessionEmail, email);
+        sessionStorage.setItem(STORAGE_KEYS.sessionActive, "true");
+        sessionStorage.setItem(
+          STORAGE_KEYS.allowedProducts,
+          JSON.stringify(allowedProducts)
+        );
+
+        setMessage("Membership confirmed.", "success");
+        showPortal(email, allowedProducts);
+      } catch (error) {
+        console.error("Membership check failed:", error);
+
+        setMessage(
+          error.message ||
+            "Unable to contact the membership server. Please try again.",
+          "error"
+        );
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    signOutButton.addEventListener("click", function () {
+      sessionStorage.removeItem(STORAGE_KEYS.sessionEmail);
+      sessionStorage.removeItem(STORAGE_KEYS.sessionActive);
+      sessionStorage.removeItem(STORAGE_KEYS.allowedProducts);
+
+      clearMessage();
+      showLogin();
+    });
+
+    /*
+      Restore remembered email and retain access during the current browser tab.
+    */
+    (function initializePage() {
+      const rememberedEmail = localStorage.getItem(
+        STORAGE_KEYS.rememberedEmail
+      );
+
+      if (rememberedEmail) {
+        emailInput.value = rememberedEmail;
+        rememberEmailInput.checked = true;
+      }
+
+      const sessionEmail = sessionStorage.getItem(STORAGE_KEYS.sessionEmail);
+      const sessionActive =
+        sessionStorage.getItem(STORAGE_KEYS.sessionActive) === "true";
+
+      let allowedProducts = ["load", "generator", "aic"];
+
+      try {
+        const storedProducts = JSON.parse(
+          sessionStorage.getItem(STORAGE_KEYS.allowedProducts)
+        );
+
+        if (Array.isArray(storedProducts)) {
+          allowedProducts = storedProducts;
+        }
+      } catch (error) {
+        console.warn("Could not restore stored product access.");
+      }
+
+      if (sessionEmail && sessionActive) {
+        showPortal(sessionEmail, allowedProducts);
+      } else {
+        showLogin();
+      }
+    })();
+  </script>
+</body>
+</html>
