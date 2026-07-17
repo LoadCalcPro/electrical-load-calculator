@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="LoadCalcPro member access portal" />
-  <title>Member Access | LoadCalcPro</title>
+  <title>Member Dashboard | LoadCalcPro</title>
 
   <style>
     :root {
@@ -82,7 +82,7 @@
       color: #fff;
       font-weight: 800;
       font-size: 23px;
-      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.18);
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.18);
     }
 
     .brand-name {
@@ -101,13 +101,13 @@
       color: #fff;
       text-decoration: none;
       font-size: 14px;
-      border: 1px solid rgba(255,255,255,0.35);
+      border: 1px solid rgba(255, 255, 255, 0.35);
       border-radius: 8px;
       padding: 10px 14px;
     }
 
     .header-link:hover {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
     }
 
     main {
@@ -194,18 +194,15 @@
       color: #fff;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 0.12s ease, background 0.12s ease;
     }
 
     .primary-button:hover {
       background: var(--green-dark);
-      transform: translateY(-1px);
     }
 
     .primary-button:disabled {
       cursor: wait;
       opacity: 0.7;
-      transform: none;
     }
 
     .message {
@@ -270,15 +267,15 @@
 
     .calculator-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 18px;
     }
 
     .calculator-card {
-      min-height: 230px;
+      min-height: 250px;
       display: flex;
       flex-direction: column;
-      padding: 24px;
+      padding: 26px;
       background: #fff;
       border: 1px solid var(--border);
       border-radius: 15px;
@@ -286,7 +283,7 @@
     }
 
     .calculator-card.locked {
-      opacity: 0.6;
+      opacity: 0.62;
     }
 
     .calculator-icon {
@@ -305,7 +302,7 @@
     .calculator-card h2 {
       margin: 0 0 9px;
       color: var(--navy);
-      font-size: 20px;
+      font-size: 21px;
     }
 
     .calculator-card p {
@@ -329,6 +326,7 @@
       font-weight: 700;
       text-decoration: none;
       cursor: pointer;
+      text-align: center;
     }
 
     .open-button:hover {
@@ -364,7 +362,7 @@
       font-size: 12px;
     }
 
-    @media (max-width: 800px) {
+    @media (max-width: 760px) {
       .calculator-grid {
         grid-template-columns: 1fr;
       }
@@ -423,6 +421,7 @@
         <div class="panel-body">
           <form id="loginForm" novalidate>
             <label class="field-label" for="email">Member Email</label>
+
             <input
               class="email-input"
               id="email"
@@ -453,7 +452,7 @@
 
       <section id="portalSection" class="portal" aria-labelledby="portalTitle">
         <div class="portal-heading">
-          <h1 id="portalTitle">Member Calculators</h1>
+          <h1 id="portalTitle">Member Dashboard</h1>
           <p>
             Logged in as
             <span id="memberEmailDisplay" class="member-email"></span>
@@ -461,26 +460,12 @@
         </div>
 
         <div class="calculator-grid">
-          <article class="calculator-card" data-product="load">
-            <div class="calculator-icon" aria-hidden="true">L</div>
-            <h2>Electrical Load Calculator</h2>
-            <p>
-              Open the LoadCalcPro electrical load calculation program.
-            </p>
-            <a
-              class="open-button"
-              data-access-link="load"
-              href="calculator.html"
-            >
-              Open Calculator
-            </a>
-          </article>
-
           <article class="calculator-card" data-product="generator">
             <div class="calculator-icon" aria-hidden="true">G</div>
-            <h2>Generator Calculator</h2>
+            <h2>Optional Method Generator Calculator</h2>
             <p>
-              Calculate generator sizing and related electrical loads.
+              Prepare NEC 2023 optional-method and generator-load calculations
+              and produce a professional printable report.
             </p>
             <a
               class="open-button"
@@ -493,9 +478,10 @@
 
           <article class="calculator-card" data-product="aic">
             <div class="calculator-icon" aria-hidden="true">A</div>
-            <h2>AIC Calculator</h2>
+            <h2>AIC Available Fault Current Calculator</h2>
             <p>
-              Calculate available fault current at the service and downstream panels.
+              Calculate available fault current at the service and downstream
+              panel locations.
             </p>
             <a
               class="open-button"
@@ -523,13 +509,8 @@
   <script>
     "use strict";
 
-    /*
-      LoadCalcPro member access settings
-      ----------------------------------
-      This page checks the active membership through the Render server.
-    */
     const API_BASE_URL = "https://loadcalcpro-hcml-api.onrender.com";
-    const CHECK_LICENSE_ENDPOINT = "/check-license";
+    const ACCESS_ENDPOINT = "/api/access";
 
     const STORAGE_KEYS = {
       rememberedEmail: "loadcalcproRememberedEmail",
@@ -575,74 +556,18 @@
         : "Member Login";
     }
 
-    /*
-      Supports several possible server response names so this page remains
-      compatible if the backend returns active, valid, authorized, or success.
-    */
-    function membershipIsActive(data) {
-      if (!data || typeof data !== "object") return false;
-
-      return (
-        data.active === true ||
-        data.valid === true ||
-        data.authorized === true ||
-        data.success === true ||
-        data.status === "active" ||
-        data.membership_status === "active"
-      );
-    }
-
-    /*
-      If the server supplies product permissions, use them.
-      If it only confirms an active membership, show all calculator choices.
-    */
     function getAllowedProducts(data) {
-      const raw =
-        data.allowed_products ||
-        data.products ||
-        data.entitlements ||
-        data.access ||
-        null;
-
-      if (!raw) {
-        return ["load", "generator", "aic"];
-      }
-
-      const values = Array.isArray(raw) ? raw : [raw];
-      const normalized = values.map(function (item) {
-        return String(item || "").toLowerCase();
-      });
-
       const allowed = [];
 
-      normalized.forEach(function (item) {
-        if (
-          item.includes("load") ||
-          item.includes("electrical") ||
-          item.includes("professional") ||
-          item.includes("membership")
-        ) {
-          allowed.push("load");
-        }
+      if (data && data.generator_access === true) {
+        allowed.push("generator");
+      }
 
-        if (item.includes("generator")) {
-          allowed.push("generator");
-        }
+      if (data && data.aic_access === true) {
+        allowed.push("aic");
+      }
 
-        if (
-          item.includes("aic") ||
-          item.includes("fault") ||
-          item.includes("available current")
-        ) {
-          allowed.push("aic");
-        }
-
-        if (item === "all" || item.includes("bundle")) {
-          allowed.push("load", "generator", "aic");
-        }
-      });
-
-      return [...new Set(allowed)];
+      return allowed;
     }
 
     function applyProductAccess(allowedProducts) {
@@ -658,9 +583,7 @@
 
         if (hasAccess) {
           link.textContent =
-            product === "load"
-              ? "Open Calculator"
-              : product === "generator"
+            product === "generator"
               ? "Open Generator Calculator"
               : "Open AIC Calculator";
         } else {
@@ -694,17 +617,14 @@
     }
 
     async function checkMembership(email) {
-      const response = await fetch(
-        API_BASE_URL + CHECK_LICENSE_ENDPOINT,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify({ email: email })
-        }
-      );
+      const response = await fetch(API_BASE_URL + ACCESS_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({ email: email })
+      });
 
       let data = {};
 
@@ -715,12 +635,11 @@
       }
 
       if (!response.ok) {
-        const serverMessage =
+        throw new Error(
           data.message ||
           data.error ||
-          "The membership server could not verify this email.";
-
-        throw new Error(serverMessage);
+          "The membership server could not verify this email."
+        );
       }
 
       return data;
@@ -743,17 +662,24 @@
       try {
         const result = await checkMembership(email);
 
-        if (!membershipIsActive(result)) {
-          const inactiveMessage =
+        if (result.active !== true) {
+          setMessage(
             result.message ||
-            result.error ||
-            "No active membership was found for this email address.";
-
-          setMessage(inactiveMessage, "error");
+            "No active membership was found for this email address.",
+            "error"
+          );
           return;
         }
 
         const allowedProducts = getAllowedProducts(result);
+
+        if (allowedProducts.length === 0) {
+          setMessage(
+            "Your membership is active, but no calculator access is assigned.",
+            "error"
+          );
+          return;
+        }
 
         if (rememberEmailInput.checked) {
           localStorage.setItem(STORAGE_KEYS.rememberedEmail, email);
@@ -768,14 +694,13 @@
           JSON.stringify(allowedProducts)
         );
 
-        setMessage("Membership confirmed.", "success");
         showPortal(email, allowedProducts);
       } catch (error) {
         console.error("Membership check failed:", error);
 
         setMessage(
           error.message ||
-            "Unable to contact the membership server. Please try again.",
+          "Unable to contact the membership server. Please try again.",
           "error"
         );
       } finally {
@@ -792,9 +717,6 @@
       showLogin();
     });
 
-    /*
-      Restore remembered email and retain access during the current browser tab.
-    */
     (function initializePage() {
       const rememberedEmail = localStorage.getItem(
         STORAGE_KEYS.rememberedEmail
@@ -809,7 +731,7 @@
       const sessionActive =
         sessionStorage.getItem(STORAGE_KEYS.sessionActive) === "true";
 
-      let allowedProducts = ["load", "generator", "aic"];
+      let allowedProducts = [];
 
       try {
         const storedProducts = JSON.parse(
@@ -820,10 +742,10 @@
           allowedProducts = storedProducts;
         }
       } catch (error) {
-        console.warn("Could not restore stored product access.");
+        allowedProducts = [];
       }
 
-      if (sessionEmail && sessionActive) {
+      if (sessionEmail && sessionActive && allowedProducts.length > 0) {
         showPortal(sessionEmail, allowedProducts);
       } else {
         showLogin();
