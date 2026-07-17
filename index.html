@@ -1,630 +1,420 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>LoadCalcPro | Professional NEC 2023 Electrical Calculators</title>
-
-<meta
-  name="description"
-  content="Choose the LoadCalcPro electrical calculators you need. One calculator is $9.99 per month or choose two calculators for $17.99 per month."
->
-
-<meta name="robots" content="index, follow">
-
-<link
-  rel="canonical"
-  href="https://loadcalcpro.github.io/electrical-load-calculator/"
->
-
-<meta property="og:type" content="website">
-
-<meta
-  property="og:title"
-  content="LoadCalcPro | Professional NEC 2023 Electrical Calculators"
->
-
-<meta
-  property="og:description"
-  content="Choose one professional electrical calculator for $9.99 per month or two calculators for $17.99 per month."
->
-
-<meta
-  property="og:url"
-  content="https://loadcalcpro.github.io/electrical-load-calculator/"
->
-
-<meta property="og:site_name" content="LoadCalcPro">
-<meta name="twitter:card" content="summary">
-
-<meta
-  name="twitter:title"
-  content="LoadCalcPro | Professional NEC 2023 Electrical Calculators"
->
-
-<meta
-  name="twitter:description"
-  content="Professional NEC 2023 electrical calculators with flexible monthly access."
->
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "LoadCalcPro",
-  "url": "https://loadcalcpro.github.io/electrical-load-calculator/",
-  "applicationCategory": "BusinessApplication",
-  "operatingSystem": "Web Browser",
-  "description": "Professional NEC 2023 electrical calculators for electrical contractors, engineers, inspectors, designers, and plans examiners.",
-  "provider": {
-    "@type": "Organization",
-    "name": "LoadCalcPro",
-    "url": "https://loadcalcpro.github.io/electrical-load-calculator/"
-  }
-}
-</script>
-
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: #0f172a;
-  color: #ffffff;
-  line-height: 1.6;
-}
-
-a {
-  text-decoration: none;
-}
-
-header {
-  background: linear-gradient(135deg, #1e3a8a, #0f172a);
-  padding: 26px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.nav {
-  max-width: 1150px;
-  margin: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.logo {
-  font-size: 26px;
-  font-weight: 900;
-  letter-spacing: 0.2px;
-}
-
-.logo span {
-  color: #22c55e;
-}
-
-.nav-links {
-  display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
-}
-
-.nav-links a {
-  color: #dbeafe;
-  font-weight: 700;
-  font-size: 14px;
-}
-
-.nav-links a:hover {
-  color: #86efac;
-}
-
-.hero {
-  padding: 82px 20px 72px;
-  background:
-    radial-gradient(circle at top right, rgba(34, 197, 94, 0.14), transparent 32%),
-    linear-gradient(135deg, #1e3a8a 0%, #0f172a 72%);
-}
-
-.hero-inner {
-  max-width: 1050px;
-  margin: auto;
-  text-align: center;
-}
-
-.eyebrow {
-  color: #86efac;
-  font-weight: 900;
-  text-transform: uppercase;
-  font-size: 13px;
-  letter-spacing: 0.1em;
-  margin-bottom: 12px;
-}
-
-.hero h1 {
-  font-size: 54px;
-  line-height: 1.05;
-  margin-bottom: 18px;
-}
-
-.hero p {
-  font-size: 20px;
-  color: #dbeafe;
-  max-width: 800px;
-  margin: auto;
-}
-
-.actions {
-  display: flex;
-  justify-content: center;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-top: 30px;
-}
-
-.btn {
-  display: inline-block;
-  padding: 15px 24px;
-  border-radius: 12px;
-  font-weight: 900;
-  border: 2px solid transparent;
-  transition: transform 0.15s ease, background 0.15s ease;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-}
-
-.btn.primary {
-  background: #22c55e;
-  color: #052e16;
-}
-
-.btn.primary:hover {
-  background: #16a34a;
-  color: #ffffff;
-}
-
-.btn.secondary {
-  background: transparent;
-  color: #ffffff;
-  border-color: #93c5fd;
-}
-
-.btn.secondary:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.btn.disabled {
-  background: #d1d5db;
-  color: #4b5563;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.section {
-  padding: 64px 20px;
-}
-
-.wrap {
-  max-width: 1150px;
-  margin: auto;
-}
-
-.section h2 {
-  text-align: center;
-  font-size: 36px;
-  margin-bottom: 12px;
-}
-
-.section .sub {
-  text-align: center;
-  color: #cbd5e1;
-  margin: 0 auto 34px;
-  max-width: 820px;
-}
-
-.pricing {
-  background: #f8fafc;
-  color: #111827;
-}
-
-.pricing h2 {
-  color: #0f172a;
-}
-
-.pricing .sub {
-  color: #475569;
-}
-
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
-  max-width: 900px;
-  margin: auto;
-}
-
-.price-card {
-  background: #ffffff;
-  color: #111827;
-  border-radius: 20px;
-  padding: 30px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.12);
-  display: flex;
-  flex-direction: column;
-}
-
-.price-card.featured {
-  border: 3px solid #22c55e;
-  position: relative;
-}
-
-.savings-badge {
-  position: absolute;
-  top: -15px;
-  right: 22px;
-  background: #22c55e;
-  color: #052e16;
-  padding: 7px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.price-card h3 {
-  color: #1e3a8a;
-  font-size: 27px;
-  margin-bottom: 8px;
-}
-
-.price {
-  font-size: 46px;
-  font-weight: 900;
-  color: #0f172a;
-  margin: 13px 0;
-}
-
-.price small {
-  font-size: 18px;
-  color: #6b7280;
-}
-
-.price-card ul {
-  margin: 15px 0 24px 22px;
-  color: #374151;
-}
-
-.price-card li {
-  margin: 8px 0;
-}
-
-.price-card .btn {
-  margin-top: auto;
-  width: 100%;
-  text-align: center;
-}
-
-.checkout-note {
-  margin-top: 12px;
-  color: #64748b;
-  font-size: 13px;
-  text-align: center;
-}
-
-.available {
-  background: #0f172a;
-}
-
-.calculator-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
-}
-
-.calculator-card {
-  background: #ffffff;
-  color: #111827;
-  border-radius: 18px;
-  padding: 26px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.2);
-}
-
-.status {
-  display: inline-block;
-  background: #dcfce7;
-  color: #166534;
-  border-radius: 999px;
-  padding: 5px 10px;
-  margin-bottom: 13px;
-  font-size: 12px;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.calculator-card h3 {
-  color: #1e3a8a;
-  font-size: 25px;
-  margin-bottom: 10px;
-}
-
-.calculator-card p {
-  color: #475569;
-}
-
-.features {
-  background: #111827;
-}
-
-.feature-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-
-.feature-card {
-  background: #ffffff;
-  color: #111827;
-  border-radius: 16px;
-  padding: 23px;
-  border: 1px solid #e5e7eb;
-}
-
-.feature-card h3 {
-  color: #1e3a8a;
-  margin-bottom: 8px;
-}
-
-.coming {
-  background: #f8fafc;
-  color: #111827;
-}
-
-.coming h2 {
-  color: #0f172a;
-}
-
-.coming .sub {
-  color: #475569;
-}
-
-.coming-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-}
-
-.coming-item {
-  background: #ffffff;
-  color: #111827;
-  border-radius: 14px;
-  padding: 20px;
-  text-align: center;
-  font-weight: 900;
-  border: 1px solid #e5e7eb;
-}
-
-.about {
-  background: #0f172a;
-}
-
-.about-copy {
-  max-width: 900px;
-  margin: auto;
-  text-align: center;
-  color: #cbd5e1;
-  font-size: 17px;
-}
-
-.disclaimer {
-  background: #020617;
-  padding: 30px 20px;
-  color: #94a3b8;
-  text-align: center;
-  font-size: 13px;
-}
-
-.disclaimer p {
-  max-width: 1000px;
-  margin: auto;
-}
-
-.footer {
-  text-align: center;
-  padding: 26px 20px;
-  color: #94a3b8;
-  background: #020617;
-  border-top: 1px solid #1e293b;
-  font-size: 14px;
-}
-
-@media (max-width: 850px) {
-  .pricing-grid,
-  .calculator-grid,
-  .feature-grid,
-  .coming-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .hero h1 {
-    font-size: 40px;
-  }
-}
-
-@media (max-width: 500px) {
-  .hero {
-    padding-top: 56px;
-  }
-
-  .hero h1 {
-    font-size: 34px;
-  }
-
-  .hero p {
-    font-size: 18px;
-  }
-
-  .actions .btn {
-    width: 100%;
-    text-align: center;
-  }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>LoadCalcPro | Professional Electrical Calculators</title>
+
+  <meta
+    name="description"
+    content="LoadCalcPro provides professional NEC 2023 electrical load, generator, and available fault current calculators."
+  >
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(2, 6, 23, 0.96);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .nav {
+      max-width: 1180px;
+      margin: auto;
+      padding: 19px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      color: #ffffff;
+      font-size: 27px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .logo span {
+      color: #22c55e;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .nav-link {
+      color: #dbeafe;
+      font-weight: 800;
+    }
+
+    .nav-link:hover {
+      color: #86efac;
+    }
+
+    .member-button {
+      display: inline-block;
+      padding: 12px 19px;
+      border-radius: 10px;
+      background: #22c55e;
+      color: #052e16;
+      font-weight: 900;
+    }
+
+    .member-button:hover {
+      background: #16a34a;
+      color: #ffffff;
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at top right, rgba(34, 197, 94, 0.17), transparent 32%),
+        linear-gradient(135deg, #1e3a8a 0%, #0f172a 68%);
+      color: #ffffff;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: auto;
+      padding: 94px 20px 105px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: center;
+      gap: 58px;
+    }
+
+    .eyebrow {
+      color: #86efac;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      font-size: 55px;
+      line-height: 1.08;
+      margin-bottom: 22px;
+    }
+
+    .hero-copy {
+      max-width: 690px;
+      color: #cbd5e1;
+      font-size: 20px;
+      margin-bottom: 31px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .primary-button,
+    .secondary-button {
+      display: inline-block;
+      padding: 15px 23px;
+      border-radius: 11px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .primary-button {
+      background: #22c55e;
+      color: #052e16;
+    }
+
+    .primary-button:hover {
+      background: #16a34a;
+      color: #ffffff;
+    }
+
+    .secondary-button {
+      border: 1px solid #93c5fd;
+      color: #dbeafe;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .secondary-button:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .hero-card {
+      background: rgba(255, 255, 255, 0.97);
+      color: #0f172a;
+      border-radius: 22px;
+      padding: 31px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-card h2 {
+      color: #1e3a8a;
+      font-size: 27px;
+      margin-bottom: 13px;
+    }
+
+    .hero-card p {
+      color: #475569;
+      margin-bottom: 19px;
+    }
+
+    .hero-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    .hero-list li {
+      position: relative;
+      padding-left: 27px;
+      color: #334155;
+      font-weight: 700;
+    }
+
+    .hero-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #16a34a;
+      font-weight: 900;
+    }
+
+    .section {
+      max-width: 1180px;
+      margin: auto;
+      padding: 76px 20px;
+    }
+
+    .section-heading {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 38px;
+    }
+
+    .section-heading h2 {
+      color: #1e3a8a;
+      font-size: 39px;
+      line-height: 1.15;
+      margin-bottom: 13px;
+    }
+
+    .section-heading p {
+      color: #64748b;
+      font-size: 18px;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .calculator-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 19px;
+      padding: 28px;
+      box-shadow: 0 16px 45px rgba(15, 23, 42, 0.08);
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
+      margin-bottom: 15px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .calculator-card h3 {
+      color: #1e3a8a;
+      font-size: 25px;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .calculator-card p {
+      color: #64748b;
+    }
+
+    .membership-section {
+      background: #e0f2fe;
+      border-top: 1px solid #bae6fd;
+      border-bottom: 1px solid #bae6fd;
+    }
+
+    .membership-inner {
+      max-width: 920px;
+      margin: auto;
+      padding: 65px 20px;
+      text-align: center;
+    }
+
+    .membership-inner h2 {
+      color: #1e3a8a;
+      font-size: 37px;
+      margin-bottom: 13px;
+    }
+
+    .membership-inner p {
+      color: #334155;
+      font-size: 18px;
+      margin-bottom: 25px;
+    }
+
+    footer {
+      padding: 27px 20px;
+      text-align: center;
+      color: #94a3b8;
+      background: #020617;
+      border-top: 1px solid #1e293b;
+      font-size: 14px;
+    }
+
+    @media (max-width: 850px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        padding-top: 72px;
+      }
+
+      h1 {
+        font-size: 45px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav {
+        flex-direction: column;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 37px;
+      }
+
+      .hero-copy {
+        font-size: 18px;
+      }
+
+      .hero-actions,
+      .primary-button,
+      .secondary-button,
+      .member-button {
+        width: 100%;
+      }
+
+      .section-heading h2,
+      .membership-inner h2 {
+        font-size: 31px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
-  <div class="nav">
-    <div class="logo">⚡ LoadCalc<span>Pro</span></div>
+  <nav class="nav" aria-label="Main navigation">
+    <a class="logo" href="index.html">⚡ LoadCalc<span>Pro</span></a>
 
-    <nav class="nav-links" aria-label="Main navigation">
-      <a href="#plans">Membership Plans</a>
-      <a href="#calculators">Calculators</a>
-      <a href="#coming">Coming Soon</a>
-      <a href="#about">About</a>
-      <a href="member-dashboard.html">Member Login</a>
-    </nav>
-  </div>
+    <div class="nav-links">
+      <a class="nav-link" href="#calculators">Calculators</a>
+      <a class="member-button" href="member-dashboard.html">Member Login</a>
+    </div>
+  </nav>
 </header>
 
 <main>
-
-<section class="hero">
-  <div class="hero-inner">
-
-    <div class="eyebrow">
-      NEC 2023 | Professional Electrical Calculation Tools
-    </div>
-
-    <h1>
-      Choose the Calculators You Need
-    </h1>
-
-    <p>
-      Select one calculator for $9.99 per month or choose two calculators
-      for $17.99 per month. Use one secure member login to access the
-      calculators included with your plan.
-    </p>
-
-    <div class="actions">
-      <a class="btn primary" href="#plans">
-        View Membership Plans
-      </a>
-
-      <a class="btn secondary" href="member-dashboard.html">
-        Member Login
-      </a>
-    </div>
-
-  </div>
-</section>
-
-<section class="section pricing" id="plans">
-  <div class="wrap">
-
-    <h2>Choose Your Membership</h2>
-
-    <p class="sub">
-      Pay only for the number of calculators you need. Your selected
-      calculators will appear in your LoadCalcPro member dashboard.
-    </p>
-
-    <div class="pricing-grid">
-
-      <article class="price-card">
-        <h3>1 Calculator</h3>
-
-        <div class="price">
-          $9.99
-          <small>/ month</small>
-        </div>
-
-        <ul>
-          <li>Choose any one available calculator</li>
-          <li>Secure member dashboard access</li>
-          <li>Professional print and PDF reports</li>
-          <li>Calculator updates while subscribed</li>
-        </ul>
-
-        <a
-          class="btn primary"
-          href="https://payhip.com/b/AG1mf"
-          target="_blank"
-          rel="noopener"
-        >
-          Choose 1 Calculator
-        </a>
-      </article>
-
-      <article class="price-card featured">
-        <div class="savings-badge">Save $1.99 Monthly</div>
-
-        <h3>2 Calculators</h3>
-
-        <div class="price">
-          $17.99
-          <small>/ month</small>
-        </div>
-
-        <ul>
-          <li>Choose any two available calculators</li>
-          <li>One secure login for both calculators</li>
-          <li>Professional print and PDF reports</li>
-          <li>Calculator updates while subscribed</li>
-        </ul>
-
-        <!-- Replace # with the new two-calculator Payhip product link. -->
-        <a
-          class="btn disabled"
-          href="#"
-          aria-disabled="true"
-          title="The two-calculator checkout link is being connected."
-        >
-          Two-Calculator Checkout Coming Next
-        </a>
-
-        <p class="checkout-note">
-          This button will be activated after the $17.99 Payhip plan is created.
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow">Professional NEC 2023 Calculation Tools</div>
+        <h1>Electrical calculations made clear, fast, and professional.</h1>
+        <p class="hero-copy">
+          LoadCalcPro helps electrical professionals prepare accurate calculations,
+          organize project information, and produce clean printable reports.
         </p>
-      </article>
 
+        <div class="hero-actions">
+          <a class="primary-button" href="member-dashboard.html">Open Member Login</a>
+          <a class="secondary-button" href="#calculators">View Calculators</a>
+        </div>
+      </div>
+
+      <aside class="hero-card" aria-label="Membership information">
+        <h2>Already a Member?</h2>
+        <p>
+          Use the Member Dashboard to enter your membership email and open every
+          calculator included with your account.
+        </p>
+
+        <ul class="hero-list">
+          <li>One member login page</li>
+          <li>Separate access for each calculator</li>
+          <li>Remember-my-email option</li>
+          <li>Professional printable calculations</li>
+        </ul>
+      </aside>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="section available" id="calculators">
-  <div class="wrap">
-
-    <h2>Available Calculators</h2>
-
-    <p class="sub">
-      Choose either calculator with the one-calculator plan, or choose both
-      with the two-calculator plan.
-    </p>
+  <section class="section" id="calculators">
+    <div class="section-heading">
+      <h2>Available Professional Calculators</h2>
+      <p>
+        Members are shown only the calculators included with their active membership.
+      </p>
+    </div>
 
     <div class="calculator-grid">
-
       <article class="calculator-card">
         <div class="status">Available Now</div>
-        <h3>Generator Optional Method Calculator</h3>
+        <h3>Optional Method Generator Calculator</h3>
         <p>
-          Prepare residential generator-load calculations using an organized
-          NEC 2023-based workflow, managed-load selection, HVAC comparison,
-          EV charging support, and a professional calculation report.
+          Prepare NEC 2023 residential generator-load calculations, select managed
+          loads, compare HVAC loads, include EV charging, and print a professional report.
         </p>
       </article>
 
@@ -632,108 +422,26 @@ header {
         <div class="status">Available Now</div>
         <h3>AIC Available Fault Current Calculator</h3>
         <p>
-          Calculate available fault current at service equipment and
-          downstream panels, add multiple panel locations, and create a
-          clean professional calculation report.
+          Calculate available fault current at the service and downstream panels,
+          add multiple panel locations, and print a professional calculation summary.
         </p>
       </article>
-
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="section features">
-  <div class="wrap">
-
-    <h2>Built for Electrical Professionals</h2>
-
-    <p class="sub">
-      Practical tools for project design, plan review, inspection,
-      permit support, and professional documentation.
-    </p>
-
-    <div class="feature-grid">
-
-      <article class="feature-card">
-        <h3>Flexible Access</h3>
-        <p>
-          Choose one calculator or save by selecting two calculators under
-          a single monthly membership.
-        </p>
-      </article>
-
-      <article class="feature-card">
-        <h3>Professional Reports</h3>
-        <p>
-          Create clean calculation summaries for project files, permit
-          documentation, plan review, or customer records.
-        </p>
-      </article>
-
-      <article class="feature-card">
-        <h3>Secure Member Access</h3>
-        <p>
-          Active subscribers use the email address associated with their
-          LoadCalcPro membership to enter the member dashboard.
-        </p>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<section class="section coming" id="coming">
-  <div class="wrap">
-
-    <h2>More Calculators Are Planned</h2>
-
-    <p class="sub">
-      LoadCalcPro is being developed as a growing library of professional
-      electrical calculation tools.
-    </p>
-
-    <div class="coming-grid">
-      <div class="coming-item">Standard Method Calculator — Residential</div>
-      <div class="coming-item">Standard Method Calculator — Commercial</div>
-      <div class="coming-item">Multifamily Calculator</div>
-      <div class="coming-item">Existing Service Load Calculator</div>
-      <div class="coming-item">Voltage Drop Calculator</div>
-    </div>
-
-  </div>
-</section>
-
-<section class="section about" id="about">
-  <div class="wrap">
-
-    <h2>About LoadCalcPro</h2>
-
-    <div class="about-copy">
+  <section class="membership-section">
+    <div class="membership-inner">
+      <h2>Access Your Calculators</h2>
       <p>
-        LoadCalcPro provides practical electrical calculation tools designed
-        to make complex workflows easier to complete, review, print, and
-        document. The platform is focused on professional usability, clear
-        results, and NEC-based calculation methods.
+        Enter the email used for your LoadCalcPro membership. The Member Dashboard
+        will check your account and display the calculators you can open.
       </p>
+      <a class="primary-button" href="member-dashboard.html">Go to Member Dashboard</a>
     </div>
-
-  </div>
-</section>
-
-<section class="disclaimer">
-  <p>
-    LoadCalcPro is an independent electrical calculation tool and is not
-    affiliated with or endorsed by the National Fire Protection Association.
-    NEC® and National Electrical Code® are registered trademarks of the
-    National Fire Protection Association. Users are responsible for verifying
-    all results against the applicable code edition, equipment specifications,
-    local amendments, and authority having jurisdiction requirements.
-  </p>
-</section>
-
+  </section>
 </main>
 
-<footer class="footer">
+<footer>
   © 2026 LoadCalcPro. Professional NEC 2023 Electrical Calculators.
 </footer>
 
