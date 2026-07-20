@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
-
   <url>
     <loc>https://loadcalcpro.github.io/electrical-load-calculator/</loc>
-    <priority>1.0</priority>
   </url>
-
-  <url>
-    <loc>https://loadcalcpro.github.io/electrical-load-calculator/aic_calculator.html</loc>
-  </url>
-
-  <url>
-    <loc>https://loadcalcpro.github.io/electrical-load-calculator/generator.html</loc>
-  </url>
-
-  <url>
-    <loc>https://loadcalcpro.github.io/electrical-load-calculator/member-dashboard.html</loc>
-  </url>
-
 </urlset>
