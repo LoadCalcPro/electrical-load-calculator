@@ -1,0 +1,650 @@
+index_LoadCalcPro_v1.1(1).html
+File
+Pasted text(32).txt
+Document
+Here's the existing one.
+That was good.
+Edit
+Pasted text(33).txt
+Document
+<footer>
+  <p>© 2026 LoadCalcPro. Professional NEC Electrical Calculators.</p>
+
+  <p>
+    <a href="about.html">About</a> |
+    <a href="privacy.html">Privacy</a> |
+    <a href="terms.html">Terms</a> |
+    <a href="faq.html">FAQ</a> |
+    <a href="contact.html">Contact</a>
+  </p>
+</footer>
+page-template.html
+File
+privacy.html
+File
+
+I actually do have a suggestion, and I think it's the simplest one.
+
+Let's forget about styles.css for now.
+
+Right now you're trying to:
+
+Finish the website.
+Get Google indexing working.
+Finish Payhip.
+Get customers.
+
+Adding a shared stylesheet is a nice improvement, but it's not necessary today.
+
+Here's what I recommend
+
+Keep each page as a complete, self-contained HTML file.
+
+That means every page contains:
+
+Its own <style> section.
+Its own content.
+Its own footer.
+
+It's a little more repetitive, but it's much easier to manage while we're building the site.
+
+Later, after the site is finished and working, we can spend 10 minutes creating a shared styles.css file if you want. There's no rush.
+
+So here's our plan
+✅ Leave page-template.html as our reference.
+✅ Make about.html a complete file.
+✅ Make privacy.html a complete file.
+✅ Make terms.html a complete file.
+✅ Make faq.html a complete file.
+✅ Make contact.html a complete file.
+
+No shared stylesheet. No combining files. No extra complexity.
+
+I think that's the best path because it keeps us moving toward launching LoadCalcPro instead of stopping to reorganize code that already works.
+
+Then, once these five pages are finished, we'll connect them to the homepage and move on to the next priority.
+
+It's already. Launched. This is how we make it look good. By making these pages look good. And professional.
+
+You're right, and that's a different goal than what I was optimizing for.
+
+Since LoadCalcPro is already live, we're no longer trying to "get something working." We're polishing the site so that when someone finds it through Google, it looks like a professional software company.
+
+In that case, I recommend we do it the professional way.
+
+Here's the approach I suggest
+
+We'll create:
+
+One styles.css file that controls the appearance of every page.
+Keep each page (about.html, privacy.html, terms.html, faq.html, contact.html) focused only on its content.
+
+The benefits are:
+
+Every page looks identical.
+If you decide to change a button color, font, spacing, or footer later, you edit one file instead of five.
+As you add more calculators and pages, the site stays consistent.
+
+That's how most professional websites are organized.
+
+I think we should do it like this:
+Create a polished styles.css.
+Update all five pages to use it.
+Fine-tune the design until it looks exactly the way you want.
+Then update the homepage to match where appropriate.
+
+That gives LoadCalcPro a consistent visual identity across the entire site.
+
+I think it's worth investing the time now because these pages are part of your public-facing business, and you won't have to keep copying the same styling from file to file in the future.
+
+OK, go ahead.
+
+I created the two files you need:
+
+Upload this file to the main folder of your GitHub repository, beside index.html:
+
+styles.css
+
+Replace your current privacy.html with this completed version:
+
+privacy-updated.html
+
+When uploading the second file to GitHub, rename it from:
+
+privacy-updated.html
+
+to:
+
+privacy.html
+
+The two files must be in the same folder:
+
+index.html
+privacy.html
+styles.css
+
+The Privacy page will then automatically use the professional design from styles.css. 
+
+Library
+/
+styles.css
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+  line-height: 1.7;
+}
+
+a {
+  text-decoration: none;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(2, 6, 23, 0.97);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.nav {
+  max-width: 1180px;
+  margin: auto;
+  padding: 19px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logo {
+  color: #ffffff;
+  font-size: 27px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.logo span {
+  color: #22c55e;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.home-link {
+  color: #dbeafe;
+  font-weight: 800;
+}
+
+.home-link:hover {
+  color: #86efac;
+}
+
+.member-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 19px;
+  border-radius: 10px;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 900;
+  text-align: center;
+  transition: 0.2s ease;
+}
+
+.member-button:hover {
+  background: #1d4ed8;
+  color: #ffffff;
+}
+
+main {
+  flex: 1;
+}
+
+.page-hero {
+  background:
+    radial-gradient(circle at top right, rgba(34, 197, 94, 0.17), transparent 32%),
+    linear-gradient(135deg, #1e3a8a 0%, #0f172a 68%);
+  color: #ffffff;
+}
+
+.page-hero-inner {
+  max-width: 920px;
+  margin: auto;
+  padding: 72px 20px;
+  text-align: center;
+}
+
+.eyebrow {
+  color: #86efac;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+h1 {
+  font-size: 46px;
+  line-height: 1.1;
+  margin-bottom: 17px;
+}
+
+.hero-copy {
+  max-width: 720px;
+  margin: auto;
+  color: #cbd5e1;
+  font-size: 19px;
+}
+
+.content-section {
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+  padding: 65px 20px;
+}
+
+.content-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 38px;
+  box-shadow: 0 16px 45px rgba(15, 23, 42, 0.08);
+}
+
+.content-card h2 {
+  color: #1e3a8a;
+  font-size: 29px;
+  line-height: 1.25;
+  margin-top: 30px;
+  margin-bottom: 12px;
+}
+
+.content-card h2:first-child {
+  margin-top: 0;
+}
+
+.content-card p {
+  color: #475569;
+  margin-bottom: 18px;
+  font-size: 17px;
+}
+
+.content-card ul {
+  margin: 0 0 22px 24px;
+  color: #475569;
+  font-size: 17px;
+}
+
+.content-card li {
+  margin-bottom: 8px;
+}
+
+.content-card a {
+  color: #2563eb;
+  font-weight: 800;
+}
+
+.content-card a:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+.return-home {
+  margin-top: 30px;
+}
+
+.return-home a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 11px 18px;
+  border-radius: 9px;
+  background: #22c55e;
+  color: #052e16;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.return-home a:hover {
+  background: #16a34a;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+footer {
+  padding: 27px 20px;
+  text-align: center;
+  color: #94a3b8;
+  background: #020617;
+  border-top: 1px solid #1e293b;
+  font-size: 14px;
+}
+
+footer p + p {
+  margin-top: 8px;
+}
+
+footer a {
+  color: #dbeafe;
+  font-weight: 700;
+}
+
+footer a:hover {
+  color: #86efac;
+}
+
+@media (max-width: 700px) {
+  .nav {
+    flex-direction: column;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  h1 {
+    font-size: 38px;
+  }
+
+  .content-card {
+    padding: 28px 22px;
+  }
+}
+
+@media (max-width: 520px) {
+  .nav-links,
+  .member-button {
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 33px;
+  }
+
+  .hero-copy {
+    font-size: 17px;
+  }
+}
+
+Library
+/
+styles.css
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+  line-height: 1.7;
+}
+
+a {
+  text-decoration: none;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(2, 6, 23, 0.97);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.nav {
+  max-width: 1180px;
+  margin: auto;
+  padding: 19px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logo {
+  color: #ffffff;
+  font-size: 27px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.logo span {
+  color: #22c55e;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.home-link {
+  color: #dbeafe;
+  font-weight: 800;
+}
+
+.home-link:hover {
+  color: #86efac;
+}
+
+.member-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 19px;
+  border-radius: 10px;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 900;
+  text-align: center;
+  transition: 0.2s ease;
+}
+
+.member-button:hover {
+  background: #1d4ed8;
+  color: #ffffff;
+}
+
+main {
+  flex: 1;
+}
+
+.page-hero {
+  background:
+    radial-gradient(circle at top right, rgba(34, 197, 94, 0.17), transparent 32%),
+    linear-gradient(135deg, #1e3a8a 0%, #0f172a 68%);
+  color: #ffffff;
+}
+
+.page-hero-inner {
+  max-width: 920px;
+  margin: auto;
+  padding: 72px 20px;
+  text-align: center;
+}
+
+.eyebrow {
+  color: #86efac;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+h1 {
+  font-size: 46px;
+  line-height: 1.1;
+  margin-bottom: 17px;
+}
+
+.hero-copy {
+  max-width: 720px;
+  margin: auto;
+  color: #cbd5e1;
+  font-size: 19px;
+}
+
+.content-section {
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+  padding: 65px 20px;
+}
+
+.content-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 38px;
+  box-shadow: 0 16px 45px rgba(15, 23, 42, 0.08);
+}
+
+.content-card h2 {
+  color: #1e3a8a;
+  font-size: 29px;
+  line-height: 1.25;
+  margin-top: 30px;
+  margin-bottom: 12px;
+}
+
+.content-card h2:first-child {
+  margin-top: 0;
+}
+
+.content-card p {
+  color: #475569;
+  margin-bottom: 18px;
+  font-size: 17px;
+}
+
+.content-card ul {
+  margin: 0 0 22px 24px;
+  color: #475569;
+  font-size: 17px;
+}
+
+.content-card li {
+  margin-bottom: 8px;
+}
+
+.content-card a {
+  color: #2563eb;
+  font-weight: 800;
+}
+
+.content-card a:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+.return-home {
+  margin-top: 30px;
+}
+
+.return-home a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 11px 18px;
+  border-radius: 9px;
+  background: #22c55e;
+  color: #052e16;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.return-home a:hover {
+  background: #16a34a;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+footer {
+  padding: 27px 20px;
+  text-align: center;
+  color: #94a3b8;
+  background: #020617;
+  border-top: 1px solid #1e293b;
+  font-size: 14px;
+}
+
+footer p + p {
+  margin-top: 8px;
+}
+
+footer a {
+  color: #dbeafe;
+  font-weight: 700;
+}
+
+footer a:hover {
+  color: #86efac;
+}
+
+@media (max-width: 700px) {
+  .nav {
+    flex-direction: column;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  h1 {
+    font-size: 38px;
+  }
+
+  .content-card {
+    padding: 28px 22px;
+  }
+}
+
+@media (max-width: 520px) {
+  .nav-links,
+  .member-button {
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 33px;
+  }
+
+  .hero-copy {
+    font-size: 17px;
+  }
+}
