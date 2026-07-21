@@ -428,12 +428,16 @@
               name="email"
               type="email"
               autocomplete="email"
+              inputmode="email"
+              autocapitalize="none"
+              autocorrect="off"
+              spellcheck="false"
               placeholder="Enter your email address"
               required
             />
 
             <label class="remember-row" for="rememberEmail">
-              <input id="rememberEmail" type="checkbox" />
+              <input id="rememberEmail" type="checkbox" checked />
               <span>Remember my email</span>
             </label>
 
@@ -533,6 +537,38 @@
 
     function cleanEmail(value) {
       return String(value || "").trim().toLowerCase();
+    }
+
+    function getRememberedEmail() {
+      try {
+        return cleanEmail(
+          localStorage.getItem(STORAGE_KEYS.rememberedEmail)
+        );
+      } catch (error) {
+        return "";
+      }
+    }
+
+    function updateRememberedEmailControls() {
+      const rememberedEmail = getRememberedEmail();
+
+      if (rememberedEmail && !emailInput.value) {
+        emailInput.value = rememberedEmail;
+      }
+
+      if (rememberedEmail) {
+        rememberEmailInput.checked = true;
+      }
+    }
+
+    function saveRememberedEmail(email) {
+      try {
+        saveRememberedEmail(email);
+      } catch (error) {
+        console.warn("The remembered email could not be saved:", error);
+      }
+
+      updateRememberedEmailControls();
     }
 
     function isValidEmail(value) {
@@ -681,11 +717,7 @@
           return;
         }
 
-        if (rememberEmailInput.checked) {
-          localStorage.setItem(STORAGE_KEYS.rememberedEmail, email);
-        } else {
-          localStorage.removeItem(STORAGE_KEYS.rememberedEmail);
-        }
+        saveRememberedEmail(email);
 
         sessionStorage.setItem(STORAGE_KEYS.sessionEmail, email);
         sessionStorage.setItem(STORAGE_KEYS.sessionActive, "true");
@@ -718,14 +750,7 @@
     });
 
     (function initializePage() {
-      const rememberedEmail = localStorage.getItem(
-        STORAGE_KEYS.rememberedEmail
-      );
-
-      if (rememberedEmail) {
-        emailInput.value = rememberedEmail;
-        rememberEmailInput.checked = true;
-      }
+      updateRememberedEmailControls();
 
       const sessionEmail = sessionStorage.getItem(STORAGE_KEYS.sessionEmail);
       const sessionActive =
