@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -36,11 +35,7 @@
       font-family: Arial, Helvetica, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(
-          circle at top left,
-          rgba(31, 138, 91, 0.13),
-          transparent 32rem
-        ),
+        radial-gradient(circle at top left, rgba(31, 138, 91, 0.13), transparent 32rem),
         linear-gradient(145deg, #f7fafc 0%, var(--page) 100%);
     }
 
@@ -57,7 +52,7 @@
 
     .site-header {
       background: linear-gradient(135deg, var(--navy), var(--navy-2));
-      color: #ffffff;
+      color: #fff;
       border-bottom: 4px solid var(--gold);
     }
 
@@ -84,7 +79,7 @@
       display: grid;
       place-items: center;
       background: var(--green);
-      color: #ffffff;
+      color: #fff;
       font-weight: 800;
       font-size: 23px;
       box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.18);
@@ -103,7 +98,7 @@
     }
 
     .header-link {
-      color: #ffffff;
+      color: #fff;
       text-decoration: none;
       font-size: 14px;
       border: 1px solid rgba(255, 255, 255, 0.35);
@@ -163,18 +158,18 @@
       margin-top: 18px;
     }
 
-    .email-input {
+    .text-input {
       width: 100%;
       min-height: 50px;
       padding: 12px 14px;
       border: 1px solid #bcc8d3;
       border-radius: 9px;
       color: var(--text);
-      background: #ffffff;
+      background: #fff;
       outline: none;
     }
 
-    .email-input:focus {
+    .text-input:focus {
       border-color: var(--green);
       box-shadow: 0 0 0 3px rgba(31, 138, 91, 0.15);
     }
@@ -200,7 +195,7 @@
       border: 0;
       border-radius: 9px;
       background: var(--green);
-      color: #ffffff;
+      color: #fff;
       font-weight: 700;
       cursor: pointer;
     }
@@ -212,6 +207,20 @@
     .primary-button:disabled {
       cursor: wait;
       opacity: 0.7;
+    }
+
+    .secondary-link {
+      display: block;
+      margin-top: 15px;
+      text-align: center;
+      color: var(--green-dark);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .secondary-link:hover {
+      text-decoration: underline;
     }
 
     .message {
@@ -285,7 +294,7 @@
       display: flex;
       flex-direction: column;
       padding: 26px;
-      background: #ffffff;
+      background: #fff;
       border: 1px solid var(--border);
       border-radius: 15px;
       box-shadow: 0 12px 30px rgba(16, 35, 63, 0.09);
@@ -331,7 +340,7 @@
       border: 0;
       border-radius: 8px;
       background: var(--navy);
-      color: #ffffff;
+      color: #fff;
       font-weight: 700;
       text-decoration: none;
       cursor: pointer;
@@ -358,7 +367,7 @@
       border: 1px solid #aeb9c4;
       border-radius: 8px;
       padding: 10px 16px;
-      background: #ffffff;
+      background: #fff;
       color: var(--navy);
       font-weight: 700;
       cursor: pointer;
@@ -402,7 +411,6 @@
       }
     }
   </style>
-
 </head>
 
 <body>
@@ -412,280 +420,227 @@
         <div class="brand">
           <div class="brand-mark" aria-hidden="true">LC</div>
 
-```
-      <div>
-        <h2 class="brand-name">LoadCalcPro</h2>
+          <div>
+            <h2 class="brand-name">LoadCalcPro</h2>
+            <p class="brand-tagline">Professional Electrical Calculation Tools</p>
+          </div>
+        </div>
 
-        <p class="brand-tagline">
-          Professional Electrical Calculation Tools
-        </p>
+        <a class="header-link" href="index.html">Return to Main Page</a>
       </div>
-    </div>
+    </header>
 
-    <a class="header-link" href="index.html">
-      Return to Main Page
-    </a>
-  </div>
-</header>
-
-<main>
-  <section
-    id="loginSection"
-    class="panel"
-    aria-labelledby="loginTitle"
-  >
-    <div class="panel-top">
-      <h1 id="loginTitle">Member Login</h1>
-
-      <p>
-        Enter the email address and password for your LoadCalcPro account.
-      </p>
-    </div>
-
-    <div class="panel-body">
-      <form id="loginForm" novalidate>
-        <label class="field-label" for="email">
-          Member Email
-        </label>
-
-        <input
-          class="email-input"
-          id="email"
-          name="email"
-          type="email"
-          autocomplete="email"
-          inputmode="email"
-          autocapitalize="none"
-          autocorrect="off"
-          spellcheck="false"
-          placeholder="Enter your email address"
-          required
-        />
-
-        <label
-          class="field-label password-label"
-          for="password"
-        >
-          Password
-        </label>
-
-        <input
-          class="email-input"
-          id="password"
-          name="password"
-          type="password"
-          autocomplete="current-password"
-          placeholder="Enter your password"
-          minlength="6"
-          required
-        />
-
-        <label class="remember-row" for="rememberEmail">
-          <input
-            id="rememberEmail"
-            type="checkbox"
-            checked
-          />
-
-          <span>Remember my email</span>
-        </label>
-
-        <button
-          id="loginButton"
-          class="primary-button"
-          type="submit"
-        >
-          Member Login
-        </button>
-
-        <div
-          id="loginMessage"
-          class="message"
-          role="status"
-          aria-live="polite"
-        ></div>
-      </form>
-
-      <p class="small-note">
-        Your membership must be active. Use the same email address
-        entered when purchasing.
-      </p>
-    </div>
-  </section>
-
-  <section
-    id="portalSection"
-    class="portal"
-    aria-labelledby="portalTitle"
-  >
-    <div class="portal-heading">
-      <h1 id="portalTitle">Member Dashboard</h1>
-
-      <p>
-        Logged in as
-        <span
-          id="memberEmailDisplay"
-          class="member-email"
-        ></span>
-      </p>
-    </div>
-
-    <div class="calculator-grid">
-      <article
-        class="calculator-card"
-        data-product="generator"
-      >
-        <div
-          class="calculator-icon"
-          aria-hidden="true"
-        >
-          G
+    <main>
+      <section id="loginSection" class="panel" aria-labelledby="loginTitle">
+        <div class="panel-top">
+          <h1 id="loginTitle">Member Login</h1>
+          <p>Enter your LoadCalcPro email address and password.</p>
         </div>
 
-        <h2>
-          Optional Method Generator Calculator
-        </h2>
+        <div class="panel-body">
+          <form id="loginForm" novalidate>
+            <label class="field-label" for="email">Member Email</label>
 
-        <p>
-          Prepare NEC 2023 optional-method and generator-load
-          calculations and produce a professional printable report.
-        </p>
+            <input
+              class="text-input"
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              inputmode="email"
+              autocapitalize="none"
+              autocorrect="off"
+              spellcheck="false"
+              placeholder="Enter your email address"
+              required
+            />
 
-        <a
-          class="open-button"
-          data-access-link="generator"
-          href="generator.html"
-        >
-          Open Generator Calculator
-        </a>
-      </article>
+            <label class="field-label password-label" for="password">
+              Password
+            </label>
 
-      <article
-        class="calculator-card"
-        data-product="aic"
-      >
-        <div
-          class="calculator-icon"
-          aria-hidden="true"
-        >
-          A
+            <input
+              class="text-input"
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Enter your password"
+              required
+            />
+
+            <label class="remember-row" for="rememberEmail">
+              <input id="rememberEmail" type="checkbox" checked />
+              <span>Remember my email</span>
+            </label>
+
+            <button id="loginButton" class="primary-button" type="submit">
+              Member Login
+            </button>
+
+            <a class="secondary-link" href="forgot-password.html">
+              Forgot your password?
+            </a>
+
+            <div
+              id="loginMessage"
+              class="message"
+              role="status"
+              aria-live="polite"
+            ></div>
+          </form>
+
+          <p class="small-note">
+            Your membership must be active. Use the same email address used for your purchase.
+          </p>
+        </div>
+      </section>
+
+      <section id="portalSection" class="portal" aria-labelledby="portalTitle">
+        <div class="portal-heading">
+          <h1 id="portalTitle">Member Dashboard</h1>
+
+          <p>
+            Logged in as
+            <span id="memberEmailDisplay" class="member-email"></span>
+          </p>
         </div>
 
-        <h2>
-          AIC Available Fault Current Calculator
-        </h2>
+        <div class="calculator-grid">
+          <article class="calculator-card" data-product="generator">
+            <div class="calculator-icon" aria-hidden="true">G</div>
 
-        <p>
-          Calculate available fault current at the service and
-          downstream panel locations.
-        </p>
+            <h2>Optional Method Generator Calculator</h2>
 
-        <a
-          class="open-button"
-          data-access-link="aic"
-          href="aic_calculator.html"
-        >
-          Open AIC Calculator
-        </a>
-      </article>
-    </div>
+            <p>
+              Prepare optional-method and generator-load calculations and produce
+              a professional printable report.
+            </p>
 
-    <div class="portal-actions">
-      <button
-        id="signOutButton"
-        class="sign-out-button"
-        type="button"
-      >
-        Sign Out
-      </button>
-    </div>
-  </section>
-</main>
+            <a
+              class="open-button"
+              data-access-link="generator"
+              href="generator.html"
+              aria-disabled="true"
+            >
+              Checking Access...
+            </a>
+          </article>
 
-<footer>
-  &copy;
-  <span id="year"></span>
-  LoadCalcPro. All rights reserved.
-</footer>
-```
+          <article class="calculator-card" data-product="aic">
+            <div class="calculator-icon" aria-hidden="true">A</div>
 
+            <h2>AIC Available Fault Current Calculator</h2>
+
+            <p>
+              Calculate available fault current at the service and downstream
+              panel locations.
+            </p>
+
+            <a
+              class="open-button"
+              data-access-link="aic"
+              href="aic_calculator.html"
+              aria-disabled="true"
+            >
+              Checking Access...
+            </a>
+          </article>
+        </div>
+
+        <div class="portal-actions">
+          <button id="signOutButton" class="sign-out-button" type="button">
+            Sign Out
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      &copy; <span id="year"></span> LoadCalcPro. All rights reserved.
+    </footer>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
     "use strict";
 
-    const API_BASE_URL =
-      "https://loadcalcpro-hcml-api.onrender.com";
+    /*
+      Replace these two values with your Supabase project information.
 
-   const ACCESS_ENDPOINT = "/api/v2/access";
+      Use the PUBLIC anon key only.
+      Never put the service-role key in this HTML file.
+    */
+    const SUPABASE_URL = "https://oaqehddiqtgplxydxbxv.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_o_3xMc9QOsgV-8kqBFkLnw_tuvUyWD8";
+
+    const API_BASE_URL = "https://loadcalcpro-hcml-api.onrender.com";
+    const ACCESS_ENDPOINT = "/api/v2/access";
 
     const STORAGE_KEYS = {
-      rememberedEmail: "loadcalcproRememberedEmail",
-      sessionEmail: "loadcalcproMemberEmail",
-      sessionActive: "loadcalcproMemberActive",
-      allowedProducts: "loadcalcproAllowedProducts"
+      rememberedEmail: "loadcalcproRememberedEmail"
     };
 
-    const loginSection =
-      document.getElementById("loginSection");
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      }
+    );
 
-    const portalSection =
-      document.getElementById("portalSection");
+    const loginSection = document.getElementById("loginSection");
+    const portalSection = document.getElementById("portalSection");
+    const loginForm = document.getElementById("loginForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const rememberEmailInput = document.getElementById("rememberEmail");
+    const loginButton = document.getElementById("loginButton");
+    const loginMessage = document.getElementById("loginMessage");
+    const memberEmailDisplay = document.getElementById("memberEmailDisplay");
+    const signOutButton = document.getElementById("signOutButton");
 
-    const loginForm =
-      document.getElementById("loginForm");
-
-    const emailInput =
-      document.getElementById("email");
-
-    const passwordInput =
-      document.getElementById("password");
-
-    const rememberEmailInput =
-      document.getElementById("rememberEmail");
-
-    const loginButton =
-      document.getElementById("loginButton");
-
-    const loginMessage =
-      document.getElementById("loginMessage");
-
-    const memberEmailDisplay =
-      document.getElementById("memberEmailDisplay");
-
-    const signOutButton =
-      document.getElementById("signOutButton");
-
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
+    document.getElementById("year").textContent = new Date().getFullYear();
 
     function cleanEmail(value) {
-      return String(value || "")
-        .trim()
-        .toLowerCase();
+      return String(value || "").trim().toLowerCase();
+    }
+
+    function isValidEmail(value) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail(value));
+    }
+
+    function configurationIsReady() {
+      return (
+        SUPABASE_URL &&
+        SUPABASE_ANON_KEY &&
+        !SUPABASE_URL.includes("PASTE_YOUR_") &&
+        !SUPABASE_ANON_KEY.includes("PASTE_YOUR_")
+      );
     }
 
     function getRememberedEmail() {
       try {
         return cleanEmail(
-          localStorage.getItem(
-            STORAGE_KEYS.rememberedEmail
-          )
+          localStorage.getItem(STORAGE_KEYS.rememberedEmail)
         );
       } catch (error) {
         return "";
       }
     }
 
-    function updateRememberedEmailControls() {
+    function loadRememberedEmail() {
       const rememberedEmail = getRememberedEmail();
 
-      if (rememberedEmail && !emailInput.value) {
+      if (rememberedEmail) {
         emailInput.value = rememberedEmail;
+        rememberEmailInput.checked = true;
       }
-
-      rememberEmailInput.checked =
-        Boolean(rememberedEmail);
     }
 
     function saveRememberedEmail(email) {
@@ -696,22 +651,11 @@
             cleanEmail(email)
           );
         } else {
-          localStorage.removeItem(
-            STORAGE_KEYS.rememberedEmail
-          );
+          localStorage.removeItem(STORAGE_KEYS.rememberedEmail);
         }
       } catch (error) {
-        console.warn(
-          "The remembered email could not be saved:",
-          error
-        );
+        console.warn("Unable to save remembered email:", error);
       }
-    }
-
-    function isValidEmail(value) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-        cleanEmail(value)
-      );
     }
 
     function setMessage(text, type) {
@@ -726,116 +670,13 @@
 
     function setLoading(isLoading) {
       loginButton.disabled = isLoading;
-
       loginButton.textContent = isLoading
-        ? "Checking Membership..."
+        ? "Signing In..."
         : "Member Login";
     }
 
-    function getAllowedProducts(data) {
-      const allowed = [];
-
-      if (
-        data &&
-        data.generator_access === true
-      ) {
-        allowed.push("generator");
-      }
-
-      if (
-        data &&
-        data.aic_access === true
-      ) {
-        allowed.push("aic");
-      }
-
-      return allowed;
-    }
-
-    function applyProductAccess(allowedProducts) {
-      const allowed = new Set(allowedProducts);
-
-      document
-        .querySelectorAll(".calculator-card")
-        .forEach(function (card) {
-          const product = card.dataset.product;
-          const link =
-            card.querySelector(".open-button");
-
-          const hasAccess =
-            allowed.has(product);
-
-          card.classList.toggle(
-            "locked",
-            !hasAccess
-          );
-
-          link.setAttribute(
-            "aria-disabled",
-            hasAccess ? "false" : "true"
-          );
-
-          if (hasAccess) {
-            link.textContent =
-              product === "generator"
-                ? "Open Generator Calculator"
-                : "Open AIC Calculator";
-          } else {
-            link.textContent =
-              "Not Included in Membership";
-          }
-        });
-    }
-
-    function attachEmailToCalculatorLinks(email) {
-      document
-        .querySelectorAll("[data-access-link]")
-        .forEach(function (link) {
-          const originalHref =
-            link
-              .getAttribute("href")
-              .split("?")[0];
-
-          const url = new URL(
-            originalHref,
-            window.location.href
-          );
-
-          url.searchParams.set(
-            "member",
-            email
-          );
-
-          link.href = url.href;
-        });
-    }
-
-    function showPortal(
-      email,
-      allowedProducts
-    ) {
-      memberEmailDisplay.textContent = email;
-
-      applyProductAccess(
-        allowedProducts
-      );
-
-      attachEmailToCalculatorLinks(
-        email
-      );
-
-      loginSection.style.display = "none";
-
-      portalSection.classList.add(
-        "active"
-      );
-    }
-
     function showLogin() {
-      portalSection.classList.remove(
-        "active"
-      );
-
+      portalSection.classList.remove("active");
       loginSection.style.display = "block";
 
       window.setTimeout(function () {
@@ -847,29 +688,59 @@
       }, 0);
     }
 
-    async function checkMembership(
-      email,
-      password
-    ) {
-      const response = await fetch(
-        API_BASE_URL + ACCESS_ENDPOINT,
-        {
-          method: "POST",
+    function showPortal(email, allowedProducts) {
+      memberEmailDisplay.textContent = email;
+      applyProductAccess(allowedProducts);
+      attachEmailToCalculatorLinks(email);
 
-          headers: {
-            "Content-Type":
-              "application/json",
+      loginSection.style.display = "none";
+      portalSection.classList.add("active");
+    }
 
-            "Accept":
-              "application/json"
-          },
+    function applyProductAccess(allowedProducts) {
+      const allowed = new Set(allowedProducts);
 
-          body: JSON.stringify({
-            email: email,
-            password: password
-          })
+      document.querySelectorAll(".calculator-card").forEach(function (card) {
+        const product = card.dataset.product;
+        const link = card.querySelector(".open-button");
+        const hasAccess = allowed.has(product);
+
+        card.classList.toggle("locked", !hasAccess);
+        link.setAttribute("aria-disabled", hasAccess ? "false" : "true");
+
+        if (hasAccess) {
+          link.textContent =
+            product === "generator"
+              ? "Open Generator Calculator"
+              : "Open AIC Calculator";
+        } else {
+          link.textContent = "Not Included in Membership";
         }
-      );
+      });
+    }
+
+    function attachEmailToCalculatorLinks(email) {
+      document.querySelectorAll("[data-access-link]").forEach(function (link) {
+        const originalHref = link.getAttribute("href").split("?")[0];
+        const url = new URL(originalHref, window.location.href);
+
+        url.searchParams.set("member", email);
+        link.href = url.href;
+      });
+    }
+
+    async function checkCalculatorAccess(accessToken, calculator) {
+      const response = await fetch(API_BASE_URL + ACCESS_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "Authorization": "Bearer " + accessToken
+        },
+        body: JSON.stringify({
+          calculator: calculator
+        })
+      });
 
       let data = {};
 
@@ -879,199 +750,209 @@
         data = {};
       }
 
-      if (!response.ok) {
-        throw new Error(
-          data.message ||
-          data.error ||
-          "The membership server could not verify your login."
-        );
-      }
-
-      return data;
+      return {
+        ok: response.ok,
+        status: response.status,
+        data: data
+      };
     }
 
-    loginForm.addEventListener(
-      "submit",
-      async function (event) {
-        event.preventDefault();
+    async function getAllowedProducts(accessToken) {
+      const results = await Promise.all([
+        checkCalculatorAccess(accessToken, "generator"),
+        checkCalculatorAccess(accessToken, "aic")
+      ]);
 
-        clearMessage();
+      const generatorResult = results[0];
+      const aicResult = results[1];
+      const allowedProducts = [];
 
-        const email =
-          cleanEmail(emailInput.value);
-
-        const password =
-          String(
-            passwordInput.value || ""
-          );
-
-        if (!isValidEmail(email)) {
-          setMessage(
-            "Please enter a valid email address.",
-            "error"
-          );
-
-          emailInput.focus();
-          return;
-        }
-
-        if (password.length < 6) {
-          setMessage(
-            "Please enter your password.",
-            "error"
-          );
-
-          passwordInput.focus();
-          return;
-        }
-
-        setLoading(true);
-
-        try {
-          const result =
-            await checkMembership(
-              email,
-              password
-            );
-
-          if (result.active !== true) {
-            setMessage(
-              result.message ||
-              "No active membership was found for this account.",
-              "error"
-            );
-
-            return;
-          }
-
-          const allowedProducts =
-            getAllowedProducts(result);
-
-          if (
-            allowedProducts.length === 0
-          ) {
-            setMessage(
-              "Your membership is active, but no calculator access is assigned.",
-              "error"
-            );
-
-            return;
-          }
-
-          saveRememberedEmail(email);
-
-          sessionStorage.setItem(
-            STORAGE_KEYS.sessionEmail,
-            email
-          );
-
-          sessionStorage.setItem(
-            STORAGE_KEYS.sessionActive,
-            "true"
-          );
-
-          sessionStorage.setItem(
-            STORAGE_KEYS.allowedProducts,
-            JSON.stringify(
-              allowedProducts
-            )
-          );
-
-          passwordInput.value = "";
-
-          showPortal(
-            email,
-            allowedProducts
-          );
-        } catch (error) {
-          console.error(
-            "Membership check failed:",
-            error
-          );
-
-          setMessage(
-            error.message ||
-            "Unable to contact the membership server. Please try again.",
-            "error"
-          );
-        } finally {
-          setLoading(false);
-        }
+      if (generatorResult.ok && generatorResult.data.active === true) {
+        allowedProducts.push("generator");
       }
-    );
 
-    signOutButton.addEventListener(
-      "click",
-      function () {
-        sessionStorage.removeItem(
-          STORAGE_KEYS.sessionEmail
+      if (aicResult.ok && aicResult.data.active === true) {
+        allowedProducts.push("aic");
+      }
+
+      if (allowedProducts.length > 0) {
+        return allowedProducts;
+      }
+
+      const authenticationFailure = results.find(function (result) {
+        return result.status === 401;
+      });
+
+      if (authenticationFailure) {
+        throw new Error(
+          authenticationFailure.data.message ||
+          "Your login session could not be verified."
         );
+      }
 
-        sessionStorage.removeItem(
-          STORAGE_KEYS.sessionActive
+      const membershipFailure = results.find(function (result) {
+        return result.status === 403;
+      });
+
+      if (membershipFailure) {
+        throw new Error(
+          membershipFailure.data.message ||
+          "Your membership does not include calculator access."
         );
+      }
 
-        sessionStorage.removeItem(
-          STORAGE_KEYS.allowedProducts
+      const serverFailure = results.find(function (result) {
+        return result.status >= 500;
+      });
+
+      if (serverFailure) {
+        throw new Error(
+          serverFailure.data.message ||
+          "The membership server could not verify access."
         );
+      }
 
-        clearMessage();
+      throw new Error(
+        "No calculator access is assigned to this membership."
+      );
+    }
 
-        passwordInput.value = "";
+    async function openExistingSession() {
+      const {
+        data,
+        error
+      } = await supabaseClient.auth.getSession();
 
+      if (error) {
+        throw error;
+      }
+
+      const session = data?.session;
+
+      if (!session?.access_token || !session?.user?.email) {
         showLogin();
+        return;
       }
-    );
-
-    (function initializePage() {
-      updateRememberedEmailControls();
-
-      const sessionEmail =
-        sessionStorage.getItem(
-          STORAGE_KEYS.sessionEmail
-        );
-
-      const sessionActive =
-        sessionStorage.getItem(
-          STORAGE_KEYS.sessionActive
-        ) === "true";
-
-      let allowedProducts = [];
 
       try {
-        const storedProducts =
-          JSON.parse(
-            sessionStorage.getItem(
-              STORAGE_KEYS.allowedProducts
-            )
-          );
+        const allowedProducts = await getAllowedProducts(
+          session.access_token
+        );
 
-        if (
-          Array.isArray(
-            storedProducts
-          )
-        ) {
-          allowedProducts =
-            storedProducts;
-        }
-      } catch (error) {
-        allowedProducts = [];
-      }
-
-      if (
-        sessionEmail &&
-        sessionActive &&
-        allowedProducts.length > 0
-      ) {
         showPortal(
-          sessionEmail,
+          cleanEmail(session.user.email),
           allowedProducts
         );
-      } else {
+      } catch (error) {
+        await supabaseClient.auth.signOut();
         showLogin();
+        setMessage(error.message, "error");
       }
+    }
+
+    loginForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      clearMessage();
+
+      if (!configurationIsReady()) {
+        setMessage(
+          "Supabase is not configured in this file yet. Add the Supabase URL and public anon key.",
+          "error"
+        );
+        return;
+      }
+
+      const email = cleanEmail(emailInput.value);
+      const password = String(passwordInput.value || "");
+
+      if (!isValidEmail(email)) {
+        setMessage("Please enter a valid email address.", "error");
+        emailInput.focus();
+        return;
+      }
+
+      if (!password) {
+        setMessage("Please enter your password.", "error");
+        passwordInput.focus();
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const {
+          data,
+          error
+        } = await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        const session = data?.session;
+
+        if (!session?.access_token) {
+          throw new Error(
+            "Supabase did not return a valid login session."
+          );
+        }
+
+        const allowedProducts = await getAllowedProducts(
+          session.access_token
+        );
+
+        saveRememberedEmail(email);
+        passwordInput.value = "";
+
+        showPortal(email, allowedProducts);
+      } catch (error) {
+        console.error("Login failed:", error);
+
+        let message =
+          error?.message ||
+          "Unable to sign in. Please try again.";
+
+        if (
+          message.toLowerCase().includes("invalid login credentials")
+        ) {
+          message = "The email address or password is incorrect.";
+        }
+
+        setMessage(message, "error");
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    signOutButton.addEventListener("click", async function () {
+      try {
+        await supabaseClient.auth.signOut();
+      } catch (error) {
+        console.warn("Supabase sign-out failed:", error);
+      }
+
+      clearMessage();
+      passwordInput.value = "";
+      showLogin();
+    });
+
+    (async function initializePage() {
+      loadRememberedEmail();
+
+      if (!configurationIsReady()) {
+        showLogin();
+        setMessage(
+          "Before this login can work, add your Supabase URL and public anon key near the bottom of this file.",
+          "error"
+        );
+        return;
+      }
+
+      await openExistingSession();
     })();
   </script>
-
 </body>
 </html>
