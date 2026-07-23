@@ -12,6 +12,7 @@
       --gold:#d2a84b; --page:#eef3f7; --card:#fff; --text:#182433;
       --muted:#667487; --border:#d9e1e8; --danger:#b42318;
       --danger-bg:#fff1f0; --success:#16794f; --success-bg:#ecfdf3;
+      --info-bg:#eef7ff; --info-border:#bdd9ee;
       --shadow:0 18px 48px rgba(16,35,63,.14);
     }
     *{box-sizing:border-box}
@@ -29,6 +30,7 @@
     .primary-button{width:100%;min-height:50px;margin-top:20px;border:0;border-radius:9px;background:var(--green);color:#fff;font-weight:700;cursor:pointer}.primary-button:hover{background:var(--green-dark)}.primary-button:disabled{cursor:wait;opacity:.7}
     .message{display:none;margin-top:17px;padding:12px 14px;border-radius:8px;font-size:14px;line-height:1.45}.message.error{display:block;color:var(--danger);background:var(--danger-bg);border:1px solid #f3c7c3}.message.success{display:block;color:var(--success);background:var(--success-bg);border:1px solid #b7e4cb}
     .small-note{margin:20px 0 0;color:var(--muted);font-size:13px;line-height:1.5;text-align:center}.login-link{margin-top:20px;text-align:center}.login-link a{color:var(--green-dark);font-weight:700;text-decoration:none}
+    .account-note{margin-top:22px;padding:18px;border:1px solid var(--info-border);border-radius:12px;background:var(--info-bg);color:#425166;font-size:13px;line-height:1.55}.account-note strong{color:var(--navy)}.account-note p{margin:0}.account-note p+p{margin-top:10px}
     footer{padding:20px 16px 28px;text-align:center;color:#6f7d8d;font-size:12px}
     @media(max-width:560px){.brand-tagline,.header-link{display:none}.panel-top,.panel-body{padding-left:22px;padding-right:22px}}
   </style>
@@ -38,7 +40,7 @@
     <header class="site-header"><div class="header-inner"><div class="brand"><div class="brand-mark" aria-hidden="true">LC</div><div><h2 class="brand-name">LoadCalcPro</h2><p class="brand-tagline">Professional Electrical Calculation Tools</p></div></div><a class="header-link" href="index.html">Return to Main Page</a></div></header>
     <main>
       <section class="panel" aria-labelledby="setupTitle">
-        <div class="panel-top"><h1 id="setupTitle">First-Time Member Setup</h1><p>Enter the same email address you used during checkout. We will send you a secure link to create your password.</p></div>
+        <div class="panel-top"><h1 id="setupTitle">First-Time Member Setup</h1><p>Enter the same email address you used during checkout. We will send you a secure link to create your LoadCalcPro password.</p></div>
         <div class="panel-body">
           <form id="setupForm" novalidate>
             <label class="field-label" for="email">Purchase Email</label>
@@ -47,6 +49,14 @@
             <div id="message" class="message" role="status" aria-live="polite"></div>
           </form>
           <p class="small-note">Your purchase must already be active. For security, use only the newest email link you receive.</p>
+
+          <div class="account-note">
+            <p><strong>You will have two separate passwords:</strong></p>
+            <p><strong>LoadCalcPro password</strong> — used to sign in and access your calculators.</p>
+            <p><strong>Payhip password</strong> — used to manage billing, payment information, and cancellation.</p>
+            <p>We recommend saving both passwords in your browser or password manager. If you forget either password, you can use that service's <strong>Forgot Password</strong> option.</p>
+          </div>
+
           <div class="login-link"><a href="member-dashboard.html">Already have a password? Return to Member Login</a></div>
         </div>
       </section>
