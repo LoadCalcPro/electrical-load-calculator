@@ -3,13 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>LoadCalcPro | Professional Electrical Calculation Tools</title>
-
-  <meta
-    name="description"
-    content="Professional electrical calculation tools for electricians, contractors, inspectors, engineers, and designers. Complete calculations efficiently and produce clear, professional reports."
-  >
+  <meta name="description" content="Professional electrical calculation tools for electricians, contractors, inspectors, engineers, and designers.">
 
   <style>
     :root {
@@ -32,15 +27,8 @@
       --shadow: 0 16px 45px rgba(15, 23, 42, 0.09);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       min-height: 100vh;
@@ -50,14 +38,7 @@
       line-height: 1.6;
     }
 
-    a {
-      text-decoration: none;
-    }
-
-    img {
-      max-width: 100%;
-      display: block;
-    }
+    a { text-decoration: none; }
 
     .container {
       width: min(1180px, calc(100% - 40px));
@@ -89,9 +70,7 @@
       letter-spacing: -0.02em;
     }
 
-    .logo span {
-      color: var(--green);
-    }
+    .logo span { color: var(--green); }
 
     .nav-links {
       display: flex;
@@ -108,9 +87,7 @@
     }
 
     .nav-link:hover,
-    .footer-links a:hover {
-      color: #86efac;
-    }
+    .footer-links a:hover { color: #86efac; }
 
     .button {
       display: inline-flex;
@@ -124,9 +101,7 @@
       transition: transform 0.2s ease, background 0.2s ease;
     }
 
-    .button:hover {
-      transform: translateY(-1px);
-    }
+    .button:hover { transform: translateY(-1px); }
 
     .button-primary {
       background: var(--green);
@@ -143,10 +118,7 @@
       color: var(--white);
     }
 
-    .button-secondary:hover {
-      background: #1d4ed8;
-      color: var(--white);
-    }
+    .button-secondary:hover { background: #1d4ed8; }
 
     .button-outline {
       color: #dbeafe;
@@ -154,9 +126,7 @@
       background: rgba(255, 255, 255, 0.04);
     }
 
-    .button-outline:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
+    .button-outline:hover { background: rgba(255, 255, 255, 0.1); }
 
     .hero {
       background:
@@ -198,7 +168,8 @@
     }
 
     .hero-actions,
-    .membership-actions {
+    .membership-actions,
+    .card-actions {
       display: flex;
       gap: 14px;
       flex-wrap: wrap;
@@ -244,13 +215,8 @@
       font-weight: 900;
     }
 
-    .section {
-      padding: 82px 0;
-    }
-
-    .section-white {
-      background: var(--white);
-    }
+    .section { padding: 82px 0; }
+    .section-white { background: var(--white); }
 
     .section-heading {
       text-align: center;
@@ -314,28 +280,16 @@
     }
 
     .calculator-card p,
-    .feature-card p {
-      color: var(--slate-500);
-    }
+    .feature-card p { color: var(--slate-500); }
 
     .calculator-card p {
       margin-bottom: 24px;
       flex: 1;
     }
 
-    .card-actions {
-      display: flex;
-      gap: 11px;
-      flex-wrap: wrap;
-    }
+    .card-actions .button { flex: 1 1 180px; }
 
-    .card-actions .button {
-      flex: 1 1 180px;
-    }
-
-    .feature-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
+    .feature-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
     .feature-icon {
       width: 48px;
@@ -397,9 +351,7 @@
       margin-bottom: 26px;
     }
 
-    .membership-actions {
-      justify-content: center;
-    }
+    .membership-actions { justify-content: center; }
 
     footer {
       background: var(--navy-dark);
@@ -418,9 +370,7 @@
       flex-wrap: wrap;
     }
 
-    .footer-copy {
-      font-size: 14px;
-    }
+    .footer-copy { font-size: 14px; }
 
     .footer-links {
       display: flex;
@@ -442,9 +392,7 @@
         padding-top: 74px;
       }
 
-      .feature-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 760px) {
@@ -459,72 +407,47 @@
       }
 
       .calculator-grid,
-      .feature-grid {
-        grid-template-columns: 1fr;
-      }
+      .feature-grid { grid-template-columns: 1fr; }
 
       .footer-inner {
         justify-content: center;
         text-align: center;
       }
 
-      .footer-links {
-        justify-content: center;
-      }
+      .footer-links { justify-content: center; }
     }
 
     @media (max-width: 540px) {
-      .container {
-        width: min(100% - 28px, 1180px);
-      }
+      .container { width: min(100% - 28px, 1180px); }
 
-      .nav-links {
-        gap: 12px;
-      }
-
-      .nav-link {
-        font-size: 14px;
-      }
-
-      .hero-inner {
-        padding: 62px 0 72px;
-      }
-
-      .hero-copy {
-        font-size: 18px;
-      }
+      .hero-inner { padding: 62px 0 72px; }
+      .hero-copy { font-size: 18px; }
 
       .hero-actions,
       .hero-actions .button,
       .membership-actions,
       .membership-actions .button,
       .card-actions,
-      .card-actions .button {
-        width: 100%;
-      }
+      .card-actions .button { width: 100%; }
 
       .hero-card,
       .calculator-card,
       .feature-card,
-      .about-panel {
-        padding: 24px;
-      }
+      .about-panel { padding: 24px; }
 
-      .section {
-        padding: 64px 0;
-      }
+      .section { padding: 64px 0; }
     }
   </style>
 </head>
 
 <body>
-
 <header>
   <nav class="nav container" aria-label="Main navigation">
     <a class="logo" href="index.html">⚡ LoadCalc<span>Pro</span></a>
 
     <div class="nav-links">
       <a class="nav-link" href="index.html">Home</a>
+      <a class="nav-link" href="shop.html">Shop</a>
       <a class="nav-link" href="#calculators">Calculators</a>
       <a class="nav-link" href="#about">About</a>
       <a class="nav-link" href="contact.html">Contact</a>
@@ -534,12 +457,10 @@
 </header>
 
 <main>
-
   <section class="hero">
     <div class="hero-inner container">
       <div>
         <div class="eyebrow">Professional Electrical Calculation Tools</div>
-
         <h1>Electrical calculations made clear, fast, and professional.</h1>
 
         <p class="hero-copy">
@@ -548,34 +469,23 @@
         </p>
 
         <div class="hero-actions">
-          <a
-            class="button button-primary"
-            href="https://payhip.com/LoadCalcTools"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Purchase a Calculator
-          </a>
-
-          <a class="button button-outline" href="member-dashboard.html">
-            Member Login
-          </a>
+          <a class="button button-primary" href="shop.html">View Calculators and Plans</a>
+          <a class="button button-outline" href="member-dashboard.html">Member Login</a>
         </div>
       </div>
 
       <aside class="hero-card" aria-label="LoadCalcPro benefits">
         <h2>Professional Tools for Electrical Work</h2>
-
         <p>
-          Choose the calculator you need, purchase securely through Payhip,
-          and use your purchase email to access your products.
+          Explore calculators and membership options on the LoadCalcPro Shop page.
+          Secure checkout is handled by Payhip only after you select a plan.
         </p>
 
         <ul class="hero-list">
           <li>NEC-based calculation tools</li>
-          <li>Separate access for each calculator</li>
+          <li>Flexible calculator access</li>
           <li>Clear professional reports</li>
-          <li>Simple member email login</li>
+          <li>Secure member dashboard</li>
         </ul>
       </aside>
     </div>
@@ -584,68 +494,41 @@
   <section class="section" id="calculators">
     <div class="container">
       <div class="section-heading">
-        <h2>Professional Calculation Suite</h2>
-
+        <h2>Available Calculators</h2>
         <p>
-          Powerful electrical calculation tools designed to simplify code compliance,
-          improve accuracy, and save time.
+          Choose an individual calculator or select a membership plan that includes
+          more than one tool.
         </p>
       </div>
 
       <div class="calculator-grid">
-
         <article class="calculator-card">
           <div class="status">Available Now</div>
-
           <h3>Optional Method Generator Calculator</h3>
-
           <p>
             Prepare optional-method generator load calculations, select managed loads,
             compare HVAC loads, include EV charging, and print a professional report.
           </p>
 
           <div class="card-actions">
-            <a class="button button-secondary" href="member-dashboard.html">
-              Member Login
-            </a>
-
-            <a
-              class="button button-primary"
-              href="https://payhip.com/LoadCalcTools"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View Purchase Options
-            </a>
+            <a class="button button-secondary" href="member-dashboard.html">Member Login</a>
+            <a class="button button-primary" href="shop.html#calculators">View Purchase Options</a>
           </div>
         </article>
 
         <article class="calculator-card">
           <div class="status">Available Now</div>
-
           <h3>AIC Available Fault Current Calculator</h3>
-
           <p>
             Calculate available fault current at the service and downstream panels,
             add multiple panel locations, and print a professional calculation summary.
           </p>
 
           <div class="card-actions">
-            <a class="button button-secondary" href="member-dashboard.html">
-              Member Login
-            </a>
-
-            <a
-              class="button button-primary"
-              href="https://payhip.com/LoadCalcTools"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View Purchase Options
-            </a>
+            <a class="button button-secondary" href="member-dashboard.html">Member Login</a>
+            <a class="button button-primary" href="shop.html#calculators">View Purchase Options</a>
           </div>
         </article>
-
       </div>
     </div>
   </section>
@@ -654,7 +537,6 @@
     <div class="container">
       <div class="section-heading">
         <h2>Why Choose LoadCalcPro?</h2>
-
         <p>
           Built to support professional electrical work from initial calculation
           through final printed documentation.
@@ -662,55 +544,41 @@
       </div>
 
       <div class="feature-grid">
-
         <article class="feature-card">
           <div class="feature-icon">✓</div>
           <h3>NEC-Based Calculations</h3>
-          <p>
-            Calculation workflows are organized around applicable electrical-code requirements.
-          </p>
+          <p>Calculation workflows are organized around applicable electrical-code requirements.</p>
         </article>
 
         <article class="feature-card">
           <div class="feature-icon">⚡</div>
           <h3>Fast Workflow</h3>
-          <p>
-            Enter project information, complete calculations, and review results without unnecessary steps.
-          </p>
+          <p>Enter project information, complete calculations, and review results without unnecessary steps.</p>
         </article>
 
         <article class="feature-card">
           <div class="feature-icon">▤</div>
           <h3>Professional Reports</h3>
-          <p>
-            Produce clear printable calculation summaries suitable for project documentation.
-          </p>
+          <p>Produce clear printable calculation summaries suitable for project documentation.</p>
         </article>
 
         <article class="feature-card">
           <div class="feature-icon">⌂</div>
           <h3>Online Access</h3>
-          <p>
-            Access purchased calculators through the LoadCalcPro Member Dashboard.
-          </p>
+          <p>Access purchased calculators through the LoadCalcPro Member Dashboard.</p>
         </article>
 
         <article class="feature-card">
           <div class="feature-icon">＋</div>
           <h3>Growing Tool Suite</h3>
-          <p>
-            Additional electrical calculation tools can be added as the platform expands.
-          </p>
+          <p>Additional electrical calculation tools and membership options can be added as the platform expands.</p>
         </article>
 
         <article class="feature-card">
           <div class="feature-icon">◎</div>
           <h3>Clear Results</h3>
-          <p>
-            Organized inputs and calculation summaries help make results easier to review.
-          </p>
+          <p>Organized inputs and calculation summaries help make results easier to review.</p>
         </article>
-
       </div>
     </div>
   </section>
@@ -719,7 +587,6 @@
     <div class="container">
       <div class="about-panel">
         <h2>About LoadCalcPro</h2>
-
         <p>
           LoadCalcPro provides professional electrical calculation tools designed to help
           electricians, contractors, inspectors, engineers, and designers complete calculations
@@ -732,39 +599,26 @@
   <section class="membership-section">
     <div class="membership-inner">
       <h2>Already Purchased?</h2>
-
       <p>
-        Enter the email address used for your Payhip purchase. Your Member Dashboard
-        will check your account and display each calculator included with your purchase.
+        Sign in with the email address and password connected to your LoadCalcPro membership.
+        Your dashboard will display the calculators included with your purchase.
       </p>
 
       <div class="membership-actions">
-        <a class="button button-secondary" href="member-dashboard.html">
-          Member Login
-        </a>
-
-        <a
-          class="button button-primary"
-          href="https://payhip.com/LoadCalcTools"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Purchase a Calculator
-        </a>
+        <a class="button button-secondary" href="member-dashboard.html">Member Login</a>
+        <a class="button button-primary" href="shop.html">View Shop</a>
       </div>
     </div>
   </section>
-
 </main>
 
 <footer>
   <div class="footer-inner">
-    <div class="footer-copy">
-      © 2026 LoadCalcPro. Professional Electrical Calculation Tools.
-    </div>
+    <div class="footer-copy">© 2026 LoadCalcPro. Professional Electrical Calculation Tools.</div>
 
     <div class="footer-links">
       <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
       <a href="#calculators">Calculators</a>
       <a href="#about">About</a>
       <a href="contact.html">Contact</a>
@@ -773,6 +627,5 @@
     </div>
   </div>
 </footer>
-
 </body>
 </html>
