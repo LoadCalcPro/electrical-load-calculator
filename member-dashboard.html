@@ -8,390 +8,84 @@
 
   <style>
     :root {
-      --navy: #10233f;
-      --navy-2: #17385f;
-      --green: #1f8a5b;
-      --green-dark: #176b47;
-      --gold: #d2a84b;
-      --page: #eef3f7;
-      --card: #ffffff;
-      --text: #182433;
-      --muted: #667487;
-      --border: #d9e1e8;
-      --danger: #b42318;
-      --danger-bg: #fff1f0;
-      --success: #16794f;
-      --success-bg: #ecfdf3;
-      --locked-bg: #f1f4f7;
-      --locked-border: #c8d0d9;
-      --shadow: 0 18px 48px rgba(16, 35, 63, 0.14);
+      --navy:#10233f;--navy-2:#17385f;--green:#1f8a5b;--green-dark:#176b47;
+      --gold:#d2a84b;--page:#eef3f7;--card:#fff;--text:#182433;--muted:#667487;
+      --border:#d9e1e8;--danger:#b42318;--danger-bg:#fff1f0;
+      --locked-bg:#f1f4f7;--locked-border:#c8d0d9;--shadow:0 18px 48px rgba(16,35,63,.14)
     }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(31, 138, 91, 0.13), transparent 32rem),
-        linear-gradient(145deg, #f7fafc 0%, var(--page) 100%);
-    }
-
-    button, input { font: inherit; }
-
-    .page-shell {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .site-header {
-      background: linear-gradient(135deg, var(--navy), var(--navy-2));
-      color: #fff;
-      border-bottom: 4px solid var(--gold);
-    }
-
-    .header-inner {
-      width: min(1120px, calc(100% - 36px));
-      min-height: 92px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .brand-mark {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      background: var(--green);
-      color: #fff;
-      font-weight: 800;
-      font-size: 23px;
-    }
-
-    .brand-name { margin: 0; font-size: 25px; }
-    .brand-tagline { margin: 3px 0 0; color: #d8e4ef; font-size: 13px; }
-
-    .header-link {
-      color: #fff;
-      text-decoration: none;
-      font-size: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      border-radius: 8px;
-      padding: 10px 14px;
-    }
-
-    main {
-      width: min(980px, calc(100% - 32px));
-      margin: 48px auto;
-      flex: 1;
-    }
-
-    .panel {
-      width: min(540px, 100%);
-      margin: 0 auto;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .panel-top { padding: 30px 32px 20px; text-align: center; }
-    .panel-top h1 { margin: 0 0 8px; color: var(--navy); font-size: 29px; }
-    .panel-top p { margin: 0; line-height: 1.55; color: var(--muted); }
-    .panel-body { padding: 10px 32px 32px; }
-
-    .field-label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 700;
-      color: var(--navy);
-    }
-
-    .password-label { margin-top: 18px; }
-
-    .text-input {
-      width: 100%;
-      min-height: 50px;
-      padding: 12px 14px;
-      border: 1px solid #bcc8d3;
-      border-radius: 9px;
-      color: var(--text);
-      background: #fff;
-      outline: none;
-    }
-
-    .text-input:focus {
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(31, 138, 91, 0.15);
-    }
-
-    .remember-row {
-      margin: 14px 0 22px;
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      color: #425166;
-      font-size: 14px;
-    }
-
-    .remember-row input { width: 17px; height: 17px; accent-color: var(--green); }
-
-    .primary-button {
-      width: 100%;
-      min-height: 50px;
-      border: 0;
-      border-radius: 9px;
-      background: var(--green);
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .primary-button:hover { background: var(--green-dark); }
-    .primary-button:disabled { cursor: wait; opacity: 0.7; }
-
-    .secondary-link {
-      display: block;
-      margin-top: 15px;
-      text-align: center;
-      color: var(--green-dark);
-      font-size: 14px;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .message {
-      display: none;
-      margin-top: 17px;
-      padding: 12px 14px;
-      border-radius: 8px;
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .message.error {
-      display: block;
-      color: var(--danger);
-      background: var(--danger-bg);
-      border: 1px solid #f3c7c3;
-    }
-
-    .small-note {
-      margin: 20px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-      text-align: center;
-    }
-
-    .portal { display: none; }
-    .portal.active { display: block; }
-
-    .portal-heading { text-align: center; margin-bottom: 28px; }
-    .portal-heading h1 { margin: 0 0 8px; color: var(--navy); font-size: 31px; }
-    .portal-heading p { margin: 0; color: var(--muted); }
-    .member-email { font-weight: 700; color: var(--green-dark); }
-
-    .calculator-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .calculator-card {
-      min-height: 310px;
-      display: flex;
-      flex-direction: column;
-      padding: 26px;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 15px;
-      box-shadow: 0 12px 30px rgba(16, 35, 63, 0.09);
-      transition: opacity 0.2s ease, background 0.2s ease, border-color 0.2s ease;
-    }
-
-    .calculator-card.locked {
-      background: var(--locked-bg);
-      border-color: var(--locked-border);
-    }
-
-    .card-top-row {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .calculator-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 11px;
-      display: grid;
-      place-items: center;
-      background: #e9f6ef;
-      color: var(--green-dark);
-      font-size: 22px;
-      font-weight: 800;
-      flex: 0 0 auto;
-    }
-
-    .locked .calculator-icon { background: #dfe4e9; color: #66717d; }
-
-    .access-badge {
-      display: inline-flex;
-      align-items: center;
-      min-height: 30px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #dff5e9;
-      color: var(--green-dark);
-      font-size: 12px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
-    .access-badge.locked-badge { background: #e2e6ea; color: #56616d; }
-
-    .calculator-card h2 { margin: 0 0 9px; color: var(--navy); font-size: 21px; }
-    .calculator-card p { margin: 0 0 22px; color: var(--muted); font-size: 14px; line-height: 1.5; flex: 1; }
-
-    .product-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 46px;
-      padding: 10px 15px;
-      border: 0;
-      border-radius: 8px;
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .open-button { background: var(--navy); color: #fff; }
-    .open-button:hover { background: #091a31; }
-    .purchase-button { background: #dfe4e9; color: #263442; border: 1px solid #b8c1ca; }
-    .purchase-button:hover { background: #d3d9df; }
-
-    .portal-note {
-      margin: 22px auto 0;
-      max-width: 720px;
-      color: var(--muted);
-      text-align: center;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .portal-actions { display: flex; justify-content: center; margin-top: 24px; }
-
-    .sign-out-button {
-      border: 1px solid #aeb9c4;
-      border-radius: 8px;
-      padding: 10px 16px;
-      background: #fff;
-      color: var(--navy);
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    footer { padding: 20px 16px 28px; text-align: center; color: #6f7d8d; font-size: 12px; }
-
-    @media (max-width: 760px) {
-      .calculator-grid { grid-template-columns: 1fr; }
-      .calculator-card { min-height: 0; }
-    }
-
-    @media (max-width: 560px) {
-      .brand-tagline, .header-link { display: none; }
-      main { margin-top: 28px; }
-      .panel-top, .panel-body { padding-left: 22px; padding-right: 22px; }
-      .card-top-row { align-items: center; }
-    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:radial-gradient(circle at top left,rgba(31,138,91,.13),transparent 32rem),linear-gradient(145deg,#f7fafc 0%,var(--page) 100%)}
+    button,input{font:inherit}.page-shell{min-height:100vh;display:flex;flex-direction:column}
+    .site-header{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;border-bottom:4px solid var(--gold)}
+    .header-inner{width:min(1120px,calc(100% - 36px));min-height:92px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .brand{display:flex;align-items:center;gap:14px}.brand-mark{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:var(--green);color:#fff;font-weight:800;font-size:23px}
+    .brand-name{margin:0;font-size:25px}.brand-tagline{margin:3px 0 0;color:#d8e4ef;font-size:13px}
+    .header-link{color:#fff;text-decoration:none;font-size:14px;border:1px solid rgba(255,255,255,.35);border-radius:8px;padding:10px 14px}
+    main{width:min(980px,calc(100% - 32px));margin:48px auto;flex:1}
+    .panel{width:min(540px,100%);margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+    .panel-top{padding:30px 32px 20px;text-align:center}.panel-top h1{margin:0 0 8px;color:var(--navy);font-size:29px}.panel-top p{margin:0;line-height:1.55;color:var(--muted)}.panel-body{padding:10px 32px 32px}
+    .field-label{display:block;margin-bottom:8px;font-weight:700;color:var(--navy)}.password-label{margin-top:18px}
+    .text-input{width:100%;min-height:50px;padding:12px 14px;border:1px solid #bcc8d3;border-radius:9px;color:var(--text);background:#fff;outline:none}.text-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(31,138,91,.15)}
+    .remember-row{margin:14px 0 22px;display:flex;align-items:center;gap:9px;color:#425166;font-size:14px}.remember-row input{width:17px;height:17px;accent-color:var(--green)}
+    .primary-button{width:100%;min-height:50px;border:0;border-radius:9px;background:var(--green);color:#fff;font-weight:700;cursor:pointer}.primary-button:hover{background:var(--green-dark)}.primary-button:disabled{cursor:wait;opacity:.7}
+    .secondary-link{display:block;margin-top:15px;text-align:center;color:var(--green-dark);font-size:14px;font-weight:700;text-decoration:none}
+    .message{display:none;margin-top:17px;padding:12px 14px;border-radius:8px;font-size:14px;line-height:1.45}.message.error{display:block;color:var(--danger);background:var(--danger-bg);border:1px solid #f3c7c3}
+    .small-note{margin:20px 0 0;color:var(--muted);font-size:13px;line-height:1.5;text-align:center}
+    .portal{display:none}.portal.active{display:block}.portal-heading{text-align:center;margin-bottom:28px}.portal-heading h1{margin:0 0 8px;color:var(--navy);font-size:31px}.portal-heading p{margin:0;color:var(--muted)}.member-email{font-weight:700;color:var(--green-dark)}
+    .calculator-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+    .calculator-card{min-height:310px;display:flex;flex-direction:column;padding:26px;background:#fff;border:1px solid var(--border);border-radius:15px;box-shadow:0 12px 30px rgba(16,35,63,.09);transition:opacity .2s ease,background .2s ease,border-color .2s ease}.calculator-card.locked{background:var(--locked-bg);border-color:var(--locked-border)}
+    .card-top-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px}.calculator-icon{width:48px;height:48px;border-radius:11px;display:grid;place-items:center;background:#e9f6ef;color:var(--green-dark);font-size:22px;font-weight:800;flex:0 0 auto}.locked .calculator-icon{background:#dfe4e9;color:#66717d}
+    .access-badge{display:inline-flex;align-items:center;min-height:30px;padding:6px 10px;border-radius:999px;background:#dff5e9;color:var(--green-dark);font-size:12px;font-weight:800;white-space:nowrap}.access-badge.locked-badge{background:#e2e6ea;color:#56616d}
+    .calculator-card h2{margin:0 0 9px;color:var(--navy);font-size:21px}.calculator-card p{margin:0 0 22px;color:var(--muted);font-size:14px;line-height:1.5;flex:1}
+    .product-button{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:10px 15px;border:0;border-radius:8px;font-weight:700;text-decoration:none;cursor:pointer;text-align:center}.open-button{background:var(--navy);color:#fff}.open-button:hover{background:#091a31}.purchase-button{background:#dfe4e9;color:#263442;border:1px solid #b8c1ca}.purchase-button:hover{background:#d3d9df}
+    .portal-note{margin:22px auto 0;max-width:720px;color:var(--muted);text-align:center;font-size:13px;line-height:1.5}
+    .membership-management{margin:24px auto 0;max-width:720px;padding:22px 24px;background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 10px 26px rgba(16,35,63,.07);text-align:center}.membership-management h2{margin:0 0 8px;color:var(--navy);font-size:20px}.membership-management p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}.manage-button{display:inline-flex;align-items:center;justify-content:center;min-height:46px;margin-top:16px;padding:10px 18px;border:1px solid var(--green-dark);border-radius:8px;background:#fff;color:var(--green-dark);font-weight:700;text-decoration:none}.manage-button:hover{background:#eef8f3}
+    .portal-actions{display:flex;justify-content:center;margin-top:24px}.sign-out-button{border:1px solid #aeb9c4;border-radius:8px;padding:10px 16px;background:#fff;color:var(--navy);font-weight:700;cursor:pointer}
+    footer{padding:20px 16px 28px;text-align:center;color:#6f7d8d;font-size:12px}
+    @media(max-width:760px){.calculator-grid{grid-template-columns:1fr}.calculator-card{min-height:0}}
+    @media(max-width:560px){.brand-tagline,.header-link{display:none}main{margin-top:28px}.panel-top,.panel-body{padding-left:22px;padding-right:22px}.card-top-row{align-items:center}.membership-management{padding:20px}}
   </style>
 </head>
-
 <body>
   <div class="page-shell">
     <header class="site-header">
       <div class="header-inner">
-        <div class="brand">
-          <div class="brand-mark" aria-hidden="true">LC</div>
-          <div>
-            <h2 class="brand-name">LoadCalcPro</h2>
-            <p class="brand-tagline">Professional Electrical Calculation Tools</p>
-          </div>
-        </div>
+        <div class="brand"><div class="brand-mark" aria-hidden="true">LC</div><div><h2 class="brand-name">LoadCalcPro</h2><p class="brand-tagline">Professional Electrical Calculation Tools</p></div></div>
         <a class="header-link" href="index.html">Return to Main Page</a>
       </div>
     </header>
 
     <main>
       <section id="loginSection" class="panel" aria-labelledby="loginTitle">
-        <div class="panel-top">
-          <h1 id="loginTitle">Member Login</h1>
-          <p>Enter your LoadCalcPro email address and password.</p>
-        </div>
-
+        <div class="panel-top"><h1 id="loginTitle">Member Login</h1><p>Enter your LoadCalcPro email address and password.</p></div>
         <div class="panel-body">
           <form id="loginForm" novalidate>
             <label class="field-label" for="email">Member Email</label>
             <input class="text-input" id="email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Enter your email address" required>
-
             <label class="field-label password-label" for="password">Password</label>
             <input class="text-input" id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
-
-            <label class="remember-row" for="rememberEmail">
-              <input id="rememberEmail" type="checkbox" checked>
-              <span>Remember my email</span>
-            </label>
-
+            <label class="remember-row" for="rememberEmail"><input id="rememberEmail" type="checkbox" checked><span>Remember my email</span></label>
             <button id="loginButton" class="primary-button" type="submit">Member Login</button>
             <a class="secondary-link" href="forgot-password.html">Forgot your password?</a>
             <div id="loginMessage" class="message" role="status" aria-live="polite"></div>
           </form>
-
           <p class="small-note">Your membership must be active. Use the same email address used for your purchase.</p>
         </div>
       </section>
 
       <section id="portalSection" class="portal" aria-labelledby="portalTitle">
-        <div class="portal-heading">
-          <h1 id="portalTitle">Member Dashboard</h1>
-          <p>Logged in as <span id="memberEmailDisplay" class="member-email"></span></p>
-        </div>
+        <div class="portal-heading"><h1 id="portalTitle">Member Dashboard</h1><p>Logged in as <span id="memberEmailDisplay" class="member-email"></span></p></div>
 
         <div class="calculator-grid">
           <article class="calculator-card locked" data-product="generator">
-            <div class="card-top-row">
-              <div class="calculator-icon" aria-hidden="true">G</div>
-              <span class="access-badge locked-badge" data-access-badge>Checking Access...</span>
-            </div>
+            <div class="card-top-row"><div class="calculator-icon" aria-hidden="true">G</div><span class="access-badge locked-badge" data-access-badge>Checking Access...</span></div>
             <h2>Optional Method Generator Calculator</h2>
             <p>Prepare optional-method and generator-load calculations and produce a professional printable report.</p>
             <a class="product-button purchase-button" data-product-link href="https://payhip.com/LoadCalcTools" target="_blank" rel="noopener noreferrer">Checking Access...</a>
           </article>
 
           <article class="calculator-card locked" data-product="aic">
-            <div class="card-top-row">
-              <div class="calculator-icon" aria-hidden="true">A</div>
-              <span class="access-badge locked-badge" data-access-badge>Checking Access...</span>
-            </div>
+            <div class="card-top-row"><div class="calculator-icon" aria-hidden="true">A</div><span class="access-badge locked-badge" data-access-badge>Checking Access...</span></div>
             <h2>AIC Available Fault Current Calculator</h2>
             <p>Calculate available fault current at the service and downstream panel locations.</p>
             <a class="product-button purchase-button" data-product-link href="https://payhip.com/LoadCalcTools" target="_blank" rel="noopener noreferrer">Checking Access...</a>
@@ -400,9 +94,13 @@
 
         <p class="portal-note">Calculators included with your purchase are ready to open. A calculator not included with your purchase remains visible and provides a secure purchase link.</p>
 
-        <div class="portal-actions">
-          <button id="signOutButton" class="sign-out-button" type="button">Sign Out</button>
-        </div>
+        <section class="membership-management" aria-labelledby="membershipManagementTitle">
+          <h2 id="membershipManagementTitle">Subscription &amp; Billing</h2>
+          <p>View your billing history, update your payment method, or follow the step-by-step instructions to cancel your subscription through Payhip.</p>
+          <a class="manage-button" href="manage-membership.html">Manage Subscription &amp; Billing</a>
+        </section>
+
+        <div class="portal-actions"><button id="signOutButton" class="sign-out-button" type="button">Sign Out</button></div>
       </section>
     </main>
 
@@ -412,252 +110,34 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     "use strict";
-
-    const SUPABASE_URL = "https://oaqehddiqtgplxydxbxv.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_o_3xMc9QOsgV-8kqBFkLnw_tuvUyWD8";
-    const API_BASE_URL = "https://loadcalcpro-hcml-api.onrender.com";
-    const ACCESS_ENDPOINT = "/api/v2/access";
-    const PAYHIP_STORE_URL = "https://payhip.com/LoadCalcTools";
-
-    const PRODUCT_CONFIG = {
-      generator: {
-        href: "generator.html",
-        openText: "Open Generator Calculator"
-      },
-      aic: {
-        href: "aic_calculator.html",
-        openText: "Open AIC Calculator"
-      }
-    };
-
-    const STORAGE_KEYS = { rememberedEmail: "loadcalcproRememberedEmail" };
-
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true
-      }
-    });
-
-    const loginSection = document.getElementById("loginSection");
-    const portalSection = document.getElementById("portalSection");
-    const loginForm = document.getElementById("loginForm");
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const rememberEmailInput = document.getElementById("rememberEmail");
-    const loginButton = document.getElementById("loginButton");
-    const loginMessage = document.getElementById("loginMessage");
-    const memberEmailDisplay = document.getElementById("memberEmailDisplay");
-    const signOutButton = document.getElementById("signOutButton");
-
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    function cleanEmail(value) {
-      return String(value || "").trim().toLowerCase();
-    }
-
-    function isValidEmail(value) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail(value));
-    }
-
-    function getRememberedEmail() {
-      try {
-        return cleanEmail(localStorage.getItem(STORAGE_KEYS.rememberedEmail));
-      } catch (error) {
-        return "";
-      }
-    }
-
-    function saveRememberedEmail(email) {
-      try {
-        if (rememberEmailInput.checked) {
-          localStorage.setItem(STORAGE_KEYS.rememberedEmail, cleanEmail(email));
-        } else {
-          localStorage.removeItem(STORAGE_KEYS.rememberedEmail);
-        }
-      } catch (error) {
-        console.warn("Unable to save remembered email:", error);
-      }
-    }
-
-    function setMessage(text, type) {
-      loginMessage.textContent = text;
-      loginMessage.className = "message " + type;
-    }
-
-    function clearMessage() {
-      loginMessage.textContent = "";
-      loginMessage.className = "message";
-    }
-
-    function setLoading(isLoading) {
-      loginButton.disabled = isLoading;
-      loginButton.textContent = isLoading ? "Signing In..." : "Member Login";
-    }
-
-    function showLogin() {
-      portalSection.classList.remove("active");
-      loginSection.style.display = "block";
-    }
-
-    function calculatorUrl(path, email) {
-      const url = new URL(path, window.location.href);
-      url.searchParams.set("member", email);
-      return url.href;
-    }
-
-    function applyProductAccess(allowedProducts, email) {
-      const allowed = new Set(allowedProducts);
-
-      document.querySelectorAll(".calculator-card").forEach(function (card) {
-        const product = card.dataset.product;
-        const config = PRODUCT_CONFIG[product];
-        const badge = card.querySelector("[data-access-badge]");
-        const link = card.querySelector("[data-product-link]");
-        const hasAccess = allowed.has(product);
-
-        card.classList.toggle("locked", !hasAccess);
-        badge.classList.toggle("locked-badge", !hasAccess);
-
-        if (hasAccess) {
-          badge.textContent = "✓ Included";
-          link.textContent = config.openText;
-          link.href = calculatorUrl(config.href, email);
-          link.target = "_self";
-          link.removeAttribute("rel");
-          link.className = "product-button open-button";
-        } else {
-          badge.textContent = "🔒 Purchase Required";
-          link.textContent = "Purchase Access";
-          link.href = PAYHIP_STORE_URL;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.className = "product-button purchase-button";
-        }
-      });
-    }
-
-    function showPortal(email, allowedProducts) {
-      memberEmailDisplay.textContent = email;
-      applyProductAccess(allowedProducts, email);
-      loginSection.style.display = "none";
-      portalSection.classList.add("active");
-    }
-
-    async function checkCalculatorAccess(accessToken, calculator) {
-      const response = await fetch(API_BASE_URL + ACCESS_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "Authorization": "Bearer " + accessToken
-        },
-        body: JSON.stringify({ calculator: calculator })
-      });
-
-      let data = {};
-      try { data = await response.json(); } catch (error) { data = {}; }
-      return { ok: response.ok, status: response.status, data: data };
-    }
-
-    async function getAllowedProducts(accessToken) {
-      const results = await Promise.all([
-        checkCalculatorAccess(accessToken, "generator"),
-        checkCalculatorAccess(accessToken, "aic")
-      ]);
-
-      const allowedProducts = [];
-      if (results[0].ok && results[0].data.active === true) allowedProducts.push("generator");
-      if (results[1].ok && results[1].data.active === true) allowedProducts.push("aic");
-
-      if (allowedProducts.length > 0) return allowedProducts;
-
-      const authFailure = results.find(function (result) { return result.status === 401; });
-      if (authFailure) throw new Error(authFailure.data.message || "Your login session could not be verified.");
-
-      const serverFailure = results.find(function (result) { return result.status >= 500; });
-      if (serverFailure) throw new Error(serverFailure.data.message || "The membership server could not verify access.");
-
-      throw new Error("No active calculator access is assigned to this membership.");
-    }
-
-    async function openExistingSession() {
-      const { data, error } = await supabaseClient.auth.getSession();
-      if (error) throw error;
-
-      const session = data && data.session;
-      if (!session || !session.access_token || !session.user || !session.user.email) {
-        showLogin();
-        return;
-      }
-
-      try {
-        const allowedProducts = await getAllowedProducts(session.access_token);
-        showPortal(cleanEmail(session.user.email), allowedProducts);
-      } catch (error) {
-        await supabaseClient.auth.signOut();
-        showLogin();
-        setMessage(error.message, "error");
-      }
-    }
-
-    loginForm.addEventListener("submit", async function (event) {
-      event.preventDefault();
-      clearMessage();
-
-      const email = cleanEmail(emailInput.value);
-      const password = String(passwordInput.value || "");
-
-      if (!isValidEmail(email)) {
-        setMessage("Please enter a valid email address.", "error");
-        emailInput.focus();
-        return;
-      }
-
-      if (!password) {
-        setMessage("Please enter your password.", "error");
-        passwordInput.focus();
-        return;
-      }
-
-      setLoading(true);
-
-      try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-
-        const session = data && data.session;
-        if (!session || !session.access_token) throw new Error("Login succeeded, but no session was created.");
-
-        saveRememberedEmail(email);
-        passwordInput.value = "";
-        const allowedProducts = await getAllowedProducts(session.access_token);
-        showPortal(email, allowedProducts);
-      } catch (error) {
-        await supabaseClient.auth.signOut();
-        setMessage(error.message || "Unable to sign in.", "error");
-      } finally {
-        setLoading(false);
-      }
-    });
-
-    signOutButton.addEventListener("click", async function () {
-      await supabaseClient.auth.signOut();
-      passwordInput.value = "";
-      showLogin();
-    });
-
-    const rememberedEmail = getRememberedEmail();
-    if (rememberedEmail) {
-      emailInput.value = rememberedEmail;
-      rememberEmailInput.checked = true;
-    }
-
-    openExistingSession().catch(function (error) {
-      showLogin();
-      setMessage(error.message || "Unable to open your saved login session.", "error");
-    });
+    const SUPABASE_URL="https://oaqehddiqtgplxydxbxv.supabase.co";
+    const SUPABASE_ANON_KEY="sb_publishable_o_3xMc9QOsgV-8kqBFkLnw_tuvUyWD8";
+    const API_BASE_URL="https://loadcalcpro-hcml-api.onrender.com";
+    const ACCESS_ENDPOINT="/api/v2/access";
+    const PAYHIP_STORE_URL="https://payhip.com/LoadCalcTools";
+    const PRODUCT_CONFIG={generator:{href:"generator.html",openText:"Open Generator Calculator"},aic:{href:"aic_calculator.html",openText:"Open AIC Calculator"}};
+    const STORAGE_KEYS={rememberedEmail:"loadcalcproRememberedEmail"};
+    const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+    const loginSection=document.getElementById("loginSection"),portalSection=document.getElementById("portalSection"),loginForm=document.getElementById("loginForm"),emailInput=document.getElementById("email"),passwordInput=document.getElementById("password"),rememberEmailInput=document.getElementById("rememberEmail"),loginButton=document.getElementById("loginButton"),loginMessage=document.getElementById("loginMessage"),memberEmailDisplay=document.getElementById("memberEmailDisplay"),signOutButton=document.getElementById("signOutButton");
+    document.getElementById("year").textContent=new Date().getFullYear();
+    function cleanEmail(value){return String(value||"").trim().toLowerCase()}
+    function isValidEmail(value){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail(value))}
+    function getRememberedEmail(){try{return cleanEmail(localStorage.getItem(STORAGE_KEYS.rememberedEmail))}catch(error){return""}}
+    function saveRememberedEmail(email){try{if(rememberEmailInput.checked){localStorage.setItem(STORAGE_KEYS.rememberedEmail,cleanEmail(email))}else{localStorage.removeItem(STORAGE_KEYS.rememberedEmail)}}catch(error){console.warn("Unable to save remembered email:",error)}}
+    function setMessage(text,type){loginMessage.textContent=text;loginMessage.className="message "+type}
+    function clearMessage(){loginMessage.textContent="";loginMessage.className="message"}
+    function setLoading(isLoading){loginButton.disabled=isLoading;loginButton.textContent=isLoading?"Signing In...":"Member Login"}
+    function showLogin(){portalSection.classList.remove("active");loginSection.style.display="block"}
+    function calculatorUrl(path,email){const url=new URL(path,window.location.href);url.searchParams.set("member",email);return url.href}
+    function applyProductAccess(allowedProducts,email){const allowed=new Set(allowedProducts);document.querySelectorAll(".calculator-card").forEach(function(card){const product=card.dataset.product,config=PRODUCT_CONFIG[product],badge=card.querySelector("[data-access-badge]"),link=card.querySelector("[data-product-link]"),hasAccess=allowed.has(product);card.classList.toggle("locked",!hasAccess);badge.classList.toggle("locked-badge",!hasAccess);if(hasAccess){badge.textContent="✓ Included";link.textContent=config.openText;link.href=calculatorUrl(config.href,email);link.target="_self";link.removeAttribute("rel");link.className="product-button open-button"}else{badge.textContent="🔒 Purchase Required";link.textContent="Purchase Access";link.href=PAYHIP_STORE_URL;link.target="_blank";link.rel="noopener noreferrer";link.className="product-button purchase-button"}})}
+    function showPortal(email,allowedProducts){memberEmailDisplay.textContent=email;applyProductAccess(allowedProducts,email);loginSection.style.display="none";portalSection.classList.add("active")}
+    async function checkCalculatorAccess(accessToken,calculator){const response=await fetch(API_BASE_URL+ACCESS_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json","Authorization":"Bearer "+accessToken},body:JSON.stringify({calculator})});let data={};try{data=await response.json()}catch(error){data={}}return{ok:response.ok,status:response.status,data}}
+    async function getAllowedProducts(accessToken){const results=await Promise.all([checkCalculatorAccess(accessToken,"generator"),checkCalculatorAccess(accessToken,"aic")]);const allowedProducts=[];if(results[0].ok&&results[0].data.active===true)allowedProducts.push("generator");if(results[1].ok&&results[1].data.active===true)allowedProducts.push("aic");if(allowedProducts.length>0)return allowedProducts;const authFailure=results.find(result=>result.status===401);if(authFailure)throw new Error(authFailure.data.message||"Your login session could not be verified.");const serverFailure=results.find(result=>result.status>=500);if(serverFailure)throw new Error(serverFailure.data.message||"The membership server could not verify access.");throw new Error("No active calculator access is assigned to this membership.")}
+    async function openExistingSession(){const{data,error}=await supabaseClient.auth.getSession();if(error)throw error;const session=data&&data.session;if(!session||!session.access_token||!session.user||!session.user.email){showLogin();return}try{const allowedProducts=await getAllowedProducts(session.access_token);showPortal(cleanEmail(session.user.email),allowedProducts)}catch(error){await supabaseClient.auth.signOut();showLogin();setMessage(error.message,"error")}}
+    loginForm.addEventListener("submit",async function(event){event.preventDefault();clearMessage();const email=cleanEmail(emailInput.value),password=String(passwordInput.value||"");if(!isValidEmail(email)){setMessage("Please enter a valid email address.","error");emailInput.focus();return}if(!password){setMessage("Please enter your password.","error");passwordInput.focus();return}setLoading(true);try{const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;const session=data&&data.session;if(!session||!session.access_token)throw new Error("Login succeeded, but no session was created.");saveRememberedEmail(email);passwordInput.value="";const allowedProducts=await getAllowedProducts(session.access_token);showPortal(email,allowedProducts)}catch(error){await supabaseClient.auth.signOut();setMessage(error.message||"Unable to sign in.","error")}finally{setLoading(false)}});
+    signOutButton.addEventListener("click",async function(){await supabaseClient.auth.signOut();passwordInput.value="";showLogin()});
+    const rememberedEmail=getRememberedEmail();if(rememberedEmail){emailInput.value=rememberedEmail;rememberEmailInput.checked=true}
+    openExistingSession().catch(function(error){showLogin();setMessage(error.message||"Unable to open your saved login session.","error")});
   </script>
 </body>
 </html>
