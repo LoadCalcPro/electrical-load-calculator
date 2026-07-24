@@ -1,18 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://loadcalcpro.github.io/electrical-load-calculator/</loc>
-  </url>
-  <url>
-    <loc>https://loadcalcpro.github.io/electrical-load-calculator/shop.html</loc>
-  </url>
-  <url>
-    <loc>https://loadcalcpro.github.io/electrical-load-calculator/contact.html</loc>
-  </url>
-  <url>
-    <loc>https://loadcalcpro.github.io/electrical-load-calculator/privacy.html</loc>
-  </url>
-  <url>
-    <loc>https://loadcalcpro.github.io/electrical-load-calculator/terms.html</loc>
-  </url>
+  <url><loc>https://loadcalcpro.github.io/electrical-load-calculator/</loc><lastmod>2026-07-23</lastmod></url>
+  <url><loc>https://loadcalcpro.github.io/electrical-load-calculator/shop.html</loc><lastmod>2026-07-23</lastmod></url>
+  <url><loc>https://loadcalcpro.github.io/electrical-load-calculator/contact.html</loc><lastmod>2026-07-23</lastmod></url>
+  <url><loc>https://loadcalcpro.github.io/electrical-load-calculator/privacy.html</loc><lastmod>2026-07-23</lastmod></url>
+  <url><loc>https://loadcalcpro.github.io/electrical-load-calculator/terms.html</loc><lastmod>2026-07-23</lastmod></url>
 </urlset>
