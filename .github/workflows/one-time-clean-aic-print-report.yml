@@ -1,0 +1,161 @@
+name: One-time clean AIC print report
+
+on:
+  push:
+    paths:
+      - '.github/workflows/one-time-clean-aic-print-report.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: staging
+      - name: Update AIC print report
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('aic_calculator.html')
+          text = path.read_text(encoding='utf-8')
+
+          css = r'''
+
+    /* Clean engineering print report */
+    .print-reports { display:none; }
+    @media print {
+      body { zoom:1; background:#fff; }
+      .page { margin:0; padding:0; }
+      .form-titlebar, main { display:none!important; }
+      .print-reports { display:block!important; color:#111827; font-family:Arial,Helvetica,sans-serif; }
+      .print-report { page-break-after:always; padding:.35in .45in; }
+      .print-report:last-child { page-break-after:auto; }
+      .print-brand { font-size:18px; font-weight:800; color:#1e3a8a; margin-bottom:3px; }
+      .print-brand-x { color:#15803d; }
+      .print-report-title { font-size:16px; font-weight:700; margin-bottom:24px; color:#111827; }
+      .print-section-title { font-size:13px; font-weight:800; color:#1e3a8a; margin:18px 0 8px; text-transform:uppercase; letter-spacing:.04em; }
+      .print-summary { width:100%; max-width:540px; }
+      .print-summary-row { display:grid; grid-template-columns:210px 1fr; gap:18px; padding:3px 0; font-size:12px; line-height:1.35; }
+      .print-summary-label { font-weight:700; color:#334155; }
+      .print-summary-value { color:#111827; }
+      .print-formula-line, .print-value-line { display:grid; grid-template-columns:42px 18px 1fr; max-width:540px; padding:2px 0; font-size:12px; line-height:1.45; }
+      .print-formula-line { font-family:Consolas,Monaco,monospace; }
+      .print-final { margin-top:24px; border:2px solid #1e3a8a; padding:15px 18px; max-width:540px; text-align:center; }
+      .print-final-label { font-size:11px; font-weight:800; color:#1e3a8a; letter-spacing:.08em; }
+      .print-final-value { margin-top:5px; font-size:26px; font-weight:900; color:#0f3557; }
+    }
+'''
+          marker = '  </style>'
+          if '/* Clean engineering print report */' not in text:
+              text = text.replace(marker, css + '\n' + marker, 1)
+
+          report_container = '  <div id="printReports" class="print-reports" aria-hidden="true"></div>\n'
+          if 'id="printReports"' not in text:
+              text = text.replace('  </div>\n<script>', '  </div>\n' + report_container + '<script>', 1)
+
+          helpers = r'''
+function printValue(base, n) {
+  const node = el(base, n);
+  return node ? String(node.value || '').trim() : '';
+}
+
+function reportPhaseLabel(value) {
+  return value === '2' ? 'Single Phase' : value === '1.732' ? 'Three Phase' : '—';
+}
+
+function reportConduitLabel(value) {
+  return value === 'PVC' ? 'Non-metallic' : value === 'Steel' ? 'Metallic' : (value || '—');
+}
+
+function reportWireSize(value) {
+  if (!value) return '—';
+  return value.replace('MCM', ' kcmil');
+}
+
+function reportNumber(value, suffix='') {
+  const number = Number(String(value || '').replace(/,/g, ''));
+  return Number.isFinite(number) ? number.toLocaleString() + suffix : '—';
+}
+
+function buildPrintReport(n) {
+  const wire = constants[printValue('wireSize', n)];
+  const C = wire ? wire[constantKey(n)] : NaN;
+  const L = readNumber('distance', n);
+  const I = readNumber('utilityFault', n);
+  const V = readNumber('volts', n);
+  const N = readNumber('conductors', n);
+  const phase = readNumber('phase', n);
+  const complete = [C,L,I,V,N,phase].every(Number.isFinite) && C > 0 && V > 0 && N > 0 && phase > 0;
+  const F = complete ? (phase * L * I) / (N * C * V) : NaN;
+  const M = complete ? 1 / (1 + F) : NaN;
+  const AIC = complete ? I * M : NaN;
+  const factor = printValue('phase', n) === '2' ? '2' : printValue('phase', n) === '1.732' ? '1.732' : '—';
+
+  const rows = [
+    ['Utility Fault Current', reportNumber(printValue('utilityFault', n), ' A')],
+    ['Distance', reportNumber(printValue('distance', n), ' ft')],
+    ['Conduit Type', reportConduitLabel(printValue('conduit', n))],
+    ['Wire Type', printValue('wireType', n) || '—'],
+    ['Wire Size', reportWireSize(printValue('wireSize', n))],
+    ['C Constant', Number.isFinite(C) ? C.toLocaleString() : '—'],
+    ['Conductors per Phase', printValue('conductors', n) || '—'],
+    ['Voltage', reportNumber(printValue('volts', n), ' V')],
+    ['Phase', reportPhaseLabel(printValue('phase', n))]
+  ];
+
+  return `
+    <section class="print-report">
+      <div class="print-brand">LoadCalcPro<span class="print-brand-x"> X</span></div>
+      <div class="print-report-title">Available Fault Current Calculation Report</div>
+
+      <div class="print-section-title">Input Summary</div>
+      <div class="print-summary">
+        ${rows.map(([label,value]) => `<div class="print-summary-row"><div class="print-summary-label">${label}</div><div class="print-summary-value">${value}</div></div>`).join('')}
+      </div>
+
+      <div class="print-section-title">Formulas</div>
+      <div class="print-formula-line"><span>F</span><span>=</span><span>${factor} × L × I ÷ (N × C × V)</span></div>
+      <div class="print-formula-line"><span>M</span><span>=</span><span>1 ÷ (1 + F)</span></div>
+      <div class="print-formula-line"><span>AIC</span><span>=</span><span>I × M</span></div>
+
+      <div class="print-section-title">Calculated Values</div>
+      <div class="print-value-line"><span>F</span><span>=</span><span>${Number.isFinite(F) ? F.toFixed(4) : '—'}</span></div>
+      <div class="print-value-line"><span>M</span><span>=</span><span>${Number.isFinite(M) ? M.toFixed(4) : '—'}</span></div>
+
+      <div class="print-final">
+        <div class="print-final-label">AVAILABLE FAULT CURRENT</div>
+        <div class="print-final-value">${Number.isFinite(AIC) ? Math.round(AIC).toLocaleString() + ' AMPS' : '—'}</div>
+      </div>
+    </section>`;
+}
+
+function buildAllPrintReports() {
+  const reports = [];
+  document.querySelectorAll('#calculationsContainer > .card').forEach((card, index) => {
+    const n = index + 1;
+    if (n === 1 || hasCalculationData(n)) reports.push(buildPrintReport(n));
+  });
+  document.getElementById('printReports').innerHTML = reports.join('');
+}
+
+'''
+          if 'function buildPrintReport(n)' not in text:
+              text = text.replace('function preparePrint() {', helpers + 'function preparePrint() {', 1)
+
+          old = "function preparePrint() {\n  document.querySelectorAll('#calculationsContainer > .card').forEach((card, index) => {"
+          new = "function preparePrint() {\n  buildAllPrintReports();\n  document.querySelectorAll('#calculationsContainer > .card').forEach((card, index) => {"
+          text = text.replace(old, new, 1)
+
+          path.write_text(text, encoding='utf-8')
+          PY
+      - name: Commit staging change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add aic_calculator.html
+          git commit -m "Create clean text-only AIC print report" || exit 0
+          git push origin staging
