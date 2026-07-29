@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generator Optional Method Calculator</title>
+<style>
+body{margin:0;background:#f3f4f6;color:#111827;font-family:Arial,Helvetica,sans-serif}
+.loading{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(135deg,#1e3a8a,#0f172a)}
+.loading-card{width:100%;max-width:520px;background:#fff;border:1px solid #d1d5db;border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.32);padding:28px;text-align:center}
+.loading-card h1{margin:0 0 8px;color:#1e3a8a;font-size:24px}.loading-card p{margin:0;color:#4b5563;line-height:1.5}.error{color:#b42318!important;font-weight:700;margin-top:12px!important}
+</style>
+</head>
+<body>
+<div class="loading"><div class="loading-card"><h1>LoadCalcPro</h1><p>Opening Generator Optional Method Calculator…</p><p id="loadError" class="error"></p></div></div>
+<script>
+(async function(){
+  const sourceUrl = "https://raw.githubusercontent.com/LoadCalcPro/electrical-load-calculator/backup-before-managed-quantity/generator-optional-method.html";
+  const errorEl = document.getElementById("loadError");
+
+  function replaceRequired(source, oldText, newText, label){
+    if(!source.includes(oldText)) throw new Error("Update marker not found: " + label);
+    return source.replace(oldText, newText);
+  }
+
+  try{
+    const response = await fetch(sourceUrl, {cache:"no-store"});
+    if(!response.ok) throw new Error("Calculator source could not be loaded.");
+    let source = await response.text();
+
+    source = replaceRequired(
+      source,
+      ".check.checked{background:#ecfdf5;border-color:#15803d}.footer",
+      ".check.checked{background:#ecfdf5;border-color:#15803d}.check-wrap{display:inline-flex;align-items:center;justify-content:center;gap:5px}.managed-qty{display:none;min-width:28px;height:24px;padding:0 5px;border:1px solid #15803d;border-radius:6px;background:#fff;color:#0f172a;font-size:12px;font-weight:800;cursor:pointer;align-items:center;justify-content:center;user-select:none}.managed-qty.show{display:inline-flex}.managed-qty:hover{background:#ecfdf5}@media print{.managed-qty{border:0;padding:0;min-width:auto;background:transparent}}.footer",
+      "managed quantity styles"
+    );
+
+    source = replaceRequired(
+      source,
+      "Click the box in the Managed column to show a ✓. Checked items are removed from the generator load.",
+      "Click a Managed box to remove all units from the generator load. Click the small quantity number to reduce the number of managed units.",
+      "instruction note"
+    );
+
+    source = replaceRequired(
+      source,
+      "managedCell = `<span id=\"m${r}\" class=\"check${chk}\" onclick=\"toggleManaged(${r})\">${chk ? \"✓\" : \"\"}</span>`;",
+      "managedCell = `<span class=\"check-wrap\"><span id=\"m${r}\" class=\"check${chk}\" onclick=\"toggleManaged(${r})\" title=\"Click to manage all units\">${chk ? \"✓\" : \"\"}</span><span id=\"mq${r}\" class=\"managed-qty\" onclick=\"cycleManagedQuantity(${r})\" title=\"Click to reduce managed quantity\"></span></span>`;",
+      "managed cell"
+    );
+
+    source = replaceRequired(
+      source,
+      "function checked(r){ const el=document.getElementById(\"m\"+r); return el ? el.classList.contains(\"checked\") : false; }",
+      `function checked(r){ const el=document.getElementById("m"+r); return el ? el.classList.contains("checked") : false; }
+function totalUnits(r){ return Math.max(0, Math.floor(q(r))); }
+function managedQty(r){
+  if(!checked(r)) return 0;
+  const total = totalUnits(r);
+  if(total < 1) return 0;
+  const qtyEl = document.getElementById("mq"+r);
+  if(!qtyEl) return total;
+  let selected = parseInt(qtyEl.dataset.qty || "", 10);
+  if(!Number.isFinite(selected)) selected = total;
+  selected = Math.max(0, Math.min(selected, total));
+  qtyEl.dataset.qty = String(selected);
+  return selected;
+}
+function syncManagedControl(r){
+  const checkEl = document.getElementById("m"+r);
+  const qtyEl = document.getElementById("mq"+r);
+  if(!checkEl || !qtyEl) return;
+  const total = totalUnits(r);
+  let selected = checked(r) ? managedQty(r) : 0;
+  if(selected < 1 || total < 1){
+    checkEl.classList.remove("checked");
+    checkEl.textContent = "";
+    qtyEl.classList.remove("show");
+    qtyEl.textContent = "";
+    qtyEl.dataset.qty = "0";
+    return;
+  }
+  checkEl.classList.add("checked");
+  checkEl.textContent = "✓";
+  qtyEl.classList.add("show");
+  qtyEl.textContent = String(selected);
+}
+function syncAllManagedControls(){
+  for(const r of DATA.managedRows) syncManagedControl(r);
+}
+function managedLoadForRow(r, calculatedLoad){
+  if(!checked(r) || !calculatedLoad) return 0;
+  const total = totalUnits(r);
+  if(total < 1) return calculatedLoad;
+  return calculatedLoad * (managedQty(r) / total);
+}`,
+      "managed quantity helpers"
+    );
+
+    source = replaceRequired(
+      source,
+      `function toggleManaged(r){
+  const el=document.getElementById("m"+r);
+  el.classList.toggle("checked");
+  el.textContent = el.classList.contains("checked") ? "✓" : "";
+  calculate();
+}`,
+      `function toggleManaged(r){
+  const el=document.getElementById("m"+r);
+  const qtyEl=document.getElementById("mq"+r);
+  const total=totalUnits(r);
+  if(!el || total < 1) return;
+  if(el.classList.contains("checked")){
+    el.classList.remove("checked");
+    if(qtyEl) qtyEl.dataset.qty="0";
+  } else {
+    el.classList.add("checked");
+    if(qtyEl) qtyEl.dataset.qty=String(total);
+  }
+  calculate();
+}
+
+function cycleManagedQuantity(r){
+  const total=totalUnits(r);
+  const el=document.getElementById("m"+r);
+  const qtyEl=document.getElementById("mq"+r);
+  if(!el || !qtyEl || total < 1) return;
+  let selected=managedQty(r)-1;
+  if(selected <= 0){
+    selected=0;
+    el.classList.remove("checked");
+  }
+  qtyEl.dataset.qty=String(selected);
+  calculate();
+}`,
+      "managed click functions"
+    );
+
+    source = replaceRequired(
+      source,
+      `  document.querySelectorAll('input[id^="q"], input[id^="v"]').forEach(sanitizeNonNegative);
+  improveEVRow();`,
+      `  document.querySelectorAll('input[id^="q"], input[id^="v"]').forEach(sanitizeNonNegative);
+  improveEVRow();
+  syncAllManagedControls();`,
+      "calculate setup"
+    );
+
+    source = replaceRequired(
+      source,
+      `    applTotal += val;
+    if(checked(r) && val>0){managedCount++; managedVA += val;} else {applGen += val;}
+    setOut(r,val, checked(r) ? 0 : val);`,
+      `    applTotal += val;
+    const removedVA = managedLoadForRow(r, val);
+    if(removedVA > 0){managedCount++; managedVA += removedVA;}
+    const generatorVA = Math.max(val - removedVA, 0);
+    applGen += generatorVA;
+    setOut(r,val,generatorVA);`,
+      "appliance calculation"
+    );
+
+    source = replaceRequired(
+      source,
+      `    hvacTotal += hvacVals[rr] || 0;
+    const genVal = checked(rr) ? 0 : (hvacVals[rr] || 0);
+    hvacGen += genVal;`,
+      `    const calculatedVal = hvacVals[rr] || 0;
+    hvacTotal += calculatedVal;
+    const removedVal = managedLoadForRow(rr, calculatedVal);
+    const genVal = Math.max(calculatedVal - removedVal, 0);
+    hvacGen += genVal;`,
+      "HVAC calculation"
+    );
+
+    source = replaceRequired(
+      source,
+      `    const el=document.getElementById("m"+r);
+    if(el){el.classList.remove("checked"); el.textContent="";}`,
+      `    const el=document.getElementById("m"+r);
+    const qtyEl=document.getElementById("mq"+r);
+    if(el){el.classList.remove("checked"); el.textContent="";}
+    if(qtyEl){qtyEl.dataset.qty="0"; qtyEl.textContent=""; qtyEl.classList.remove("show");}`,
+      "clear managed quantities"
+    );
+
+    source = replaceRequired(
+      source,
+      `const state = {inputs:{}, labels:{}, managed:{}, savedAt:new Date().toISOString()};`,
+      `const state = {inputs:{}, labels:{}, managed:{}, managedQty:{}, savedAt:new Date().toISOString()};`,
+      "state object"
+    );
+
+    source = replaceRequired(
+      source,
+      `    const el = document.getElementById("m"+r);
+    if(el) state.managed[r] = !!(el && el.classList.contains("checked"));
+  }
+  return state;`,
+      `    const el = document.getElementById("m"+r);
+    const qtyEl = document.getElementById("mq"+r);
+    if(el) state.managed[r] = !!(el && el.classList.contains("checked"));
+    if(qtyEl) state.managedQty[r] = parseInt(qtyEl.dataset.qty || "0", 10) || 0;
+  }
+  return state;`,
+      "collect managed quantity state"
+    );
+
+    source = replaceRequired(
+      source,
+      `  if(state.managed){
+    for(const r in state.managed){
+      const el=document.getElementById("m"+r);
+      if(el){
+        el.classList.toggle("checked", !!state.managed[r]);
+        el.textContent = state.managed[r] ? "✓" : "";
+      }
+    }
+  }
+  calculate();`,
+      `  if(state.managed){
+    for(const r in state.managed){
+      const el=document.getElementById("m"+r);
+      if(el){
+        el.classList.toggle("checked", !!state.managed[r]);
+        el.textContent = state.managed[r] ? "✓" : "";
+      }
+    }
+  }
+  if(state.managedQty){
+    for(const r in state.managedQty){
+      const qtyEl=document.getElementById("mq"+r);
+      if(qtyEl) qtyEl.dataset.qty=String(state.managedQty[r] || 0);
+    }
+  }
+  calculate();`,
+      "restore managed quantity state"
+    );
+
+    document.open();
+    document.write(source);
+    document.close();
+  }catch(error){
+    console.error(error);
+    if(errorEl) errorEl.textContent = "The calculator could not be opened. Please refresh the page.";
+  }
+})();
+</script>
+</body>
+</html>
