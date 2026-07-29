@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generator Mobile Staging</title>
+<style>
+body{margin:0;background:#f3f4f6;color:#111827;font-family:Arial,Helvetica,sans-serif}
+.loading{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(135deg,#1e3a8a,#0f172a)}
+.loading-card{width:100%;max-width:520px;background:#fff;border:1px solid #d1d5db;border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.32);padding:28px;text-align:center}
+.loading-card h1{margin:0 0 8px;color:#1e3a8a;font-size:24px}.loading-card p{margin:0;color:#4b5563;line-height:1.5}.error{color:#b42318!important;font-weight:700;margin-top:12px!important}
+</style>
+</head>
+<body>
+<div class="loading"><div class="loading-card"><h1>LoadCalcPro</h1><p>Opening mobile staging calculator…</p><p id="loadError" class="error"></p></div></div>
+<script>
+(async function(){
+  const wrapperUrl = "https://raw.githubusercontent.com/LoadCalcPro/electrical-load-calculator/main/generator-optional-method.html";
+  const errorEl = document.getElementById("loadError");
+
+  try{
+    const response = await fetch(wrapperUrl, {cache:"no-store"});
+    if(!response.ok) throw new Error("Staging calculator source could not be loaded.");
+    let wrapper = await response.text();
+
+    const marker = "    document.open();";
+    if(!wrapper.includes(marker)) throw new Error("Mobile staging insertion point was not found.");
+
+    const mobileUpgrade = String.raw`
+    source = source.replace("</style>", String.raw\`
+<style>
+@media (max-width:760px){
+  main{padding:10px!important;overflow-x:hidden}
+  .form-titlebar{padding:2px 2px 0;gap:8px}
+  .form-titlebar .form-title{font-size:14px}
+  .project-info{padding:10px;gap:5px;margin-bottom:9px}
+  .toolbar{gap:8px;margin-bottom:9px}
+  .toolbar-left{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .toolbar-left button{padding:8px 4px;font-size:11px;white-space:nowrap}
+  .note{font-size:11px;line-height:1.35}
+  .sheet-wrap{overflow:visible!important;border-radius:10px;max-height:none!important}
+  table{display:block;min-width:0!important;width:100%!important;table-layout:auto}
+  colgroup,thead{display:none!important}
+  tbody{display:block;width:100%}
+  tbody tr{width:100%}
+  tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer){
+    display:grid;
+    grid-template-columns:minmax(112px,1fr) 58px 72px 48px;
+    align-items:center;
+    min-height:42px;
+    border-bottom:1px solid #d9dee8;
+  }
+  tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td{
+    display:flex;
+    align-items:center;
+    min-width:0;
+    height:auto;
+    min-height:41px;
+    padding:4px;
+    border:0;
+    border-right:1px solid #e5e7eb;
+    font-size:11px;
+  }
+  tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(4),
+  tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(6){display:none}
+  tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(5){justify-content:center;border-right:0}
+  td.label{line-height:1.15;overflow-wrap:anywhere}
+  .descInput{font-size:11px;padding:5px 4px;min-width:0}
+  input[type=number],select{height:32px;padding:4px 3px;font-size:12px;text-align:center}
+  input::placeholder{color:#64748b;opacity:1;font-size:10px;font-weight:700}
+  .check-wrap{gap:3px!important;max-width:46px}
+  .check{width:24px;height:25px;font-size:16px;flex:0 0 24px}
+  .managed-qty{min-width:18px!important;height:25px!important;padding:0 3px!important;font-size:10px!important}
+  .section{display:block!important;width:100%;background:#1e3a8a!important}
+  .section td{display:none!important;border:0!important}
+  .section td:first-child{display:block!important;width:100%!important;min-height:34px;height:auto!important;padding:9px 8px!important;text-align:left!important;font-size:12px!important;white-space:normal!important}
+  #row46{display:grid!important;grid-template-columns:1fr 82px!important;align-items:center;background:#1e3a8a!important}
+  #row46 td:first-child,#row46 td:nth-child(2){display:flex!important;align-items:center;min-height:38px;padding:5px 8px!important}
+  #row46 td:nth-child(2){background:#fff!important}
+  #row5,#row6,#row7{grid-template-columns:minmax(112px,1fr) 76px!important}
+  #row5 td:nth-child(3),#row6 td:nth-child(3),#row7 td:nth-child(3),
+  #row5 td:nth-child(5),#row6 td:nth-child(5),#row7 td:nth-child(5){display:none!important}
+  .subtotal,.total{display:grid!important;grid-template-columns:minmax(130px,1fr) 82px 82px;align-items:center}
+  .subtotal td,.total td{display:none!important;min-height:38px;height:auto!important;padding:6px 5px!important;border:0!important;border-right:1px solid #d9dee8!important;font-size:11px!important}
+  .subtotal td:first-child,.total td:first-child,.subtotal td:nth-child(4),.total td:nth-child(4),.subtotal td:nth-child(6),.total td:nth-child(6){display:flex!important;align-items:center}
+  .subtotal td:nth-child(4),.subtotal td:nth-child(6),.total td:nth-child(4),.total td:nth-child(6){justify-content:flex-end}
+  .after-min-amp-spacer{display:none!important}
+}
+</style>\` + "</style>");
+
+    source = source.replace("function calculate(){", String.raw\`
+function applyMobileInputHints(){
+  for(const r of DATA.inputRows){
+    if(r===46) continue;
+    const qtyEl=document.getElementById("q"+r);
+    const vaEl=document.getElementById("v"+r);
+    if(qtyEl && !qtyEl.readOnly) qtyEl.placeholder="QTY";
+    if(vaEl && !vaEl.readOnly) vaEl.placeholder=(r===43 ? "VA" : "VA");
+  }
+}
+function calculate(){
+  applyMobileInputHints();\`);
+`;
+
+    wrapper = wrapper.replace(marker, mobileUpgrade + "\n" + marker);
+    document.open();
+    document.write(wrapper);
+    document.close();
+  }catch(error){
+    console.error(error);
+    if(errorEl) errorEl.textContent = "The mobile staging calculator could not be opened. Please refresh the page.";
+  }
+})();
+</script>
+</body>
+</html>
