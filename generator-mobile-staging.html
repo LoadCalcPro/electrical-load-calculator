@@ -14,8 +14,8 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f3f4f6;fon
 </style>
 </head>
 <body>
-<div id="status"><div class="status-card"><h1>LoadCalcPro</h1><p>Opening mobile generator calculator…</p></div></div>
-<iframe id="calculatorFrame" title="Generator Optional Method Calculator" src="generator-optional-method.html?v=mobile-staging-3"></iframe>
+<div id="status"><div class="status-card"><h1>LoadCalcPro</h1><p>Opening Generator Optional Method Calculator…</p></div></div>
+<iframe id="calculatorFrame" title="Generator Optional Method Calculator" src="generator-optional-method.html?v=mobile-staging-5"></iframe>
 <script>
 (function(){
   const frame=document.getElementById('calculatorFrame');
@@ -47,23 +47,12 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f3f4f6;fon
   #row46{display:grid!important;grid-template-columns:1fr 105px!important;align-items:center!important}
   #row46 td:first-child,#row46 td:nth-child(2){display:flex!important;min-height:48px!important;padding:8px 10px!important}
   #row46 td:nth-child(2){background:#fff!important}
-  tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer){
-    display:grid!important;
-    grid-template-columns:1fr 1fr!important;
-    width:100%!important;
-    margin:0 0 12px!important;
-    background:#fff!important;
-    border:1px solid #aeb9c8!important;
-    border-radius:13px!important;
-    overflow:hidden!important;
-    box-shadow:0 1px 2px rgba(15,23,42,.04)!important;
-  }
+  tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer){display:grid!important;grid-template-columns:1fr 1fr!important;width:100%!important;margin:0 0 12px!important;background:#fff!important;border:1px solid #aeb9c8!important;border-radius:13px!important;overflow:hidden!important;box-shadow:0 1px 2px rgba(15,23,42,.04)!important}
   tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td{display:flex!important;align-items:center!important;min-width:0!important;height:auto!important;border:0!important;padding:10px!important;font-size:14px!important;background:#fff!important}
   tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:first-child{grid-column:1/-1!important;min-height:48px!important;border-bottom:1px solid #d5dbe4!important;font-size:17px!important;font-weight:800!important;line-height:1.25!important;padding:12px 14px!important;white-space:normal!important;overflow:visible!important}
   tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(2){grid-column:1!important;border-right:1px solid #d5dbe4!important}
   tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(3){grid-column:2!important}
-  tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(4),
-  tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(6){display:none!important}
+  tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(4),tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(6){display:none!important}
   tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(5){grid-column:1/-1!important;min-height:52px!important;border-top:1px solid #d5dbe4!important;justify-content:flex-start!important;gap:10px!important;padding:9px 14px!important}
   input[type=number],select{height:44px!important;min-width:0!important;width:100%!important;padding:7px 9px!important;font-size:16px!important;text-align:center!important;border:1px solid #93a0b2!important;border-radius:8px!important;background:#fff!important}
   input::placeholder{color:#334155!important;opacity:1!important;font-size:14px!important;font-weight:800!important}
@@ -86,7 +75,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f3f4f6;fon
     attempts++;
     try{
       const doc=frame.contentDocument;
-      if(!doc || !doc.head || !doc.getElementById('tbody')) throw new Error('Calculator still loading');
+      if(!doc || !doc.head || !doc.getElementById('tbody')) throw new Error('Calculator table not ready');
       if(!doc.getElementById('mobileStagingStyles')){
         const style=doc.createElement('style');
         style.id='mobileStagingStyles';
@@ -100,17 +89,20 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f3f4f6;fon
         if(q && !q.readOnly) q.placeholder=(r===5?'Square Footage':'QTY');
         if(v && !v.readOnly) v.placeholder=(r===43?'Nameplate VA':'VA');
       }
-      status.classList.add('hidden');
       return true;
     }catch(e){
-      if(attempts<80) setTimeout(applyMobile,250);
-      else status.querySelector('p').textContent='The staging calculator could not finish opening. Please refresh this page.';
+      if(attempts<240) setTimeout(applyMobile,500);
       return false;
     }
   }
 
-  frame.addEventListener('load',function(){attempts=0;setTimeout(applyMobile,150)});
-  setTimeout(applyMobile,500);
+  frame.addEventListener('load',function(){
+    status.classList.add('hidden');
+    attempts=0;
+    setTimeout(applyMobile,300);
+  });
+
+  setTimeout(function(){status.classList.add('hidden');},4000);
 })();
 </script>
 </body>
