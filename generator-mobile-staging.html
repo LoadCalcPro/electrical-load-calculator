@@ -5,32 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Generator Mobile Staging</title>
 <style>
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif}
-#calculatorFrame{display:block;width:100%;height:100%;border:0;background:#f3f4f6}
-#status{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(135deg,#1e3a8a,#0f172a);z-index:10}
-#status.hidden{display:none}
-.status-card{width:100%;max-width:430px;background:#fff;border:1px solid #d1d5db;border-radius:18px;padding:26px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.32)}
-.status-card h1{margin:0 0 8px;color:#1e3a8a;font-size:24px}.status-card p{margin:0;color:#4b5563;line-height:1.45}
+body{margin:0;background:#f3f4f6;color:#111827;font-family:Arial,Helvetica,sans-serif}.loading{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(135deg,#1e3a8a,#0f172a)}.loading-card{width:100%;max-width:520px;background:#fff;border:1px solid #d1d5db;border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.32);padding:28px;text-align:center}.loading-card h1{margin:0 0 8px;color:#1e3a8a;font-size:24px}.loading-card p{margin:0;color:#4b5563;line-height:1.5}.error{color:#b42318!important;font-weight:700;margin-top:12px!important}
 </style>
 </head>
 <body>
-<div id="status"><div class="status-card"><h1>LoadCalcPro</h1><p>Opening Generator Optional Method Calculator…</p></div></div>
-<iframe id="calculatorFrame" title="Generator Optional Method Calculator" src="generator-optional-method.html?v=mobile-staging-5"></iframe>
+<div class="loading"><div class="loading-card"><h1>LoadCalcPro</h1><p>Opening mobile generator calculator…</p><p id="loadError" class="error"></p></div></div>
 <script>
-(function(){
-  const frame=document.getElementById('calculatorFrame');
-  const status=document.getElementById('status');
-  let attempts=0;
+(async function(){
+  const wrapperUrl="generator-optional-method.html?v=direct-mobile-1";
+  const errorEl=document.getElementById("loadError");
+  try{
+    const response=await fetch(wrapperUrl,{cache:"no-store"});
+    if(!response.ok) throw new Error("Calculator wrapper could not be loaded.");
+    let wrapper=await response.text();
+    const marker="    document.open();";
+    if(!wrapper.includes(marker)) throw new Error("Mobile insertion point was not found.");
 
-  const mobileCSS=`
+    const mobileUpgrade=String.raw`
+    source = source.replace("</style>", String.raw\`
+<style>
 @media (max-width:760px){
   html,body{overflow-x:hidden!important;background:#eef3fb!important}
   main{padding:12px!important;overflow:visible!important}
-  .form-titlebar{padding:2px 1px 0!important;margin-bottom:10px!important;gap:8px!important}
+  .form-titlebar{margin-bottom:10px!important;gap:8px!important}
   .form-titlebar .form-title{font-size:15px!important;line-height:1.25!important}
   .form-titlebar .form-brand{font-size:11px!important}
   .project-info{padding:11px!important;gap:6px!important;margin-bottom:11px!important;border-radius:12px!important}
-  .project-info label{font-size:12px!important}
   .project-info input{height:38px!important;font-size:15px!important;padding:7px 9px!important}
   .toolbar{gap:8px!important;margin-bottom:12px!important}
   .toolbar-left{width:100%!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
@@ -53,7 +53,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f3f4f6;fon
   tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(2){grid-column:1!important;border-right:1px solid #d5dbe4!important}
   tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(3){grid-column:2!important}
   tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(4),tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(6){display:none!important}
-  tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(5){grid-column:1/-1!important;min-height:52px!important;border-top:1px solid #d5dbe4!important;justify-content:flex-start!important;gap:10px!important;padding:9px 14px!important}
+  tbody tr:not(.section):not(.subtotal):not(.total):not(.after-min-amp-spacer) td:nth-child(5){grid-column:1/-1!important;min-height:52px!important;border-top:1px solid #d5dbe4!important;justify-content:flex-start!important;padding:9px 14px!important}
   input[type=number],select{height:44px!important;min-width:0!important;width:100%!important;padding:7px 9px!important;font-size:16px!important;text-align:center!important;border:1px solid #93a0b2!important;border-radius:8px!important;background:#fff!important}
   input::placeholder{color:#334155!important;opacity:1!important;font-size:14px!important;font-weight:800!important}
   .descInput{width:100%!important;min-height:42px!important;font-size:16px!important;line-height:1.2!important;padding:8px 9px!important;text-align:left!important}
@@ -69,40 +69,30 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f3f4f6;fon
   .subtotal td:nth-child(4),.subtotal td:nth-child(6),.total td:nth-child(4),.total td:nth-child(6){justify-content:flex-end!important}
   .after-min-amp-spacer{display:none!important}
 }
+</style>\` + "</style>");
+
+    source = source.replace("function calculate(){", String.raw\`
+function applyMobileInputHints(){
+  for(const r of DATA.inputRows){
+    if(r===46) continue;
+    const qtyEl=document.getElementById("q"+r);
+    const vaEl=document.getElementById("v"+r);
+    if(qtyEl && !qtyEl.readOnly) qtyEl.placeholder=(r===5 ? "Square Footage" : "QTY");
+    if(vaEl && !vaEl.readOnly) vaEl.placeholder=(r===43 ? "Nameplate VA" : "VA");
+  }
+}
+function calculate(){
+  applyMobileInputHints();\`);
 `;
 
-  function applyMobile(){
-    attempts++;
-    try{
-      const doc=frame.contentDocument;
-      if(!doc || !doc.head || !doc.getElementById('tbody')) throw new Error('Calculator table not ready');
-      if(!doc.getElementById('mobileStagingStyles')){
-        const style=doc.createElement('style');
-        style.id='mobileStagingStyles';
-        style.textContent=mobileCSS;
-        doc.head.appendChild(style);
-      }
-      for(const r of (doc.defaultView.DATA?.inputRows || [])){
-        if(r===46) continue;
-        const q=doc.getElementById('q'+r);
-        const v=doc.getElementById('v'+r);
-        if(q && !q.readOnly) q.placeholder=(r===5?'Square Footage':'QTY');
-        if(v && !v.readOnly) v.placeholder=(r===43?'Nameplate VA':'VA');
-      }
-      return true;
-    }catch(e){
-      if(attempts<240) setTimeout(applyMobile,500);
-      return false;
-    }
+    wrapper=wrapper.replace(marker,mobileUpgrade+"\n"+marker);
+    document.open();
+    document.write(wrapper);
+    document.close();
+  }catch(error){
+    console.error(error);
+    if(errorEl) errorEl.textContent="The mobile staging calculator could not open. Please refresh this page.";
   }
-
-  frame.addEventListener('load',function(){
-    status.classList.add('hidden');
-    attempts=0;
-    setTimeout(applyMobile,300);
-  });
-
-  setTimeout(function(){status.classList.add('hidden');},4000);
 })();
 </script>
 </body>
