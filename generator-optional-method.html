@@ -76,6 +76,47 @@ body{margin:0;background:#f3f4f6;color:#111827;font-family:Arial,Helvetica,sans-
       "remove duplicate 40 percent quantity display"
     );
 
+    source = replaceRequired(
+      source,
+      \`  let hvacVals = {};
+  if(heatQty >= 4){
+    if(heat40 >= totalAc){
+      hvacVals[37]=0; hvacVals[38]=0; hvacVals[39]=0; hvacVals[40]=0; hvacVals[41]=heat40;
+    } else {
+      hvacVals[37]=ac1; hvacVals[38]=0; hvacVals[39]=ac2; hvacVals[40]=0; hvacVals[41]=0;
+    }
+  } else {
+    if(heat65 >= totalAc){
+      hvacVals[37]=0; hvacVals[38]=heat1*0.65; hvacVals[39]=0; hvacVals[40]=heat2*0.65; hvacVals[41]=0;
+    } else {
+      hvacVals[37]=ac1; hvacVals[38]=0; hvacVals[39]=ac2; hvacVals[40]=0; hvacVals[41]=0;
+    }
+  }
+  hvacVals[42]=rowVA(42);
+  hvacVals[43]=rowVA(43);\`,
+      \`  const controllingHeat = heatQty >= 4 ? heat40 : heat65;
+  const heatControls = controllingHeat > totalAc;
+  const hvacVals = {37:0,38:0,39:0,40:0,41:0};
+
+  // Service HVAC is mutually exclusive: either all A/C at 100%,
+  // or the applicable heating demand. Never add both categories.
+  if(heatControls){
+    if(heatQty >= 4){
+      hvacVals[41] = controllingHeat;
+    } else {
+      hvacVals[38] = heat1 * 0.65;
+      hvacVals[40] = heat2 * 0.65;
+    }
+  } else {
+    hvacVals[37] = ac1;
+    hvacVals[39] = ac2;
+  }
+
+  hvacVals[42]=rowVA(42);
+  hvacVals[43]=rowVA(43);\`,
+      "mutually exclusive HVAC service calculation"
+    );
+
     document.open();
     document.write(source);`;
 
