@@ -10,7 +10,7 @@ app.disable("x-powered-by");
 app.get("/health", (req, res) => {
   res.json({
     status: "ok",
-    app: "LoadCalcPro Website"
+    app: "LoadCalcPro X Website"
   });
 });
 
@@ -38,5 +38,5 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`LoadCalcPro website running on port ${PORT}`);
+  console.log(`LoadCalcPro X website running on port ${PORT}`);
 });
