@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: loadcalcpro-website
+    name: loadcalcpro-x-website
     runtime: node
     plan: free
     branch: main
