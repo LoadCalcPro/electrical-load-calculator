@@ -1,8 +1,8 @@
 {
-  "name": "loadcalcpro-website",
+  "name": "loadcalcpro-x-website",
   "version": "1.0.0",
   "private": true,
-  "description": "LoadCalcPro website and member calculator pages",
+  "description": "LoadCalcPro X website and member calculator pages",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
