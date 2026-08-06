@@ -5492,5 +5492,120 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
+
+<style id="v535ControllingHvacManagedStyle">
+.v535-managed-inactive{opacity:.28!important;filter:grayscale(1);cursor:not-allowed!important;pointer-events:none!important}
+.v57-method-row.v535-noncontrolling-row{background:#f8fafc!important;color:#94a3b8!important}
+.v57-method-row.v535-noncontrolling-row .v57-method-name,
+.v57-method-row.v535-noncontrolling-row .v57-output-value{color:#94a3b8!important}
+</style>
+<script id="v535ControllingHvacManagedLogic">
+(function(){
+'use strict';
+const METHODS_KEY='loadcalcpro_hvac_selected_methods_v1';
+const HP_KEY='loadcalcpro_hvac_multi_hp_answer_v1';
+const DATA_KEY='loadcalcpro_hvac_method_sections_v57';
+const MANAGED_KEY='loadcalcpro_hvac_method_managed_v57';
+const COUNT_KEY='loadcalcpro_hvac_visible_system_counts_v522';
+const BASE_MANAGED_ROWS=[10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,42,43,47];
+const VALID={central65:true,separate40:true,heatpump:true};
+function readJSON(k,f){try{const v=JSON.parse(localStorage.getItem(k)||'');return v&&typeof v==='object'?v:f}catch(e){return f}}
+function writeJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function selected(){const a=readJSON(METHODS_KEY,[]);return Array.isArray(a)?a.filter(m=>VALID[m]):[]}
+function hpAnswer(){return localStorage.getItem(HP_KEY)||''}
+function dataset(){return readJSON(DATA_KEY,{})}
+function managedMap(){return readJSON(MANAGED_KEY,{})}
+function counts(){return readJSON(COUNT_KEY,{})}
+function typeFor(kind,index){return kind+(index===1?'':index)}
+function key(method,type){return method+'_'+type}
+function count(method){const n=Math.floor(Number(counts()[method])||1);return Math.max(1,Math.min(3,n))}
+function item(method,type){return dataset()[key(method,type)]||{}}
+function qty(method,type){return Math.max(0,Math.floor(Number(item(method,type).qty)||0))}
+function va(method,type){return Math.max(0,Number(item(method,type).va)||0)}
+function total(method,type){return qty(method,type)*va(method,type)}
+function managedQty(method,type){const q=qty(method,type),raw=managedMap()[key(method,type)];let n=raw===true?q:Math.floor(Number(raw)||0);return Math.max(0,Math.min(q,n))}
+function remaining(method,type){return Math.max(qty(method,type)-managedQty(method,type),0)*va(method,type)}
+function aggregate(method,kind,generator){let n=0;for(let i=1;i<=count(method);i++)n+=(generator?remaining:total)(method,typeFor(kind,i));return n}
+function heatQty(method){let n=0;for(let i=1;i<=count(method);i++)n+=qty(method,typeFor('heat',i));return n}
+function heatFactor(method){return method==='separate40'?(heatQty(method)>=4?.40:.65):.65}
+function serviceController(method){
+ const c=aggregate(method,'ac',false),h=aggregate(method,'heat',false)*heatFactor(method);
+ if(method==='heatpump'&&hpAnswer()==='yes')return 'both';
+ if(method==='heatpump'&&!hpAnswer())return '';
+ return c>=h?'cooling':'heating';
+}
+function methodResult(method,generator){
+ const controller=serviceController(method),factor=heatFactor(method);
+ const c=aggregate(method,'ac',generator),h=aggregate(method,'heat',generator)*factor;
+ if(controller==='both')return{total:c+h,c:c,h:h,controller:controller};
+ if(controller==='cooling')return{total:c,c:c,h:0,controller:controller};
+ if(controller==='heating')return{total:h,c:0,h:h,controller:controller};
+ return{total:0,c:0,h:0,controller:''};
+}
+function isActive(method,type){const c=serviceController(method);return c==='both'||(c==='cooling'&&type.indexOf('ac')===0)||(c==='heating'&&type.indexOf('heat')===0)}
+function clearInactiveManaged(){
+ const m=managedMap();let changed=false;
+ selected().forEach(method=>{for(let i=1;i<=count(method);i++)for(const kind of ['ac','heat']){const t=typeFor(kind,i),k=key(method,t);if(!isActive(method,t)&&m[k]){m[k]=0;changed=true}}});
+ if(changed)writeJSON(MANAGED_KEY,m);
+ return changed;
+}
+function fmt(n){return n?Math.round(n).toLocaleString('en-US'):''}
+function setText(sel,v){const e=document.querySelector(sel);if(e)e.textContent=v}
+function syncManagedUI(){
+ clearInactiveManaged();
+ document.querySelectorAll('[data-v522-managed]').forEach(btn=>{
+  const k=btn.dataset.v522Managed||'',p=k.split('_'),method=p.shift(),type=p.join('_'),active=!!VALID[method]&&isActive(method,type)&&qty(method,type)>0&&va(method,type)>0;
+  btn.disabled=!active;btn.classList.toggle('v535-managed-inactive',!active);btn.setAttribute('aria-disabled',active?'false':'true');
+  const row=btn.closest('.v57-method-row');if(row)row.classList.toggle('v535-noncontrolling-row',!active);
+  const qb=document.querySelector('[data-v522-managed-qty="'+k+'"]');if(qb){qb.disabled=!active;qb.classList.toggle('v535-managed-inactive',!active)}
+ });
+}
+function updateOutputs(){
+ selected().forEach(method=>{
+  const s=methodResult(method,false),g=methodResult(method,true),factor=heatFactor(method);
+  for(let i=1;i<=count(method);i++){
+   const ac=typeFor('ac',i),heat=typeFor('heat',i),activeAC=s.controller==='cooling'||s.controller==='both',activeHeat=s.controller==='heating'||s.controller==='both';
+   setText('[data-v522-output="'+key(method,ac)+'_service"]',fmt(activeAC?total(method,ac):0));
+   setText('[data-v522-output="'+key(method,ac)+'_generator"]',fmt(activeAC?remaining(method,ac):0));
+   setText('[data-v522-output="'+key(method,heat)+'_service"]',fmt(activeHeat?total(method,heat)*factor:0));
+   setText('[data-v522-output="'+key(method,heat)+'_generator"]',fmt(activeHeat?remaining(method,heat)*factor:0));
+   if(method==='separate40'){
+    setText('[data-v522-forty="'+i+'_service"]',heatQty(method)>=4?fmt(total(method,heat)*.40):'');
+    setText('[data-v522-forty="'+i+'_generator"]',heatQty(method)>=4&&activeHeat?fmt(remaining(method,heat)*.40):'');
+    setText('[data-v522-forty-note="'+i+'"]',heatQty(method)>=4?'Calculated automatically':'65% applied — fewer than 4 total heating units');
+   }
+  }
+  if(method==='separate40'){
+   const c=aggregate(method,'ac',false),h=aggregate(method,'heat',false)*factor,used=Math.max(c,h);
+   setText('[data-v522-compare="qty"]',String(heatQty(method)));setText('[data-v522-compare="cooling"]',fmt(c));setText('[data-v522-compare="heating-used"]',fmt(h));
+   const label=document.querySelector('[data-v522-heat-label]');if(label)label.textContent=heatQty(method)>=4?'Heating at 40%':'Heating at 65%';
+   setText('[data-v522-compare="used"]',fmt(used)+(h>c?' — Heating':' — Cooling'));
+  }
+ });
+ syncManagedUI();
+}
+window.hvacLoadCalculation=function(){
+ clearInactiveManaged();let service=0,generator=0,serviceAC=0,generatorAC=0,serviceHeating=0,generatorHeating=0;
+ selected().forEach(method=>{const s=methodResult(method,false),g=methodResult(method,true);service+=s.total;generator+=g.total;serviceAC+=s.c;serviceHeating+=s.h;generatorAC+=g.c;generatorHeating+=g.h});
+ setOutput('e37',serviceAC);setOutput('e38',serviceHeating);setOutput('e39',0);setOutput('e40',0);setOutput('e41',0);setOutput('f37',generatorAC);setOutput('f38',generatorHeating);setOutput('f39',0);setOutput('f40',0);setOutput('f41',0);
+ updateOutputs();return{service,generator,serviceAC,generatorAC,serviceHeating,generatorHeating,method:selected().join(','),multipleHeatTypes:selected().length>1};
+};
+window.getCompleteManagedLoadCount=function(){
+ let n=0;BASE_MANAGED_ROWS.forEach(r=>{const q=typeof positiveQuantity==='function'?positiveQuantity('q'+r):0;if(q>0&&typeof managedQuantity==='function')n+=Math.min(q,managedQuantity(r))});
+ selected().forEach(method=>{for(let i=1;i<=count(method);i++)for(const kind of ['ac','heat']){const t=typeFor(kind,i);if(isActive(method,t))n+=managedQty(method,t)}});return n;
+};
+window.applicableManagedLoadCount=window.getCompleteManagedLoadCount;
+function escape(s){return String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+function printRow(label,q,s,g){if(s<=0&&g<=0)return'';return '<tr><td>'+escape(label)+'</td><td class="quantity">'+(q||'')+'</td><td class="number">'+fmt(s)+'</td><td class="number">'+fmt(g)+'</td></tr>'}
+function buildPrintHVAC(){let html='';selected().forEach(method=>{const sr=methodResult(method,false),factor=heatFactor(method);for(let i=1;i<=count(method);i++){const ac=typeFor('ac',i),heat=typeFor('heat',i);if(sr.controller==='cooling'||sr.controller==='both')html+=printRow(method==='heatpump'?'Heat Pump Compressor '+i:'Air Conditioning Unit '+i,qty(method,ac),total(method,ac),remaining(method,ac));if(sr.controller==='heating'||sr.controller==='both')html+=printRow((method==='heatpump'?'Supplemental Electric Heat ':method==='central65'?'Central Electric Heat ':'Separately Controlled Electric Heat ')+i+' at '+Math.round(factor*100)+'%',qty(method,heat),total(method,heat)*factor,remaining(method,heat)*factor)}});return html}
+const priorPrint=window.updatePrintRows;
+window.updatePrintRows=function(d){priorPrint(d);d.managedLoadCount=window.getCompleteManagedLoadCount();const report=document.getElementById('printReport');if(!report)return;const summary=report.querySelector('.print-method-details');if(summary){const p=summary.querySelectorAll('.summary-item span');if(p[1])p[1].textContent=String(d.managedLoadCount)}const table=report.querySelector('.print-table'),tfoot=table&&table.querySelector('tfoot');if(tfoot){const rows=Array.from(tfoot.children),start=rows.findIndex(r=>r.classList.contains('print-section-row')&&r.textContent.trim()==='HVAC Load');if(start>=0){let end=start+1;while(end<rows.length&&!rows[end].classList.contains('print-section-row')&&!rows[end].classList.contains('final-total-row'))end++;for(let i=end-1;i>start;i--)rows[i].remove();const hv=buildPrintHVAC();if(hv)rows[start].insertAdjacentHTML('afterend',hv);else rows[start].remove()}}const mc=document.getElementById('bottomManagedLoadCount');if(mc)mc.textContent=String(d.managedLoadCount);syncManagedUI()};
+function refresh(){clearInactiveManaged();updateOutputs();if(typeof calculate==='function')calculate()}
+const observer=new MutationObserver(()=>setTimeout(syncManagedUI,0));
+function init(){const v=document.querySelector('.app-version');if(v)v.textContent='NEC 2023 | Version 2.0 — V5.35 Controlling HVAC Managed Loads';const c=document.getElementById('v57HvacMethodSections');if(c)observer.observe(c,{childList:true,subtree:true});document.addEventListener('input',()=>setTimeout(syncManagedUI,0));document.addEventListener('click',()=>setTimeout(syncManagedUI,20),true);setTimeout(refresh,220)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
 </body>
 </html>
