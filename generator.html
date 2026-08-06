@@ -1368,6 +1368,113 @@ button:focus-visible,input:focus-visible,select:focus-visible{
 
 </style>
 
+
+<style id="v538MobileHvacMatchesLoadRows">
+/* V5.38 — phone HVAC entries match the ordinary appliance load rows. */
+@media (max-width:899px){
+  #v57HvacMethodSections,
+  #v57HvacMethodSections .v57-method-card,
+  #v57HvacMethodSections .v522-system-group,
+  #v57HvacMethodSections .v57-method-row,
+  #v57HvacMethodSections .v523-system-controls{
+    background:#ffffff!important;
+  }
+  #v57HvacMethodSections .v57-method-card{
+    border:1px solid #d1d5db!important;
+    box-shadow:none!important;
+  }
+  #v57HvacMethodSections .v57-method-heading{
+    padding:10px 13px!important;
+    background:#ffffff!important;
+    border-bottom:2px solid #17377f!important;
+    color:#17377f!important;
+    font-size:17px!important;
+    line-height:1.25!important;
+  }
+  #v57HvacMethodSections .v522-system-title{
+    padding:8px 13px!important;
+    background:#ffffff!important;
+    border-top:0!important;
+    border-bottom:1px solid #dbe3eb!important;
+    color:#334155!important;
+    font-size:13px!important;
+  }
+  #v57HvacMethodSections .v57-method-row,
+  #v57HvacMethodSections .v522-system-group .v57-method-row{
+    padding:11px 13px!important;
+    background:#ffffff!important;
+    opacity:1!important;
+  }
+  #v57HvacMethodSections .v57-method-name{
+    color:#111827!important;
+    font-size:18px!important;
+    line-height:1.25!important;
+  }
+  #v57HvacMethodSections .v57-method-inputs input{
+    background:#ffffff!important;
+    color:#111827!important;
+    -webkit-text-fill-color:#111827!important;
+  }
+  /* Main phone appliance rows do not show separate service/generator output cards. */
+  #v57HvacMethodSections .v57-method-output{
+    display:none!important;
+  }
+  #v57HvacMethodSections .v57-method-row.v535-noncontrolling-row{
+    background:#f8fafc!important;
+    opacity:.48!important;
+  }
+  #v57HvacMethodSections .v57-method-row.v535-noncontrolling-row .v57-method-name{
+    color:#64748b!important;
+  }
+  #v57HvacMethodSections .v523-system-controls{
+    padding:10px 13px 12px!important;
+    border-top:1px solid #e5e7eb!important;
+    background:#ffffff!important;
+  }
+  #v57HvacMethodSections .v523-system-controls .v522-add-system{
+    display:block!important;
+    width:100%!important;
+    min-height:46px!important;
+    margin:0!important;
+    border:2px solid #0f766e!important;
+    border-radius:8px!important;
+    background:#ffffff!important;
+    background-image:none!important;
+    color:#0f5f59!important;
+    -webkit-text-fill-color:#0f5f59!important;
+    font-size:16px!important;
+    font-weight:900!important;
+    line-height:1.2!important;
+    text-shadow:none!important;
+    opacity:1!important;
+    filter:none!important;
+    appearance:none!important;
+    -webkit-appearance:none!important;
+  }
+  #v57HvacMethodSections .v523-system-controls .v523-remove-system{
+    display:block!important;
+    width:100%!important;
+    min-height:44px!important;
+    margin:0!important;
+    border:1px solid #94a3b8!important;
+    border-radius:8px!important;
+    background:#ffffff!important;
+    background-image:none!important;
+    color:#475569!important;
+    -webkit-text-fill-color:#475569!important;
+    font-size:15px!important;
+    font-weight:800!important;
+    opacity:1!important;
+    appearance:none!important;
+    -webkit-appearance:none!important;
+  }
+  #v57HvacMethodSections .v57-hp-question,
+  #v57HvacMethodSections .v57-forty-comparison{
+    background:#ffffff!important;
+  }
+}
+</style>
+
 </head>
 <body class="access-locked">
 <div id="accessScreen" class="access-screen">
@@ -5814,7 +5921,7 @@ const priorPrint=window.updatePrintRows;
 window.updatePrintRows=function(d){priorPrint(d);d.managedLoadCount=window.getCompleteManagedLoadCount();const report=document.getElementById('printReport');if(!report)return;const summary=report.querySelector('.print-method-details');if(summary){const p=summary.querySelectorAll('.summary-item span');if(p[1])p[1].textContent=String(d.managedLoadCount)}const table=report.querySelector('.print-table'),tfoot=table&&table.querySelector('tfoot');if(tfoot){const rows=Array.from(tfoot.children),start=rows.findIndex(r=>r.classList.contains('print-section-row')&&r.textContent.trim()==='HVAC Load');if(start>=0){let end=start+1;while(end<rows.length&&!rows[end].classList.contains('print-section-row')&&!rows[end].classList.contains('final-total-row'))end++;for(let i=end-1;i>start;i--)rows[i].remove();const hv=buildPrintHVAC();if(hv)rows[start].insertAdjacentHTML('afterend',hv);else rows[start].remove()}}const mc=document.getElementById('bottomManagedLoadCount');if(mc)mc.textContent=String(d.managedLoadCount);syncManagedUI()};
 function refresh(){clearInactiveManaged();updateOutputs();if(typeof calculate==='function')calculate()}
 const observer=new MutationObserver(()=>setTimeout(syncManagedUI,0));
-function init(){const v=document.querySelector('.app-version');if(v)v.textContent='NEC 2023 | Version 2.0 — V5.37 Mobile HVAC Controls Readable';const c=document.getElementById('v57HvacMethodSections');if(c)observer.observe(c,{childList:true,subtree:true});document.addEventListener('input',()=>setTimeout(syncManagedUI,0));document.addEventListener('click',()=>setTimeout(syncManagedUI,20),true);setTimeout(refresh,220)}
+function init(){const v=document.querySelector('.app-version');if(v)v.textContent='NEC 2023 | Version 2.0 — V5.38 Mobile HVAC Matches Load Rows';const c=document.getElementById('v57HvacMethodSections');if(c)observer.observe(c,{childList:true,subtree:true});document.addEventListener('input',()=>setTimeout(syncManagedUI,0));document.addEventListener('click',()=>setTimeout(syncManagedUI,20),true);setTimeout(refresh,220)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
