@@ -1475,6 +1475,49 @@ button:focus-visible,input:focus-visible,select:focus-visible{
 }
 </style>
 
+
+<style id="v540MobileHvacInactiveControl">
+/* V5.40 — keep all HVAC rows at full contrast; only the unavailable managed control becomes pale green. */
+@media (max-width:899px){
+  #v57HvacMethodSections .v57-method-row,
+  #v57HvacMethodSections .v57-method-row.v535-noncontrolling-row{
+    background:#ffffff!important;
+    color:#111827!important;
+    opacity:1!important;
+    filter:none!important;
+  }
+  #v57HvacMethodSections .v57-method-row.v535-noncontrolling-row .v57-method-name,
+  #v57HvacMethodSections .v57-method-row.v535-noncontrolling-row .v57-output-value{
+    color:#111827!important;
+  }
+  #v57HvacMethodSections .v57-method-row.v535-noncontrolling-row input{
+    opacity:1!important;
+    color:#111827!important;
+    -webkit-text-fill-color:#111827!important;
+  }
+  #v57HvacMethodSections .v57-method-managed.v539-hide-noncontrolling-managed{
+    visibility:visible!important;
+    pointer-events:auto!important;
+  }
+  #v57HvacMethodSections .v57-managed-button.v535-managed-inactive,
+  #v57HvacMethodSections .v57-managed-qty.v535-managed-inactive{
+    opacity:1!important;
+    filter:none!important;
+    pointer-events:none!important;
+    cursor:default!important;
+    border-color:#9fd8ad!important;
+    background:#f3fbf5!important;
+    color:#86c795!important;
+    -webkit-text-fill-color:#86c795!important;
+    box-shadow:none!important;
+  }
+  #v57HvacMethodSections .v57-managed-button.v535-managed-inactive:hover,
+  #v57HvacMethodSections .v57-managed-qty.v535-managed-inactive:hover{
+    border-color:#9fd8ad!important;
+    background:#f3fbf5!important;
+  }
+}
+</style>
 </head>
 <body class="access-locked">
 <div id="accessScreen" class="access-screen">
@@ -1517,8 +1560,7 @@ LoadCalcPro secure access server.
 Generator Optional Method Calculator
 </h1>
 <div class="app-version">
-NEC 2023 | Version 2.0 — V5.34 NEC Compliance Update
-</div>
+NEC 2023 | Version 2.0 — V5.41 Auto Save Restore Fixed</div>
 </div>
 <div class="app-brand">
 <span class="bolt">⚡</span>LoadCalcPro<span class="brand-x">X</span>
@@ -2831,6 +2873,10 @@ rounded.toLocaleString("en-US") +
 " A";
 }
 function calculate(){
+/* V5.41: protect a saved calculation while the Continue/Start New prompt is open. */
+if(restorePromptOpen){
+return;
+}
 const generalLoad =
 generalLoadCalculation();
 const applianceLoads =
@@ -3128,7 +3174,8 @@ status.textContent = "";
 }
 }
 function saveState(showMessage){
-if(suppressAutoSave){
+/* V5.41: never overwrite saved work while the restore choice is pending. */
+if(suppressAutoSave || restorePromptOpen){
 return;
 }
 try{
@@ -3424,6 +3471,7 @@ closeRestorePrompt();
 clearInputs();
 }
 function initializeSavedCalculation(){
+/* V5.41: saved work gets first priority; later startup calculations are blocked until a choice is made. */
 if(hasSavedCalculation()){
 openRestorePrompt();
 }else{
@@ -5465,7 +5513,7 @@ else initialize();
 (function(){
   function restore(){
     const version=document.querySelector('.app-version');
-    if(version) version.textContent='NEC 2023 | Version 2.0 — V5.34 NEC Compliance Update';
+    if(version) version.textContent='NEC 2023 | Version 2.0 — V5.41 Auto Save Restore Fixed';
     const buttons=document.querySelectorAll('.header-actions button');
     if(buttons[0]) buttons[0].textContent='Calculators';
     if(buttons[1]) buttons[1].textContent='Print / PDF';
@@ -5663,7 +5711,7 @@ window.hvacLoadCalculation=function(){let service=0,generator=0,serviceAC=0,gene
 window.validateHVACMethodSelection=function(){const sel=selected(),hpReady=!sel.includes('heatpump')||!!hpAnswer();return{valid:sel.length>0&&hpReady,method:sel.join(','),methodSelected:sel.length>0,heatPumpReady:hpReady,fortyPercentReady:true,heatingUnitCount:heatingQty('separate40')}}
 window.getHVACMethodSummary=function(){const sel=selected(),names={central65:'Central electric heat at 65%',separate40:(fortyApplies()?'Separately controlled electric heat at 40%':'Separately controlled electric heat at 100% — fewer than four units'),heatpump:'Heat pump with supplemental electric heat'};return sel.length?'Heating method: '+sel.map(m=>names[m]).join(' + '):'Not selected'}
 const oldReset=window.resetHeatingMethodSelection;window.resetHeatingMethodSelection=function(){try{if(typeof oldReset==='function')oldReset()}catch(e){}data={};managed={};counts={};save();render();calculate()}
-function init(){const version=document.querySelector('.app-version');if(version)version.textContent='NEC 2023 | Version 2.0 — V5.34 NEC Compliance Update';render();calculate();const panel=document.getElementById('heatingMethodPanel');if(panel)panel.addEventListener('click',()=>setTimeout(()=>{render();calculate()},60),true)}
+function init(){const version=document.querySelector('.app-version');if(version)version.textContent='NEC 2023 | Version 2.0 — V5.41 Auto Save Restore Fixed';render();calculate();const panel=document.getElementById('heatingMethodPanel');if(panel)panel.addEventListener('click',()=>setTimeout(()=>{render();calculate()},60),true)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(init,120));else setTimeout(init,120)
 })();
 </script>
@@ -5806,7 +5854,7 @@ function syncBottom(d){
  const sa=document.getElementById('serviceAmpsView'),ga=document.getElementById('generatorAmpsView'),sv=document.getElementById('serviceTotalVAView'),gv=document.getElementById('generatorTotalVAView'),mc=document.getElementById('bottomManagedLoadCount');
  if(sa)sa.textContent=Math.ceil(d.serviceCurrent)+' A';if(ga)ga.textContent=Math.ceil(d.generatorCurrent)+' A';if(sv)sv.textContent=fmt(d.serviceTotalVA)||'0';if(gv)gv.textContent=fmt(d.generatorTotalVA)||'0';if(mc)mc.textContent=String(window.getCompleteManagedLoadCount());
 }
-function init(){const v=document.querySelector('.app-version');if(v)v.textContent='NEC 2023 | Version 2.0 — V5.34 NEC Compliance Update';document.addEventListener('input',function(){setTimeout(updateSectionOutputs,0)});setTimeout(function(){calculate()},180)}
+function init(){const v=document.querySelector('.app-version');if(v)v.textContent='NEC 2023 | Version 2.0 — V5.41 Auto Save Restore Fixed';document.addEventListener('input',function(){setTimeout(updateSectionOutputs,0)});setTimeout(function(){if(!restorePromptOpen){calculate()}},180)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
@@ -5862,9 +5910,21 @@ function methodResult(method,generator){
  return{total:0,c:0,h:0,controller:''};
 }
 function isActive(method,type){const c=serviceController(method);return c==='both'||(c==='cooling'&&type.indexOf('ac')===0)||(c==='heating'&&type.indexOf('heat')===0)}
+function comparisonReady(method){
+ const cooling=aggregate(method,'ac',false);
+ const heating=aggregate(method,'heat',false);
+ if(method==='heatpump'&&hpAnswer()==='yes')return cooling>0||heating>0;
+ return cooling>0&&heating>0;
+}
 function clearInactiveManaged(){
  const m=managedMap();let changed=false;
- selected().forEach(method=>{for(let i=1;i<=count(method);i++)for(const kind of ['ac','heat']){const t=typeFor(kind,i),k=key(method,t);if(!isActive(method,t)&&m[k]){m[k]=0;changed=true}}});
+ selected().forEach(method=>{
+  if(!comparisonReady(method))return;
+  for(let i=1;i<=count(method);i++)for(const kind of ['ac','heat']){
+   const t=typeFor(kind,i),k=key(method,t);
+   if(!isActive(method,t)&&m[k]){m[k]=0;changed=true}
+  }
+ });
  if(changed)writeJSON(MANAGED_KEY,m);
  return changed;
 }
@@ -5873,10 +5933,23 @@ function setText(sel,v){const e=document.querySelector(sel);if(e)e.textContent=v
 function syncManagedUI(){
  clearInactiveManaged();
  document.querySelectorAll('[data-v522-managed]').forEach(btn=>{
-  const k=btn.dataset.v522Managed||'',p=k.split('_'),method=p.shift(),type=p.join('_'),active=!!VALID[method]&&isActive(method,type)&&qty(method,type)>0&&va(method,type)>0;
-  btn.disabled=!active;btn.classList.toggle('v535-managed-inactive',!active);btn.setAttribute('aria-disabled',active?'false':'true');
-  const row=btn.closest('.v57-method-row');if(row)row.classList.toggle('v535-noncontrolling-row',!active);
-  const qb=document.querySelector('[data-v522-managed-qty="'+k+'"]');if(qb){qb.disabled=!active;qb.classList.toggle('v535-managed-inactive',!active)}
+  const k=btn.dataset.v522Managed||'',p=k.split('_'),method=p.shift(),type=p.join('_');
+  const hasLoad=qty(method,type)>0&&va(method,type)>0;
+  const compared=!!VALID[method]&&comparisonReady(method);
+  const controlling=!compared||isActive(method,type);
+  const usable=hasLoad&&controlling;
+  const controls=btn.closest('.v57-method-managed');
+  if(controls){
+   controls.classList.toggle('v539-hide-noncontrolling-managed',compared&&!controlling);
+   controls.setAttribute('aria-hidden',compared&&!controlling?'true':'false');
+  }
+  btn.disabled=!usable;
+  btn.classList.toggle('v535-managed-inactive',!usable);
+  btn.setAttribute('aria-disabled',usable?'false':'true');
+  const row=btn.closest('.v57-method-row');
+  if(row)row.classList.remove('v535-noncontrolling-row');
+  const qb=document.querySelector('[data-v522-managed-qty="'+k+'"]');
+  if(qb){qb.disabled=!usable;qb.classList.toggle('v535-managed-inactive',!usable)}
  });
 }
 function updateOutputs(){
@@ -5921,7 +5994,7 @@ const priorPrint=window.updatePrintRows;
 window.updatePrintRows=function(d){priorPrint(d);d.managedLoadCount=window.getCompleteManagedLoadCount();const report=document.getElementById('printReport');if(!report)return;const summary=report.querySelector('.print-method-details');if(summary){const p=summary.querySelectorAll('.summary-item span');if(p[1])p[1].textContent=String(d.managedLoadCount)}const table=report.querySelector('.print-table'),tfoot=table&&table.querySelector('tfoot');if(tfoot){const rows=Array.from(tfoot.children),start=rows.findIndex(r=>r.classList.contains('print-section-row')&&r.textContent.trim()==='HVAC Load');if(start>=0){let end=start+1;while(end<rows.length&&!rows[end].classList.contains('print-section-row')&&!rows[end].classList.contains('final-total-row'))end++;for(let i=end-1;i>start;i--)rows[i].remove();const hv=buildPrintHVAC();if(hv)rows[start].insertAdjacentHTML('afterend',hv);else rows[start].remove()}}const mc=document.getElementById('bottomManagedLoadCount');if(mc)mc.textContent=String(d.managedLoadCount);syncManagedUI()};
 function refresh(){clearInactiveManaged();updateOutputs();if(typeof calculate==='function')calculate()}
 const observer=new MutationObserver(()=>setTimeout(syncManagedUI,0));
-function init(){const v=document.querySelector('.app-version');if(v)v.textContent='NEC 2023 | Version 2.0 — V5.38 Mobile HVAC Matches Load Rows';const c=document.getElementById('v57HvacMethodSections');if(c)observer.observe(c,{childList:true,subtree:true});document.addEventListener('input',()=>setTimeout(syncManagedUI,0));document.addEventListener('click',()=>setTimeout(syncManagedUI,20),true);setTimeout(refresh,220)}
+function init(){const v=document.querySelector('.app-version');if(v)v.textContent='NEC 2023 | Version 2.0 — V5.41 Auto Save Restore Fixed';const c=document.getElementById('v57HvacMethodSections');if(c)observer.observe(c,{childList:true,subtree:true});document.addEventListener('input',()=>setTimeout(syncManagedUI,0));document.addEventListener('click',()=>setTimeout(syncManagedUI,20),true);setTimeout(refresh,220)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
