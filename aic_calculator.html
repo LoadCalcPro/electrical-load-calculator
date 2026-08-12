@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LoadCalcPro | AIC Calculator</title>
+  <meta name="robots" content="noindex,nofollow">
+  <title>LoadCalcPro | AIC Calculator | Staging</title>
   <style>
     :root { --blue:#1e3a8a; --blue2:#0f172a; --accent:#0f766e; --light:#e8eefc; --grid:#c9d3dc; --text:#111827; --muted:#6b7280; }
     * { box-sizing: border-box; }
@@ -130,7 +131,6 @@
     .access-box input {
       margin-bottom:12px;
     }
-    
     .remember-row {
       display:flex;
       align-items:center;
@@ -150,8 +150,7 @@
       font-weight:600;
       cursor:pointer;
     }
-
-.access-box button {
+    .access-box button {
       width:100%;
       padding:11px 14px;
     }
@@ -171,33 +170,377 @@
       #accessGate, .logout-button { display:none!important; }
     }
 
-  </style>
+    .restore-modal {
+      position:fixed;
+      inset:0;
+      z-index:10000;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background:rgba(15,23,42,.72);
+      backdrop-filter:blur(3px);
+    }
+    .restore-modal.show { display:flex; }
+    .restore-dialog {
+      width:min(500px,100%);
+      overflow:hidden;
+      background:#fff;
+      border:1px solid #dbe3ec;
+      border-radius:16px;
+      box-shadow:0 28px 80px rgba(15,23,42,.34);
+    }
+    .restore-dialog-header {
+      padding:22px 24px 16px;
+      border-bottom:1px solid #e5eaf0;
+    }
+    .restore-dialog-kicker {
+      margin:0 0 7px;
+      color:#0f766e;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .restore-dialog h2 {
+      margin:0;
+      color:#0f172a;
+      font-size:22px;
+      line-height:1.25;
+    }
+    .restore-dialog-body {
+      padding:18px 24px 8px;
+      color:#475569;
+      font-size:15px;
+      line-height:1.55;
+    }
+    .restore-dialog-body p { margin:0; }
+    .restore-dialog-actions {
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+      padding:18px 24px 24px;
+    }
+    .restore-dialog-actions button {
+      width:100%;
+      min-height:46px;
+      border-radius:9px;
+      font-size:14px;
+    }
+    .restore-dialog-actions .restore-secondary {
+      background:#fff;
+      color:#1e3a8a;
+      border:1px solid #1e3a8a;
+    }
+    @media (max-width:520px) {
+      .restore-modal { padding:16px; }
+      .restore-dialog-header { padding:20px 20px 15px; }
+      .restore-dialog-body { padding:16px 20px 6px; }
+      .restore-dialog-actions { padding:16px 20px 20px; }
+    }
+    @media print { .restore-modal { display:none!important; } }
+
+  .brand-x{color:#0f766e;font-weight:900;margin-left:3px;}
+
+    /* AIC_REPORT_DESIGN_V2 */
+    .print-report-header{display:none}
+    .formula-report{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;font-family:Consolas,Monaco,monospace}
+    .formula-report-panel{background:#f8fafc;border:1px solid #d7e0e8;border-radius:10px;padding:14px 16px}
+    .formula-report-title{font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:800;color:#17365d;margin-bottom:10px}
+    .formula-report-line{display:grid;grid-template-columns:42px 16px 1fr;align-items:baseline;line-height:1.65;font-size:15px}
+    .formula-report-line.aic-final{margin-top:4px;padding-top:6px;border-top:1px solid #cbd5e1;font-weight:800;color:#0f3557}
+    @media (max-width:700px){
+      .page{width:100%;margin:0;padding:12px}
+      main{padding:0}
+      .form-titlebar{grid-template-columns:1fr;gap:10px}
+      .title-actions{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+      .title-actions .form-brand{grid-column:1/-1;grid-row:1;text-align:left;font-size:14px}
+      .title-actions button{width:100%;min-height:46px;margin:0!important;font-size:15px}
+      .card{padding:15px;border-radius:12px}
+      .calc-heading-row{display:grid;grid-template-columns:1fr;gap:9px}
+      .calc-heading-input{width:100%;max-width:none;min-height:46px;font-size:16px}
+      .form-grid{grid-template-columns:1fr;gap:6px}
+      .form-grid label{margin-top:8px;font-size:15px}
+      input,select{min-height:48px;font-size:16px;padding:11px 12px}
+      .result{grid-template-columns:1fr 1fr;gap:9px}
+      .metric{padding:13px}
+      .metric .value{font-size:23px}
+      .formula-report{grid-template-columns:1fr}
+      .button-row,.panel-controls{display:grid;grid-template-columns:1fr}
+      .button-row button,.panel-controls button{width:100%;min-height:46px;font-size:15px}
+    }
+    @media print{
+      @page{size:letter portrait;margin:.35in}
+      html,body{width:100%;background:#fff!important}
+      body{zoom:1}
+      .page{width:100%;max-width:none;margin:0;padding:0}
+      .print-report-header{display:grid!important;grid-template-columns:1fr auto;align-items:end;gap:18px;padding:0 0 7px;margin:0 0 9px;border-bottom:2px solid #1e3a8a}
+      .print-report-brand{font-size:18px;font-weight:800;color:#1e3a8a}
+      .print-report-title{font-size:12px;font-weight:700;color:#111827;margin-top:2px}
+      .form-titlebar{display:none!important}
+      .grid{display:block}
+      .card{border:1px solid #9aa9b7;border-radius:4px;padding:8px 10px;margin:0 0 8px;box-shadow:none;break-inside:avoid;page-break-inside:avoid}
+      .panel-number{font-size:8.5px;margin-bottom:3px}
+      .calc-heading-row{display:grid;grid-template-columns:auto minmax(180px,1fr);gap:9px;margin:0 0 6px}
+      h2{font-size:12.5px}
+      .calc-heading-input,input,select{display:block!important;width:100%!important;min-height:21px;padding:3px 6px!important;margin:0!important;border:1px solid #6f8294!important;border-radius:2px!important;background:#fff!important;color:#111827!important;font-size:9px!important;line-height:1.2!important;opacity:1!important}
+      select{appearance:auto!important;-webkit-appearance:menulist!important}
+      input::placeholder{color:transparent!important}
+      .form-grid{display:grid!important;grid-template-columns:1.35fr 1fr 1.35fr 1fr;gap:4px 8px;align-items:center}
+      .form-grid label{font-size:8.6px;line-height:1.1}
+      .result{grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+      .metric{padding:4px 6px;border-radius:3px}
+      .metric .label{font-size:7px}
+      .metric .value{font-size:13px;margin-top:1px}
+      .formula{display:none!important}
+      .formula-report{grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+      .formula-report-panel{padding:6px 8px;border-radius:3px}
+      .formula-report-title{font-size:9.5px;margin-bottom:3px}
+      .formula-report-line{grid-template-columns:28px 10px 1fr;font-size:8.8px;line-height:1.35}
+      .formula-report-line.aic-final{margin-top:2px;padding-top:3px}
+      .no-print,button,.button-row,.panel-controls,.note,#accessGate,.restore-modal,.logout-button{display:none!important}
+    }
+
+/* Clean AIC engineering print report */
+.clean-print-report { display:none; }
+@media print {
+  @page { size:letter; margin:.5in; }
+  html, body { background:#fff!important; }
+  body { zoom:1!important; }
+  .page { margin:0!important; padding:0!important; max-width:none!important; }
+  .form-titlebar { display:none!important; }
+  #calculationsContainer > .card {
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    padding:0!important;
+    margin:0 0 .35in 0!important;
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+  #calculationsContainer > .card > :not(.clean-print-report) { display:none!important; }
+  .clean-print-report {
+    display:block!important;
+    color:#111827;
+    font-family:Arial,Helvetica,sans-serif;
+  }
+  .print-report-brand { font-size:20px; font-weight:800; color:#1e3a8a; margin:0 0 3px; }
+  .print-report-brand .brand-x { color:#15803d; }
+  .print-report-title { font-size:15px; font-weight:700; margin:0 0 18px; color:#111827; }
+  .print-report-panel { font-size:12px; font-weight:700; margin:0 0 16px; }
+  .print-report-section { margin:0 0 17px; }
+  .print-report-section h3 { font-size:12px; margin:0 0 8px; color:#1e3a8a; text-transform:uppercase; letter-spacing:.04em; }
+  .print-report-row { display:grid; grid-template-columns:190px 1fr; gap:14px; font-size:11px; line-height:1.65; }
+  .print-report-label { font-weight:700; }
+  .print-report-formula { font-family:Consolas,Monaco,monospace; font-size:11px; line-height:1.8; }
+  .print-report-final { border:2px solid #1e3a8a; padding:14px 18px; margin-top:18px; text-align:center; }
+  .print-report-final-label { font-size:11px; font-weight:800; letter-spacing:.08em; color:#1e3a8a; }
+  .print-report-final-value { font-size:24px; font-weight:900; margin-top:4px; color:#0f172a; }
+}
+
+/* AIC selectable print layouts */
+.result { display:none!important; }
+.formula { background:transparent!important; border:0!important; padding:0!important; }
+.formula-report-panel { background:transparent!important; border:0!important; border-radius:0!important; padding:8px 0!important; }
+.formula-report { border-top:1px solid #d7e0e8; border-bottom:1px solid #d7e0e8; padding:8px 0; }
+.formula-report-line.aic-final { font-weight:700; }
+.print-layout-control { display:flex; align-items:center; gap:6px; color:#334155; font-size:12px; font-weight:700; white-space:nowrap; }
+.print-layout-control select { width:auto; min-width:112px; padding:7px 28px 7px 9px; border-radius:8px; font-size:13px; }
+.print-pages { display:none; }
+
+@media (max-width:700px) {
+  .print-layout-control { grid-column:1/-1; width:100%; justify-content:space-between; }
+  .print-layout-control select { flex:1; max-width:190px; min-height:42px; }
+}
+
+@media print {
+  @page { size:letter portrait; margin:.25in; }
+  html, body { background:#fff!important; }
+  body { zoom:1!important; }
+  body > :not(.print-pages) { display:none!important; }
+  .print-pages { display:block!important; }
+  .print-page {
+    height:10.5in;
+    display:grid;
+    grid-template-rows:auto minmax(0,1fr);
+    gap:.10in;
+    overflow:hidden;
+    break-after:page;
+    page-break-after:always;
+    color:#111827;
+    font-family:Arial,Helvetica,sans-serif;
+  }
+  .print-page:last-child { break-after:auto; page-break-after:auto; }
+  .print-page-header {
+    padding:0 0 .07in;
+    border-bottom:2px solid #1e3a8a;
+  }
+  .print-page-brand { font-size:18px; line-height:1.05; font-weight:800; color:#1e3a8a; }
+  .print-page-brand .brand-x { color:#0f766e; }
+  .print-page-title { margin-top:2px; font-size:11px; line-height:1.15; font-weight:700; color:#111827; }
+  .print-page-grid {
+    min-height:0;
+    display:grid;
+    gap:.10in;
+    align-items:stretch;
+  }
+  .print-page[data-layout="1"] .print-page-grid { grid-template-columns:1fr; grid-template-rows:1fr; }
+  .print-page[data-layout="2"] .print-page-grid { grid-template-columns:1fr; grid-template-rows:repeat(2,minmax(0,1fr)); }
+  .print-page[data-layout="4"] .print-page-grid { grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:repeat(2,minmax(0,1fr)); }
+  .print-page[data-layout="8"] .print-page-grid { grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:repeat(4,minmax(0,1fr)); gap:.07in; }
+  .print-report-card {
+    min-width:0;
+    min-height:0;
+    border:1px solid #64748b;
+    border-radius:3px;
+    padding:.09in .11in;
+    overflow:hidden;
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+  .clean-print-report {
+    display:block!important;
+    width:100%;
+    min-width:0;
+    height:100%;
+    overflow:hidden;
+  }
+  .print-report-panel {
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-weight:800;
+    margin:0 0 4px;
+    padding:0 0 3px;
+    border-bottom:1px solid #cbd5e1;
+    color:#0f172a;
+  }
+  .print-report-section { margin:0; min-width:0; }
+  .print-report-section + .print-report-section { margin-top:4px; padding-top:3px; border-top:1px solid #e2e8f0; }
+  .print-report-section h3 {
+    margin:0 0 2px;
+    color:#1e3a8a;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+  }
+  .print-report-row,
+  .compact-formula-row {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(72px,38%);
+    column-gap:6px;
+    align-items:baseline;
+    width:100%;
+    min-width:0;
+  }
+  .print-report-label,
+  .compact-formula-label {
+    min-width:0;
+    overflow-wrap:anywhere;
+    text-align:left;
+    font-weight:700;
+  }
+  .print-report-value,
+  .compact-formula-value {
+    min-width:0;
+    max-width:100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    text-align:right;
+    justify-self:stretch;
+    font-variant-numeric:tabular-nums;
+  }
+  .compact-formula-row { font-family:Consolas,Monaco,monospace; }
+  .compact-formula-row.aic-final { margin-top:1px; font-weight:800; }
+
+  .print-page[data-layout="1"] .print-report-card { padding:.18in .22in; }
+  .print-page[data-layout="1"] .print-report-panel { font-size:14px; margin-bottom:10px; padding-bottom:7px; }
+  .print-page[data-layout="1"] .print-report-section + .print-report-section { margin-top:12px; padding-top:9px; }
+  .print-page[data-layout="1"] .print-report-section h3 { font-size:10px; margin-bottom:6px; }
+  .print-page[data-layout="1"] .print-report-row,
+  .print-page[data-layout="1"] .compact-formula-row { font-size:10.5px; line-height:1.7; grid-template-columns:minmax(0,1fr) 190px; }
+
+  .print-page[data-layout="2"] .print-report-panel { font-size:11px; }
+  .print-page[data-layout="2"] .print-report-section h3 { font-size:8.5px; }
+  .print-page[data-layout="2"] .print-report-row,
+  .print-page[data-layout="2"] .compact-formula-row { font-size:8.7px; line-height:1.42; grid-template-columns:minmax(0,1fr) 150px; }
+
+  .print-page[data-layout="4"] .print-report-panel { font-size:9px; }
+  .print-page[data-layout="4"] .print-report-section h3 { font-size:7px; }
+  .print-page[data-layout="4"] .print-report-row,
+  .print-page[data-layout="4"] .compact-formula-row { font-size:7.25px; line-height:1.3; }
+
+  .print-page[data-layout="8"] .print-report-card { padding:.055in .075in; }
+  .print-page[data-layout="8"] .print-report-panel { font-size:7.3px; margin-bottom:2px; padding-bottom:2px; }
+  .print-page[data-layout="8"] .print-report-section + .print-report-section { margin-top:2px; padding-top:2px; }
+  .print-page[data-layout="8"] .print-report-section h3 { font-size:5.8px; margin-bottom:1px; }
+  .print-page[data-layout="8"] .print-report-row,
+  .print-page[data-layout="8"] .compact-formula-row { font-size:5.8px; line-height:1.18; grid-template-columns:minmax(0,1fr) minmax(62px,38%); column-gap:4px; }
+}
+
+/* AIC print control header fix */
+.form-titlebar { grid-template-columns:minmax(230px,1fr) auto; }
+.form-title { white-space:nowrap; }
+.title-actions { flex-wrap:wrap; justify-content:flex-end; }
+.print-layout-control { display:flex; align-items:center; gap:6px; color:#334155; font-size:12px; font-weight:700; white-space:nowrap; }
+.print-layout-control select { width:auto; min-width:112px; padding:7px 28px 7px 9px; border-radius:8px; font-size:13px; }
+@media (max-width:850px) {
+  .form-titlebar { grid-template-columns:1fr; }
+  .form-title { white-space:normal; }
+  .title-actions { justify-content:flex-start; }
+}
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="access-locked">
 
   <div id="accessGate" aria-label="LoadCalcPro member login">
     <form class="access-box" id="accessForm">
-      <div class="access-brand">⚡ LoadCalcPro</div>
+      <div class="access-brand">⚡ LoadCalcPro<span class="brand-x">X</span></div>
       <div class="access-subtitle">AIC Calculator — Member Access</div>
       <label for="accessEmail">Membership email</label>
       <input id="accessEmail" type="email" autocomplete="email"
         placeholder="Enter the email used for your membership" required>
-            <div class="remember-row">
+      <div class="remember-row">
         <input id="rememberEmail" type="checkbox">
         <label for="rememberEmail">Remember my email</label>
       </div>
-<button type="submit" id="accessButton">Open Calculator</button>
+      <button type="submit" id="accessButton">Open Calculator</button>
       <div id="accessMessage" role="status" aria-live="polite"></div>
     </form>
   </div>
 
+  <div class="restore-modal" id="restoreModal" role="dialog" aria-modal="true" aria-labelledby="restoreModalTitle" aria-describedby="restoreModalDescription">
+    <div class="restore-dialog">
+      <div class="restore-dialog-header">
+        <p class="restore-dialog-kicker">Saved Work</p>
+        <h2 id="restoreModalTitle">Previous Calculation Found</h2>
+      </div>
+      <div class="restore-dialog-body">
+        <p id="restoreModalDescription">We found a previously saved calculation on this device. Would you like to continue it or start a new calculation?</p>
+      </div>
+      <div class="restore-dialog-actions">
+        <button type="button" id="continuePreviousBtn">Continue Previous Calculation</button>
+        <button type="button" id="startNewBtn" class="restore-secondary">Start a New Calculation</button>
+      </div>
+    </div>
+  </div>
+
   <div class="page">
+    <div class="print-report-header" aria-hidden="true">
+      <div>
+        <div class="print-report-brand">⚡ LoadCalcPro<span class="brand-x">X</span></div>
+        <div class="print-report-title">Available Fault Current (AIC) Report</div>
+      </div>
+    </div>
+
     <div class="form-titlebar">
       <div>
         <div class="form-title">Available Fault Current (AIC)</div>
-        <div class="form-version">NEC 2023 | Version 1.0</div>
+        <div class="form-version">Version 1.0</div>
       </div>
-      <div class="title-actions"><button type="button" class="no-print" onclick="preparePrint()">Print</button><button type="button" class="no-print logout-button" id="logoutBtn">Log Out</button><div class="form-brand"><span class="bolt">⚡</span>LoadCalcPro</div></div>
+      <div class="title-actions"><button type="button" class="no-print secondary" onclick="window.location.href='member-dashboard.html'">Available Calculators</button><label class="no-print print-layout-control" for="printLayout">Print Layout <select id="printLayout" aria-label="Reports per printed page"><option value="1">1 per page</option><option value="2">2 per page</option><option value="4" selected>4 per page</option><option value="8">8 per page</option></select></label><button type="button" class="no-print" onclick="preparePrint()">Print / Save PDF</button><button type="button" class="no-print logout-button" id="logoutBtn">Log Out</button><div class="form-brand"><span class="bolt">⚡</span>LoadCalcPro<span class="brand-x">X</span></div></div>
     </div>
     <main>
       <div class="grid">
@@ -209,22 +552,22 @@
             <input id="calculationName1" class="calc-heading-input" type="text" placeholder="Enter panel number or description" aria-label="First AIC calculation name">
           </div>
           <div class="form-grid">
+            <label for="utilityFault">I = Utility Fault Current</label>
+            <input id="utilityFault" type="text" inputmode="decimal" placeholder="Enter utility fault current (AIC)">
             <label for="conduit">Conduit type</label>
-            <select id="conduit"><option value="">Select conduit type</option><option>PVC</option><option>Steel</option></select>
+            <select id="conduit"><option value="">Select conduit type</option><option>Non-metallic</option><option>Metallic</option></select>
             <label for="wireType">Wire type</label>
             <select id="wireType"><option value="">Select wire type</option><option>Copper</option><option>Aluminum</option></select>
             <label for="wireSize">Wire size</label>
             <select id="wireSize"></select>
-            <label for="utilityFault">I = Utility Fault Current</label>
-            <input id="utilityFault" type="text" inputmode="decimal" placeholder="Enter utility fault current (AIC)">
-            <label for="distance">L = Distance to transformer</label>
+            <label for="distance">L = Distance to Transformer</label>
             <input id="distance" type="text" inputmode="decimal" placeholder="Enter distance to transformer">
-            <label for="volts">E = Volts</label>
+            <label for="volts">E = Voltage</label>
             <select id="volts"><option value="">Select volts</option><option>208</option><option>240</option><option>480</option></select>
-            <label for="conductors">N = Number of conductors per phase</label>
+            <label for="conductors">N = Number of Conductors per Phase</label>
             <select id="conductors"><option value="">Select number of conductors per phase</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
-            <label for="phase">2 Single phase or √3 Three phase</label>
-            <select id="phase"><option value="">Select 2 single phase or √3 three phase</option><option>2</option><option>1.732</option></select>
+            <label for="phase">Phase</label>
+            <select id="phase"><option value="">Select phase</option><option value="2">Single phase</option><option value="1.732">Three phase</option></select>
           </div>
           <div class="result">
             <div class="metric"><div class="label">C constant</div><div class="value" id="cConstant">—</div></div>
@@ -240,32 +583,31 @@
         </div>
         <div class="note no-print" id="panelLimitNote">You may add up to 6 downstream panels.</div>
       </div>
-
     </main>
   </div>
 <script>
 const constants = {
-  "8": { copperSteel:1557, copperPvc:1559, aluminumSteel:951, aluminumPvc:952 },
-  "6": { copperSteel:2425, copperPvc:2430, aluminumSteel:1481, aluminumPvc:1482 },
-  "4": { copperSteel:3806, copperPvc:3826, aluminumSteel:2346, aluminumPvc:2350 },
-  "3": { copperSteel:4774, copperPvc:4811, aluminumSteel:2952, aluminumPvc:2961 },
-  "2": { copperSteel:5907, copperPvc:6044, aluminumSteel:3713, aluminumPvc:3730 },
-  "1": { copperSteel:7293, copperPvc:7493, aluminumSteel:4645, aluminumPvc:4678 },
-  "1/0": { copperSteel:8925, copperPvc:9317, aluminumSteel:5777, aluminumPvc:5838 },
-  "2/0": { copperSteel:10755, copperPvc:11424, aluminumSteel:7187, aluminumPvc:7301 },
-  "3/0": { copperSteel:12844, copperPvc:13923, aluminumSteel:8826, aluminumPvc:9110 },
-  "4/0": { copperSteel:15082, copperPvc:16673, aluminumSteel:10741, aluminumPvc:11174 },
-  "250MCM": { copperSteel:16483, copperPvc:18594, aluminumSteel:12122, aluminumPvc:12862 },
-  "300MCM": { copperSteel:18177, copperPvc:20868, aluminumSteel:13910, aluminumPvc:14923 },
-  "350MCM": { copperSteel:19704, copperPvc:22737, aluminumSteel:15484, aluminumPvc:16813 },
-  "400MCM": { copperSteel:20566, copperPvc:24294, aluminumSteel:16671, aluminumPvc:18506 },
-  "500MCM": { copperSteel:22185, copperPvc:26706, aluminumSteel:18756, aluminumPvc:21391 },
-  "600MCM": { copperSteel:22965, copperPvc:28033, aluminumSteel:20093, aluminumPvc:23451 },
-  "750MCM": { copperSteel:24137, copperPvc:29735, aluminumSteel:21766, aluminumPvc:25976 },
-  "1000MCM": { copperSteel:25278, copperPvc:31491, aluminumSteel:23478, aluminumPvc:28779 }
+  "8": { copperMetallic:1557, copperPvc:1559, aluminumMetallic:951, aluminumPvc:952 },
+  "6": { copperMetallic:2425, copperPvc:2430, aluminumMetallic:1481, aluminumPvc:1482 },
+  "4": { copperMetallic:3806, copperPvc:3826, aluminumMetallic:2346, aluminumPvc:2350 },
+  "3": { copperMetallic:4774, copperPvc:4811, aluminumMetallic:2952, aluminumPvc:2961 },
+  "2": { copperMetallic:5907, copperPvc:6044, aluminumMetallic:3713, aluminumPvc:3730 },
+  "1": { copperMetallic:7293, copperPvc:7493, aluminumMetallic:4645, aluminumPvc:4678 },
+  "1/0": { copperMetallic:8925, copperPvc:9317, aluminumMetallic:5777, aluminumPvc:5838 },
+  "2/0": { copperMetallic:10755, copperPvc:11424, aluminumMetallic:7187, aluminumPvc:7301 },
+  "3/0": { copperMetallic:12844, copperPvc:13923, aluminumMetallic:8826, aluminumPvc:9110 },
+  "4/0": { copperMetallic:15082, copperPvc:16673, aluminumMetallic:10741, aluminumPvc:11174 },
+  "250MCM": { copperMetallic:16483, copperPvc:18594, aluminumMetallic:12122, aluminumPvc:12862 },
+  "300MCM": { copperMetallic:18177, copperPvc:20868, aluminumMetallic:13910, aluminumPvc:14923 },
+  "350MCM": { copperMetallic:19704, copperPvc:22737, aluminumMetallic:15484, aluminumPvc:16813 },
+  "400MCM": { copperMetallic:20566, copperPvc:24294, aluminumMetallic:16671, aluminumPvc:18506 },
+  "500MCM": { copperMetallic:22185, copperPvc:26706, aluminumMetallic:18756, aluminumPvc:21391 },
+  "600MCM": { copperMetallic:22965, copperPvc:28033, aluminumMetallic:20093, aluminumPvc:23451 },
+  "750MCM": { copperMetallic:24137, copperPvc:29735, aluminumMetallic:21766, aluminumPvc:25976 },
+  "1000MCM": { copperMetallic:25278, copperPvc:31491, aluminumMetallic:23478, aluminumPvc:28779 }
 };
 
-const MAX_PANELS = 7; // first calculation plus up to 6 downstream panels
+const MAX_PANELS = 7;
 const storageKey = 'loadCalcProAicCalculatorExpandablePanels';
 const defaults = {
   calculationHeading:'', conduit:'', wireType:'', wireSize:'',
@@ -301,7 +643,7 @@ function fmt(n, digits=0) {
 
 function constantKey(n) {
   const metal = el('wireType', n).value === 'Copper' ? 'copper' : 'aluminum';
-  const raceway = el('conduit', n).value === 'PVC' ? 'Pvc' : 'Steel';
+  const raceway = el('conduit', n).value === 'Non-metallic' ? 'Pvc' : 'Metallic';
   return metal + raceway;
 }
 
@@ -312,15 +654,35 @@ function clearAicResult(n, message='') {
     details.textContent = message;
     return;
   }
+  const phaseNode = el('phase', n);
+  const phaseFactor = phaseNode && phaseNode.value === '2' ? '2' : '1.732';
   details.innerHTML =
-    '<div class="formula-title">Calculation Results</div>' +
-    '<div class="formula-line"><span>F</span><span>=</span><span class="formula-value">—</span></div>' +
-    '<div class="formula-line"><span>M</span><span>=</span><span class="formula-value">—</span></div>' +
-    '<div class="formula-line"><span>AIC</span><span>=</span><span class="formula-value">—</span></div>';
+    '<div class="formula-report">' +
+      '<div class="formula-report-panel">' +
+        '<div class="formula-report-title">Formulas</div>' +
+        '<div class="formula-report-line"><span>F</span><span>=</span><span>' + phaseFactor + ' × L × I ÷ (N × C × V)</span></div>' +
+        '<div class="formula-report-line"><span>M</span><span>=</span><span>1 ÷ (1 + F)</span></div>' +
+        '<div class="formula-report-line"><span>AIC</span><span>=</span><span>I × M</span></div>' +
+      '</div>' +
+      '<div class="formula-report-panel">' +
+        '<div class="formula-report-title">Calculated Values</div>' +
+        '<div class="formula-report-line"><span>F</span><span>=</span><span>—</span></div>' +
+        '<div class="formula-report-line"><span>M</span><span>=</span><span>—</span></div>' +
+        '<div class="formula-report-line aic-final"><span>AIC</span><span>=</span><span>—</span></div>' +
+      '</div>' +
+    '</div>';
 }
 
 function calculate(n) {
-  const wire = constants[el('wireSize', n).value];
+  const conduitNode = el('conduit', n);
+  const wireTypeNode = el('wireType', n);
+  const wireSizeNode = el('wireSize', n);
+  const requiredSelectionsPresent =
+    conduitNode && conduitNode.value !== '' &&
+    wireTypeNode && wireTypeNode.value !== '' &&
+    wireSizeNode && wireSizeNode.value !== '';
+
+  const wire = requiredSelectionsPresent ? constants[wireSizeNode.value] : null;
   if (!wire) {
     el('cConstant', n).textContent = '—';
     clearAicResult(n);
@@ -355,17 +717,27 @@ function calculate(n) {
   const AIC = I * M;
 
   el('aicResult', n).textContent = fmt(AIC, 0);
+  const phaseFactor = phase === 2 ? '2' : '1.732';
   el('calcDetails', n).innerHTML =
-    '<div class="formula-title">Calculation Results</div>' +
-    `<div class="formula-line"><span>F</span><span>=</span><span class="formula-value">${F.toFixed(4)}</span></div>` +
-    `<div class="formula-line"><span>M</span><span>=</span><span class="formula-value">${M.toFixed(4)}</span></div>` +
-    `<div class="formula-line"><span>AIC</span><span>=</span><span class="formula-value">${fmt(AIC,0)}</span></div>`;
+    '<div class="formula-report">' +
+      '<div class="formula-report-panel">' +
+        '<div class="formula-report-title">Formulas</div>' +
+        '<div class="formula-report-line"><span>F</span><span>=</span><span>' + phaseFactor + ' × L × I ÷ (N × C × V)</span></div>' +
+        '<div class="formula-report-line"><span>M</span><span>=</span><span>1 ÷ (1 + F)</span></div>' +
+        '<div class="formula-report-line"><span>AIC</span><span>=</span><span>I × M</span></div>' +
+      '</div>' +
+      '<div class="formula-report-panel">' +
+        '<div class="formula-report-title">Calculated Values</div>' +
+        '<div class="formula-report-line"><span>F</span><span>=</span><span>' + F.toFixed(4) + '</span></div>' +
+        '<div class="formula-report-line"><span>M</span><span>=</span><span>' + M.toFixed(4) + '</span></div>' +
+        '<div class="formula-report-line aic-final"><span>AIC</span><span>=</span><span>' + fmt(AIC,0) + ' AMPS</span></div>' +
+      '</div>' +
+    '</div>';
 
   carryForward(n, AIC);
 }
 
 function carryForward(n, aicValue=null) {
-  // Only the first downstream panel receives the AIC from the main calculation.
   if (n !== 1) return;
 
   const nextFault = el('utilityFault', 2);
@@ -377,9 +749,8 @@ function carryForward(n, aicValue=null) {
     value = Number(text);
   }
 
-  if (nextFault.dataset.userEdited !== 'true') {
-    nextFault.value = Number.isFinite(value) ? Math.round(value).toString() : '';
-  }
+  nextFault.dataset.userEdited = 'false';
+  nextFault.value = Number.isFinite(value) ? Math.round(value).toString() : '';
   calculate(2);
 }
 
@@ -401,31 +772,23 @@ function createPanel(n) {
         placeholder="Enter panel number or description" aria-label="Panel calculation heading">
     </div>
     <div class="form-grid">
-
-      <label for="conduit${n}">Conduit type</label>
-      <select id="conduit${n}"><option value="">Select conduit type</option><option>PVC</option><option>Steel</option></select>
-
-      <label for="wireType${n}">Wire type</label>
-      <select id="wireType${n}"><option value="">Select wire type</option><option>Copper</option><option>Aluminum</option></select>
-
-      <label for="wireSize${n}">Wire size</label>
-      <select id="wireSize${n}"></select>
-
       <label for="utilityFault${n}">I = Fault Current</label>
       <input id="utilityFault${n}" type="text" inputmode="decimal"
         placeholder="${n === 2 ? 'Fault current from first calculation' : 'Enter fault current'}">
-
-      <label for="distance${n}">L = Distance to panel</label>
+      <label for="conduit${n}">Conduit type</label>
+      <select id="conduit${n}"><option value="">Select conduit type</option><option>Non-metallic</option><option>Metallic</option></select>
+      <label for="wireType${n}">Wire type</label>
+      <select id="wireType${n}"><option value="">Select wire type</option><option>Copper</option><option>Aluminum</option></select>
+      <label for="wireSize${n}">Wire size</label>
+      <select id="wireSize${n}"></select>
+      <label for="distance${n}">L = Distance to Panel</label>
       <input id="distance${n}" type="text" inputmode="decimal" placeholder="Enter distance to panel">
-
-      <label for="volts${n}">E = Volts</label>
+      <label for="volts${n}">E = Voltage</label>
       <select id="volts${n}"><option value="">Select volts</option><option>208</option><option>240</option><option>480</option></select>
-
-      <label for="conductors${n}">N = Number of conductors per phase</label>
+      <label for="conductors${n}">N = Number of Conductors per Phase</label>
       <select id="conductors${n}"><option value="">Select number of conductors per phase</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
-
-      <label for="phase${n}">2 Single phase or √3 Three phase</label>
-      <select id="phase${n}"><option value="">Select 2 single phase or √3 three phase</option><option>2</option><option>1.732</option></select>
+      <label for="phase${n}">Phase</label>
+      <select id="phase${n}"><option value="">Select phase</option><option value="2">Single phase</option><option value="1.732">Three phase</option></select>
     </div>
     <div class="result">
       <div class="metric"><div class="label">C constant</div><div class="value" id="cConstant${n}">—</div></div>
@@ -448,7 +811,7 @@ function attachPanelEvents(n) {
   );
 
   const fault = el('utilityFault', n);
-  if (n > 1) {
+  if (n > 2) {
     fault.addEventListener('input', () => {
       fault.dataset.userEdited = fault.value.trim() === '' ? 'false' : 'true';
     });
@@ -549,14 +912,159 @@ function hasCalculationData(n) {
     .some(base => String(el(base,n).value || '').trim() !== '');
 }
 
-function preparePrint() {
+function printText(value, fallback='—') {
+  const text = String(value ?? '').trim();
+  return text || fallback;
+}
+function selectedText(base, n) {
+  const node = el(base, n);
+  if (!node) return '—';
+  const option = node.options && node.selectedIndex >= 0 ? node.options[node.selectedIndex] : null;
+  return option ? printText(option.textContent) : printText(node.value);
+}
+function phaseText(n) {
+  const value = printText(el('phase', n)?.value, '');
+  if (value === '2') return 'Single Phase';
+  if (value === '1.732') return 'Three Phase';
+  return '—';
+}
+function conduitText(n) {
+  const value = selectedText('conduit', n);
+  if (value === 'PVC') return 'Non-metallic';
+  if (value === 'Steel') return 'Metallic';
+  return value;
+}
+function reportNumber(base, n, suffix='') {
+  const value = readNumber(base, n);
+  return Number.isFinite(value) ? `${fmt(value, 0)}${suffix}` : '—';
+}
+function buildCleanPrintReports() {
   document.querySelectorAll('#calculationsContainer > .card').forEach((card, index) => {
     const n = index + 1;
-    card.classList.toggle('optional-empty', n > 1 && !hasCalculationData(n));
+    let report = card.querySelector('.clean-print-report');
+    if (!report) {
+      report = document.createElement('div');
+      report.className = 'clean-print-report';
+      card.appendChild(report);
+    }
+
+    const wire = constants[el('wireSize', n)?.value];
+    const C = wire ? wire[constantKey(n)] : null;
+    const L = readNumber('distance', n);
+    const I = readNumber('utilityFault', n);
+    const E = readNumber('volts', n);
+    const N = readNumber('conductors', n);
+    const phase = readNumber('phase', n);
+    const valid = [L,I,E,N,phase,C].every(Number.isFinite) && E > 0 && N > 0 && phase > 0 && C > 0;
+    const F = valid ? (phase * L * I) / (N * C * E) : NaN;
+    const M = valid ? 1 / (1 + F) : NaN;
+    const AIC = valid ? I * M : NaN;
+    const phaseLabel = phaseText(n);
+    const phaseFactor = phase === 2 ? '2' : phase === 1.732 ? '1.732' : '—';
+    const headingNode = n === 1 ? document.getElementById('calculationName1') : el('calculationHeading', n);
+    const panelName = printText(headingNode?.value, n === 1 ? 'Main Service' : `Downstream Panel ${n - 1}`);
+
+    report.innerHTML = `
+      <div class="print-report-panel">${panelName}</div>
+      <section class="print-report-section">
+        <h3>Input Summary</h3>
+        <div class="print-report-row"><span class="print-report-label">Utility Fault Current</span><span class="print-report-value">${reportNumber('utilityFault', n, ' A')}</span></div>
+        <div class="print-report-row"><span class="print-report-label">Distance</span><span class="print-report-value">${reportNumber('distance', n, ' ft')}</span></div>
+        <div class="print-report-row"><span class="print-report-label">Conduit Type</span><span class="print-report-value">${conduitText(n)}</span></div>
+        <div class="print-report-row"><span class="print-report-label">Wire Type</span><span class="print-report-value">${selectedText('wireType', n)}</span></div>
+        <div class="print-report-row"><span class="print-report-label">Wire Size</span><span class="print-report-value">${selectedText('wireSize', n)}</span></div>
+        <div class="print-report-row"><span class="print-report-label">C Constant</span><span class="print-report-value">${Number.isFinite(C) ? fmt(C,0) : '—'}</span></div>
+        <div class="print-report-row"><span class="print-report-label">Conductors per Phase</span><span class="print-report-value">${reportNumber('conductors', n)}</span></div>
+        <div class="print-report-row"><span class="print-report-label">Voltage</span><span class="print-report-value">${reportNumber('volts', n, ' V')}</span></div>
+        <div class="print-report-row"><span class="print-report-label">Phase</span><span class="print-report-value">${phaseLabel}</span></div>
+      </section>
+      <section class="print-report-section">
+        <h3>Formulas and Values</h3>
+        <div class="compact-formula-row"><span class="compact-formula-label">F = ${phaseFactor} × L × I ÷ (N × C × V)</span><span class="compact-formula-value">${Number.isFinite(F) ? F.toFixed(4) : '—'}</span></div>
+        <div class="compact-formula-row"><span class="compact-formula-label">M = 1 ÷ (1 + F)</span><span class="compact-formula-value">${Number.isFinite(M) ? M.toFixed(4) : '—'}</span></div>
+        <div class="compact-formula-row aic-final"><span class="compact-formula-label">AIC = I × M</span><span class="compact-formula-value">${Number.isFinite(AIC) ? `${fmt(AIC,0)} AMPS` : '—'}</span></div>
+      </section>`;
   });
-  window.print();
-  setTimeout(() => document.querySelectorAll('.optional-empty').forEach(card => card.classList.remove('optional-empty')), 500);
 }
+
+const PRINT_LAYOUT_KEY = 'loadCalcProAicPrintLayout';
+
+function selectedPrintLayout() {
+  const select = document.getElementById('printLayout');
+  const value = Number(select?.value || 4);
+  return [1,2,4,8].includes(value) ? value : 4;
+}
+
+function restorePrintLayout() {
+  const select = document.getElementById('printLayout');
+  if (!select) return;
+  const saved = Number(localStorage.getItem(PRINT_LAYOUT_KEY));
+  if ([1,2,4,8].includes(saved)) select.value = String(saved);
+  select.addEventListener('change', () => localStorage.setItem(PRINT_LAYOUT_KEY, select.value));
+}
+
+function removePrintPages() {
+  document.getElementById('printPages')?.remove();
+}
+
+function createPrintPages(layout) {
+  removePrintPages();
+  const printableCards = Array.from(document.querySelectorAll('#calculationsContainer > .card'))
+    .filter((card, index) => hasCalculationData(index + 1));
+
+  if (!printableCards.length) return 0;
+
+  const printPages = document.createElement('div');
+  printPages.id = 'printPages';
+  printPages.className = 'print-pages';
+
+  for (let start = 0; start < printableCards.length; start += layout) {
+    const page = document.createElement('section');
+    page.className = 'print-page';
+    page.dataset.layout = String(layout);
+    page.innerHTML = `
+      <header class="print-page-header">
+        <div class="print-page-brand">⚡ LoadCalcPro<span class="brand-x">X</span></div>
+        <div class="print-page-title">Available Fault Current (AIC) Report</div>
+      </header>
+      <div class="print-page-grid"></div>`;
+
+    const grid = page.querySelector('.print-page-grid');
+    printableCards.slice(start, start + layout).forEach(card => {
+      const wrapper = document.createElement('article');
+      wrapper.className = 'print-report-card';
+      wrapper.appendChild(card.querySelector('.clean-print-report').cloneNode(true));
+      grid.appendChild(wrapper);
+    });
+    printPages.appendChild(page);
+  }
+
+  document.body.appendChild(printPages);
+  return printableCards.length;
+}
+
+let printInProgress = false;
+
+function preparePrint() {
+  if (printInProgress) return;
+
+  buildCleanPrintReports();
+  const layout = selectedPrintLayout();
+  localStorage.setItem(PRINT_LAYOUT_KEY, String(layout));
+  const reportCount = createPrintPages(layout);
+  if (!reportCount) {
+    alert('Enter calculation information before printing.');
+    return;
+  }
+
+  printInProgress = true;
+  window.print();
+}
+
+window.addEventListener('afterprint', () => {
+  printInProgress = false;
+  removePrintPages();
+});
 
 function saveCurrentValues() {
   const data = { panelCount: panelCount(), values: {} };
@@ -565,36 +1073,73 @@ function saveCurrentValues() {
   localStorage.setItem(storageKey, JSON.stringify(data));
 }
 
+let pendingSavedAicData = null;
+
+function hasMeaningfulSavedValues(saved) {
+  if (!saved || !saved.values || typeof saved.values !== 'object') return false;
+  return Object.entries(saved.values).some(([id, value]) => {
+    if (id === 'utilityFault2') return false;
+    return String(value || '').trim() !== '';
+  });
+}
+
+function applySavedValues(saved) {
+  const wantedCount = Math.min(Math.max(Number(saved.panelCount) || 2, 2), MAX_PANELS);
+  while (panelCount() < wantedCount) addPanel(false);
+
+  Object.entries(saved.values || {}).forEach(([id,value]) => {
+    if (id === 'utilityFault2') return;
+    const node = document.getElementById(id);
+    if (node) node.value = value;
+  });
+
+  for (let n = 2; n <= panelCount(); n++) {
+    if (n === 2) {
+      el('utilityFault',2).dataset.userEdited = 'false';
+    } else {
+      el('utilityFault',n).dataset.userEdited = 'true';
+    }
+  }
+
+  updateAllSelectPlaceholders();
+  for (let n = 1; n <= panelCount(); n++) calculate(n);
+  updatePanelControls();
+}
+
+function hideRestoreModal() {
+  document.getElementById('restoreModal').classList.remove('show');
+}
+
 function loadSavedValues() {
   try {
     const raw = localStorage.getItem(storageKey);
     if (!raw) return;
+
     const saved = JSON.parse(raw);
-    const keep = confirm('Saved AIC information was found. Do you want to keep and restore the old information?');
-    if (!keep) {
+    if (!hasMeaningfulSavedValues(saved)) {
       localStorage.removeItem(storageKey);
       return;
     }
 
-    const wantedCount = Math.min(Math.max(Number(saved.panelCount) || 2, 2), MAX_PANELS);
-    while (panelCount() < wantedCount) addPanel(false);
-
-    Object.entries(saved.values || {}).forEach(([id,value]) => {
-      const node = document.getElementById(id);
-      if (node) node.value = value;
-    });
-
-    for (let n = 2; n <= panelCount(); n++) {
-      if (n === 2) {
-        el('utilityFault',2).dataset.userEdited =
-          String((saved.values || {})['utilityFault2'] || '').trim() !== '' ? 'true' : 'false';
-      } else {
-        el('utilityFault',n).dataset.userEdited = 'true';
-      }
-    }
+    pendingSavedAicData = saved;
+    document.getElementById('restoreModal').classList.add('show');
+    document.getElementById('continuePreviousBtn').focus();
   } catch {
     localStorage.removeItem(storageKey);
   }
+}
+
+function continuePreviousCalculation() {
+  const saved = pendingSavedAicData;
+  pendingSavedAicData = null;
+  hideRestoreModal();
+  if (saved) applySavedValues(saved);
+}
+
+function startNewCalculation() {
+  pendingSavedAicData = null;
+  localStorage.removeItem(storageKey);
+  hideRestoreModal();
 }
 
 function initialize() {
@@ -602,7 +1147,7 @@ function initialize() {
   attachPanelEvents(1);
   clearAicResult(1);
 
-  addPanel(false); // one downstream panel is always visible
+  addPanel(false);
   loadSavedValues();
   updateAllSelectPlaceholders();
 
@@ -610,15 +1155,33 @@ function initialize() {
 
   document.getElementById('addPanelBtn').addEventListener('click', () => addPanel(true));
   document.getElementById('removePanelBtn').addEventListener('click', removeLastPanel);
+  document.getElementById('continuePreviousBtn').addEventListener('click', continuePreviousCalculation);
+  document.getElementById('startNewBtn').addEventListener('click', startNewCalculation);
+  restorePrintLayout();
   updatePanelControls();
 }
 
 initialize();
 
-
 const ACCESS_API_URL = 'https://loadcalcpro-hcml-api.onrender.com/api/access';
 const ACCESS_SESSION_KEY = 'loadCalcProAicAccessApproved';
 const REMEMBERED_EMAIL_KEY = 'loadCalcProRememberedMemberEmail';
+const DASHBOARD_URL = 'member-dashboard.html';
+const SUPABASE_URL = 'https://oaqehddiqtgplxydxbxv.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_o_3xMc9QOsgV-8kqBFkLnw_tuvUyWD8';
+const API_BASE_URL = 'https://loadcalcpro-hcml-api.onrender.com';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+
+async function verifyDashboardSessionAccess(token) {
+  const response = await fetch(API_BASE_URL + '/api/v2/access', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json', Authorization:'Bearer ' + token},
+    body: JSON.stringify({calculator:'aic'})
+  });
+  let data = {};
+  try { data = await response.json(); } catch {}
+  return {ok:response.ok && data.active === true, data};
+}
 
 function showCalculator() {
   document.getElementById('accessGate').hidden = true;
@@ -629,14 +1192,14 @@ function showAccessGate(message='') {
   document.getElementById('accessGate').hidden = false;
   document.body.classList.add('access-locked');
   const messageNode = document.getElementById('accessMessage');
-  messageNode.textContent = message;
   messageNode.classList.remove('success');
+  messageNode.textContent = message;
 }
 
 async function verifyMemberAccess(email) {
   const response = await fetch(ACCESS_API_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type':'application/json'},
     body: JSON.stringify({
       email,
       calculator: "aic"
@@ -699,8 +1262,9 @@ document.getElementById('accessForm').addEventListener('submit', async (event) =
   }
 });
 
-document.getElementById('logoutBtn').addEventListener('click', () => {
+document.getElementById('logoutBtn').addEventListener('click', async () => {
   sessionStorage.removeItem(ACCESS_SESSION_KEY);
+  try { await supabaseClient.auth.signOut(); } catch {}
 
   const rememberedEmail = localStorage.getItem(REMEMBERED_EMAIL_KEY) || '';
   document.getElementById('accessEmail').value = rememberedEmail;
@@ -715,9 +1279,27 @@ if (rememberedEmail) {
   document.getElementById('rememberEmail').checked = true;
 }
 
-if (sessionStorage.getItem(ACCESS_SESSION_KEY) === 'true') {
-  showCalculator();
-}
+(async function initializeAccess() {
+  try {
+    const {data} = await supabaseClient.auth.getSession();
+    const session = data && data.session;
+    if (session && session.access_token) {
+      const result = await verifyDashboardSessionAccess(session.access_token);
+      if (result.ok) {
+        sessionStorage.setItem(ACCESS_SESSION_KEY, 'true');
+        showCalculator();
+        return;
+      }
+      sessionStorage.removeItem(ACCESS_SESSION_KEY);
+      showAccessGate((result.data && result.data.message) || 'This membership does not include the AIC calculator.');
+      return;
+    }
+  } catch (error) {
+    sessionStorage.removeItem(ACCESS_SESSION_KEY);
+  }
+
+  showAccessGate();
+})();
 
 </script>
 </body>
