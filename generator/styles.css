@@ -1572,3 +1572,42 @@ button:focus-visible,input:focus-visible,select:focus-visible{
   /* The separate calculated Heat-at-40 row is redundant on desktop. */
   #phoneHeat40Row1,#phoneHeat40Row2,.v522-calculated-row{display:none!important}
 }
+
+/* Production print grouping — four clearly defined calculation areas. */
+@media print{
+  .print-page h1{font-size:13.5px!important}
+  .print-brand{font-size:11px!important}
+  .print-project{font-size:10px!important;line-height:1.35!important}
+  .print-table th,
+  .print-table td{
+    height:22px!important;
+    padding:3px 5px!important;
+    font-size:9.4px!important;
+    line-height:1.2!important;
+  }
+  .print-table thead th{
+    font-size:9px!important;
+  }
+
+  /* General + Appliance, Demand, HVAC and Continuous use one color. */
+  .print-table .print-group-heading > th,
+  .print-table .print-group-heading > td{
+    background:#e9eef3!important;
+    color:#17365d!important;
+    font-weight:900!important;
+  }
+
+  /* Outline the four areas marked on the reviewed printout. */
+  .print-table .print-box-row > :first-child{
+    border-left:1.6px solid #1e3a8a!important;
+  }
+  .print-table .print-box-row > :last-child{
+    border-right:1.6px solid #1e3a8a!important;
+  }
+  .print-table .print-box-start > *{
+    border-top:1.6px solid #1e3a8a!important;
+  }
+  .print-table .print-box-end > *{
+    border-bottom:1.6px solid #1e3a8a!important;
+  }
+}
