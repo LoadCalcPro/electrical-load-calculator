@@ -2895,7 +2895,6 @@ if(document.readyState === 'loading'){
 })();
 
 
-
 (function(){
 
 function finishLayout(){
@@ -13272,79 +13271,6 @@ if(
 }
 
 })();
-
-/* Final print presentation pass: reviewed production report grouping. */
-(function(){
-  'use strict';
-
-  const previousUpdatePrintRows = window.updatePrintRows;
-
-  function markBox(rows){
-    if(!rows.length) return;
-    rows.forEach(row => row.classList.add('print-box-row'));
-    rows[0].classList.add('print-box-start');
-    rows[rows.length - 1].classList.add('print-box-end');
-  }
-
-  function decoratePrintReport(){
-    const table = document.querySelector('#printReport .print-table');
-    if(!table) return;
-
-    table.querySelectorAll('.print-box-row,.print-box-start,.print-box-end,.print-group-heading')
-      .forEach(row => row.classList.remove('print-box-row','print-box-start','print-box-end','print-group-heading'));
-
-    const heading = table.querySelector('thead tr');
-    const firstHeading = heading && heading.querySelector('th:first-child');
-    if(firstHeading) firstHeading.textContent = 'General + Appliance Loads';
-    if(heading) heading.classList.add('print-group-heading');
-
-    markBox([
-      ...(heading ? [heading] : []),
-      ...table.querySelectorAll('tbody tr')
-    ]);
-
-    const footerRows = Array.from(table.querySelectorAll('tfoot tr'));
-    const sectionIndex = label => footerRows.findIndex(row =>
-      row.classList.contains('print-section-row') &&
-      row.textContent.trim().toLowerCase() === label.toLowerCase()
-    );
-    const finalIndex = footerRows.findIndex(row => row.classList.contains('final-total-row'));
-    const demandIndex = sectionIndex('Demand Load');
-    const hvacIndex = sectionIndex('HVAC Load');
-    const continuousIndex = sectionIndex('Continuous Loads');
-
-    [demandIndex,hvacIndex,continuousIndex]
-      .filter(index => index >= 0)
-      .forEach(index => footerRows[index].classList.add('print-group-heading'));
-
-    const hvacContinuousStart = [hvacIndex,continuousIndex]
-      .filter(index => index >= 0)
-      .sort((a,b) => a-b)[0];
-
-    if(demandIndex >= 0){
-      const demandEnd = hvacContinuousStart ?? (finalIndex >= 0 ? finalIndex : footerRows.length);
-      markBox(footerRows.slice(demandIndex,demandEnd));
-    }
-
-    if(hvacContinuousStart !== undefined){
-      markBox(footerRows.slice(
-        hvacContinuousStart,
-        finalIndex >= 0 ? finalIndex : footerRows.length
-      ));
-    }
-
-    if(finalIndex >= 0){
-      markBox(footerRows.slice(finalIndex));
-    }
-  }
-
-  window.decorateGeneratorPrintReport = decoratePrintReport;
-
-  window.updatePrintRows = function(data){
-    previousUpdatePrintRows(data);
-    decoratePrintReport();
-  };
-})();
 (function(){
 
 'use strict';
@@ -17045,10 +16971,6 @@ window.updatePrintRows =
         String(
           d.managedLoadCount
         );
-    }
-
-    if(typeof window.decorateGeneratorPrintReport === 'function'){
-      window.decorateGeneratorPrintReport();
     }
   };
 
