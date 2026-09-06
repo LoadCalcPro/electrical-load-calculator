@@ -2894,6 +2894,29 @@ if(document.readyState === 'loading'){
 
 })();
 
+/* Keep user-entered quantity fields blank at zero so their Qty placeholder
+   returns, matching the Standard Method calculator. Capture phase ensures
+   every existing and dynamically added row is normalized before calculating. */
+(function(){
+  'use strict';
+
+  document.addEventListener('input',function(event){
+    const input=event.target;
+
+    if(!(input instanceof HTMLInputElement)||input.type!=='number'||input.readOnly){
+      return;
+    }
+
+    const isStaticQuantity=/^q(?:6|7|3[7-9]|40|42|43|47)$/.test(input.id);
+    const isApplianceQuantity=/^q(?:[89]|[12][0-9]|30)$/.test(input.id);
+    const isDynamicHvacQuantity=input.dataset.v522Field==='qty';
+
+    if((isStaticQuantity||isApplianceQuantity||isDynamicHvacQuantity)&&input.value!==''&&Number(input.value)<=0){
+      input.value='';
+    }
+  },true);
+})();
+
 
 (function(){
 
