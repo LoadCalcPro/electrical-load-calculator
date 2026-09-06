@@ -2900,21 +2900,52 @@ if(document.readyState === 'loading'){
 (function(){
   'use strict';
 
-  document.addEventListener('input',function(event){
-    const input=event.target;
-
+  function isQuantityInput(input){
     if(!(input instanceof HTMLInputElement)||input.type!=='number'||input.readOnly){
-      return;
+      return false;
     }
-
     const isStaticQuantity=/^q(?:6|7|3[7-9]|40|42|43|47)$/.test(input.id);
     const isApplianceQuantity=/^q(?:[89]|[12][0-9]|30)$/.test(input.id);
     const isDynamicHvacQuantity=input.dataset.v522Field==='qty';
+    return isStaticQuantity||isApplianceQuantity||isDynamicHvacQuantity;
+  }
 
-    if((isStaticQuantity||isApplianceQuantity||isDynamicHvacQuantity)&&input.value!==''&&Number(input.value)<=0){
+  function clearZeroQuantity(input){
+    if(isQuantityInput(input)&&input.value!==''&&Number(input.value)<=0){
       input.value='';
     }
-  },true);
+  }
+
+  function clearAllZeroQuantities(root){
+    if(root instanceof HTMLInputElement){
+      clearZeroQuantity(root);
+    }
+    if(root&&root.querySelectorAll){
+      root.querySelectorAll('input[type="number"]').forEach(clearZeroQuantity);
+    }
+  }
+
+  ['input','change','blur'].forEach(function(eventName){
+    document.addEventListener(eventName,function(event){
+      clearZeroQuantity(event.target);
+    },true);
+  });
+
+  function initialize(){
+    clearAllZeroQuantities(document);
+    new MutationObserver(function(mutations){
+      mutations.forEach(function(mutation){
+        mutation.addedNodes.forEach(clearAllZeroQuantities);
+      });
+    }).observe(document.body,{childList:true,subtree:true});
+    setTimeout(function(){clearAllZeroQuantities(document);},350);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',initialize);
+  }else{
+    initialize();
+  }
 })();
 
 
