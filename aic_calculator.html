@@ -1166,7 +1166,6 @@ function initialize() {
 
 initialize();
 
-const ACCESS_API_URL = 'https://loadcalcpro-hcml-api.onrender.com/api/access';
 const ACCESS_SESSION_KEY = 'loadCalcProAicAccessApproved';
 const REMEMBERED_EMAIL_KEY = 'loadCalcProRememberedMemberEmail';
 const DASHBOARD_URL = 'member-dashboard.html';
@@ -1174,7 +1173,6 @@ const SUPABASE_URL = 'https://oaqehddiqtgplxydxbxv.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_o_3xMc9QOsgV-8kqBFkLnw_tuvUyWD8';
 const API_BASE_URL = 'https://loadcalcpro-hcml-api.onrender.com';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-
 async function verifyDashboardSessionAccess(token) {
   const response = await fetch(API_BASE_URL + '/api/v2/access', {
     method: 'POST',
@@ -1203,72 +1201,6 @@ function showAccessGate(message='') {
   messageNode.classList.remove('success');
   messageNode.textContent = message;
 }
-
-async function verifyMemberAccess(email) {
-  const response = await fetch(ACCESS_API_URL, {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      email,
-      calculator: "aic"
-    })
-  });
-
-  let data = {};
-  try {
-    data = await response.json();
-  } catch {
-    throw new Error('The access server returned an unreadable response.');
-  }
-
-  if (!response.ok || data.active !== true) {
-    throw new Error(data.message || 'No active membership was found for this email.');
-  }
-
-  return data;
-}
-
-document.getElementById('accessForm').addEventListener('submit', async (event) => {
-  event.preventDefault();
-
-  const emailNode = document.getElementById('accessEmail');
-  const button = document.getElementById('accessButton');
-  const messageNode = document.getElementById('accessMessage');
-  const email = emailNode.value.trim().toLowerCase();
-
-  if (!email) {
-    messageNode.textContent = 'Please enter your membership email.';
-    return;
-  }
-
-  button.disabled = true;
-  button.textContent = 'Checking Access...';
-  messageNode.textContent = '';
-
-  try {
-    await verifyMemberAccess(email);
-    sessionStorage.setItem(ACCESS_SESSION_KEY, 'true');
-
-    if (document.getElementById('rememberEmail').checked) {
-      localStorage.setItem(REMEMBERED_EMAIL_KEY, email);
-    } else {
-      localStorage.removeItem(REMEMBERED_EMAIL_KEY);
-    }
-    messageNode.textContent = 'Access approved.';
-    messageNode.classList.add('success');
-    showCalculator();
-  } catch (error) {
-    sessionStorage.removeItem(ACCESS_SESSION_KEY);
-    messageNode.classList.remove('success');
-    messageNode.textContent =
-      error instanceof TypeError
-        ? 'Unable to reach the access server. Please try again.'
-        : error.message;
-  } finally {
-    button.disabled = false;
-    button.textContent = 'Open Calculator';
-  }
-});
 
 document.getElementById('logoutBtn').addEventListener('click', async () => {
   sessionStorage.removeItem(ACCESS_SESSION_KEY);
@@ -1306,7 +1238,7 @@ if (rememberedEmail) {
     sessionStorage.removeItem(ACCESS_SESSION_KEY);
   }
 
-  showAccessGate();
+  showAccessGate('Please sign in through the Member Dashboard to open this calculator.');
 })();
 
 </script>
