@@ -1194,6 +1194,7 @@ function showAccessGate(message='') {
 }
 
 document.getElementById('logoutBtn').addEventListener('click', async () => {
+  sessionStorage.removeItem('loadcalcprox.aic.recentAccess');
   try { await supabaseClient.auth.signOut(); } catch {}
 
   showAccessGate();
@@ -1204,6 +1205,19 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
     const {data} = await supabaseClient.auth.getSession();
     const session = data && data.session;
     if (session && session.access_token) {
+      // Reuse the recent dashboard result for navigation speed. This is a UI
+      // optimization, not a security boundary: paid server operations must
+      // continue to enforce authorization independently.
+      try {
+        const cached = JSON.parse(sessionStorage.getItem('loadcalcprox.aic.recentAccess') || 'null');
+        if (cached && cached.userId === session.user.id &&
+            cached.expiresAt > Date.now() &&
+            session.expires_at && session.expires_at * 1000 > Date.now() &&
+            cached.sessionExpiry === session.expires_at) {
+          showCalculator();
+          return;
+        }
+      } catch {}
       const result = await verifyDashboardSessionAccess(session.access_token);
       if (result.ok) {
         showCalculator();
