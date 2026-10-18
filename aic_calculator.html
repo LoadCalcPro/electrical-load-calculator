@@ -1159,7 +1159,6 @@ function initialize() {
 
 initialize();
 
-const ACCESS_SESSION_KEY = 'loadCalcProAicAccessApproved';
 const DASHBOARD_URL = 'member-dashboard.html';
 const SUPABASE_URL = 'https://oaqehddiqtgplxydxbxv.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_o_3xMc9QOsgV-8kqBFkLnw_tuvUyWD8';
@@ -1195,7 +1194,6 @@ function showAccessGate(message='') {
 }
 
 document.getElementById('logoutBtn').addEventListener('click', async () => {
-  sessionStorage.removeItem(ACCESS_SESSION_KEY);
   try { await supabaseClient.auth.signOut(); } catch {}
 
   showAccessGate();
@@ -1208,17 +1206,14 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
     if (session && session.access_token) {
       const result = await verifyDashboardSessionAccess(session.access_token);
       if (result.ok) {
-        sessionStorage.setItem(ACCESS_SESSION_KEY, 'true');
         showCalculator();
         return;
       }
-      sessionStorage.removeItem(ACCESS_SESSION_KEY);
-      showAccessGate((result.data && result.data.message) || 'This membership does not include the AIC calculator.');
+          showAccessGate(result.data?.message || 'This membership does not include the AIC calculator.');
       return;
     }
   } catch (error) {
-    sessionStorage.removeItem(ACCESS_SESSION_KEY);
-  }
+    }
 
   showAccessGate('Please sign in through the Member Dashboard to open this calculator.');
 })();
